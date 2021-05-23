@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Batch DropBlock Network</title>
+    <url>/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/</url>
+    <content><![CDATA[<h1 id="Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond"><a href="#Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond" class="headerlink" title="Batch DropBlock Network for Person Re-Identification and Beyond"></a>Batch DropBlock Network for Person Re-Identification and Beyond</h1><p>全文链接：<br><a href="https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea" target="_blank" rel="noopener">https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea</a></p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
+<li><p>the large variation of poses, background, illumination, camera conditions and view angle changes</p>
+</li>
+<li><p>Because the body parts such as faces, hands and feet are unstable as the view angle changes, <strong>the CNN tends to focus on the main body part and the other descriminative body parts</strong>, i.e., <strong>some attentive local features are consequently suppressed</strong>.</p>
+</li>
+</ul>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
+<li><p>Pose-based works seek to localize different body parts and align their associated features.</p>
+</li>
+<li><p>Part-based works use coarse partitions or attention selection network to improve feature learning.</p>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ol>
+<li><p>Pose-based networks usually require additional body pose or segment information.</p>
+</li>
+<li><p>These networks are designed using specific partition mechanisms, such as a horizontal partition, which is fit for person re-ID but hard to be generalized to other metric learning tasks.</p>
+</li>
+</ol>
+<a id="more"></a>
+
+<h2 id="Batch-DropBlock-Network"><a href="#Batch-DropBlock-Network" class="headerlink" title="Batch DropBlock Network"></a>Batch DropBlock Network</h2><ul>
+<li><p>The global branch encodes the global feature representations while the feature dropping branch learns local detailed features.</p>
+<p>  Specifically, Batch DropBlock randomly drops the same region of all the feature maps, namely the same semantic body parts, in a batch during training and reinforces the attentive feature learning of local regions, i.e., the remaining parts.</p>
+</li>
+<li><p>Batch DropBlock can also be adopted in different metric learning schemes.</p>
+<p>   Metric Learning Problem:</p>
+<p>   aims to find embedding features for input images in order to measure their semantic similarity</p>
+<p>   such as contrastive loss, triplet loss, lifted structure loss, quadruplet loss, histogram loss</p>
+</li>
+</ul>
+<div align="center">
+    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig3.png">
+</div>
+
+<ul>
+<li><p><strong>Global max pooling (GMP)</strong> encourages the network to identify comparatively weak salient features after the most descriminative part is dropped, i.e., encourages the network to strength the weak features.</p>
+</li>
+<li><p>Without <strong>the stack of convolution layers on feature map T</strong>, the global average pooling layer and the global max pooling layer would be applied simultaneously on T, making the network hard to converge.</p>
+</li>
+</ul>
+<ol>
+<li><p>The Batch DropBlock Layer is parameter free and will not increase the network size.</p>
+</li>
+<li><p>The Batch DropBlock Layer can be easily adopted in other metric learning tasks beyond person re-ID.</p>
+<p> The triplet loss is a vital part of BDB Network since the Batch DropBlock layer has effect only when considering relationship between images.</p>
+</li>
+<li><p>The Batch DropBlock hyper-parameters are tunable without changing the network structure for different tasks, such as image retrieval problem.</p>
+<p> BDB Network requires input images to be roughly aligned.</p>
+</li>
+<li><p>BDB Network can still benefit from image erasing data augmentation methods such as Cutout [1] and Random Erasing, because the BDB Network contains a global branch which sees the complete feature map.</p>
+</li>
+</ol>
+<h2 id="Comparison-with-Dropout-and-DropBlock"><a href="#Comparison-with-Dropout-and-DropBlock" class="headerlink" title="Comparison with Dropout and DropBlock"></a>Comparison with Dropout and DropBlock</h2><div align="center">
+    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig6.png" width="60%">
+</div>
+
+<p>Comparison with DropBlock [2]:</p>
+<ol>
+<li><p>Batch DropBlock is an attentive feature learning module for metric learning tasks while DropBlock is a regularization method for classification tasks.</p>
+</li>
+<li><p>Batch DropBlock drops the same block for a batch of images during a single iteration, while DropBlock erases randomly across different images.</p>
+</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Terrance DeVries and Graham W Taylor. Improved regularization of convolutional neural networks with cutout. arXiv preprint arXiv:1708.04552, 2017. [<a href="https://arxiv.xilesou.top/abs/1708.04552" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Golnaz Ghiasi, Tsung-Yi Lin, and Quoc V Le. Dropblock: A regularization method for convolutional networks. arXiv:1810.12890, 2018. [<a href="http://papers.nips.cc/paper/8271-dropblock-a-regularization-method-for-convolutional-networks" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>trick</tag>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>A Maximum-value Perfect Matching for Mining Hard Samples</title>
+    <url>/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification"><a href="#MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification" class="headerlink" title="MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification"></a>MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/IAAI-CVResearchGroup/MVP-metric" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="Hard-Samples"><a href="#Hard-Samples" class="headerlink" title="Hard Samples"></a>Hard Samples</h3><ol>
+<li><p>The appearance of different pedestrians may be highly similar;</p>
+</li>
+<li><p>The pose of a person may vary significantly as time and space changed;</p>
+</li>
+<li><p>The light conditions taken by some cameras are sometimes poor.</p>
+</li>
+</ol>
+<p>These hard samples would strongly <strong>slow down the convergence rate</strong> of the metric learning, which works on pulling similar samples to cluster together while pushing dissimilar ones to widen apart.</p>
+<p>Or worse of all, the learned embedding metric and feature representation could be heavily biased by these hard samples.</p>
+<a id="more"></a>
+
+<h3 id="Deep-metric-learning"><a href="#Deep-metric-learning" class="headerlink" title="Deep metric learning"></a>Deep metric learning</h3><ul>
+<li><p>Seminal contrastive loss [1] or triplet loss [2] learns the semantical information within image pairs or triplets based on the siamese-like networks [3]. They do not make full use of all available information within a batch of samples.</p>
+</li>
+<li><p>Batch all triplet loss [4] and N-pair loss [5] have been developed to remedy this flaw, but they do not attach enough attention to hard samples and require expensive resampling techniques to boost the performance.</p>
+</li>
+<li><p>Lifted loss [6] and quadruplet loss [7] only consider hard negative samples mining while ignoring the hard positive samples.</p>
+</li>
+<li><p>Batch hard triplet loss [4] considers the hardest positive and negative mining depended on the distances of features simply. Its performance is easily influenced by some outlier samples (e.g., indistinguishable or mislabeled images in person re-ID datasets), which could be regarded as hardest sample pairs by many other samples simultaneously and lead to oscillation during metric learning process.</p>
+</li>
+</ul>
+<div align="center">
+    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Fig1.png" width="46%">
+</div>
+
+<p>Conventional batchwise loss objectives for metric learning can be optimized using all available information within training batches, so that all similar positive pairs with large ground distances and dissimilar negative pairs with small ground distances would be emphasized simultaneously.</p>
+<ol>
+<li><p><strong>Overtraining</strong>:</p>
+<p> Similar positive pairs with small distances would still be optimized (e.g., $x_1$ and $x_4$).</p>
+</li>
+<li><p><strong>Counteracting</strong>:</p>
+<p> Or worse, if we treat the optimization as a whole rather than the individual particle, the metric learning process of these methods is vulnerable to oscillation. Since the hard samples might be emphasized by many particles simultaneously, they could all cancel each other out (e.g., $x_2$ and $x_5$).</p>
+</li>
+</ol>
+<p>In contrast, metric learning with the MVP matching based loss objective can guarantee that each sample selects one exclusive hard positive and negative pairs.</p>
+<p>Thus, the learned MVP matching could deal with <strong>unbalanced samples</strong> according to the adaptive edge weights in the bipartite graph and the <strong>adverse optimization</strong>, e.g., overtraining and counteracting yielded by other anchors as black arrows shown in Figure 1.(c), <strong>would be effectively eliminated</strong>.</p>
+<p>As a consequence, the convergence rate and recognition performance of metric learning could be improved significantly.</p>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><div align="center">
+    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Fig2.png">
+</div>
+
+<h3 id="Adaptive-Weighting-for-Positives-and-Negatives"><a href="#Adaptive-Weighting-for-Positives-and-Negatives" class="headerlink" title="Adaptive Weighting for Positives and Negatives"></a>Adaptive Weighting for Positives and Negatives</h3><p>We divide the complete bipartite graph $G(U,V,E)$ into two bipartite graphs $G_P$ and $G_N$ for positive and negative pairs respectively.</p>
+<p>An adaptive weight $M_{ij}^+$ and $M_{ij}^−$ of each edge $(i, j)$ in $G_P$ and $G_N$:</p>
+<p>$$<br>M_{ij}^+(x_i, x_j; f)=<br>\begin{cases}<br>||f(x_i)-f(x_j)||_2^2-\alpha,\quad&amp;\mbox{if}\quad\delta_{ij}^+=1\\<br>0,&amp;\mbox{if}\quad\delta_{ij}^+=0<br>\end{cases}<br>$$</p>
+<p>where</p>
+<p>$$<br>\delta_{ij}^+=<br>\begin{cases}<br>1,\quad&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\gt\alpha\\<br>0,&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\le\alpha<br>\end{cases}<br>$$</p>
+<p>where $\alpha$ is a learnable variable.</p>
+<p>This function would prevent the overtraining for positive samples in contrastive loss, which demands similar pairs gather as close as possible.</p>
+<p>$$<br>M_{ij}^-(x_i, x_j; f)=<br>\begin{cases}<br>\beta-||f(x_i)-f(x_j)||_2^2,\quad&amp;\mbox{if}\quad\delta_{ij}^-=1\\<br>0,&amp;\mbox{if}\quad\delta_{ij}^-=0<br>\end{cases}<br>$$</p>
+<p>where</p>
+<p>$$<br>\delta_{ij}^-=<br>\begin{cases}<br>1,\quad&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\lt\beta\\<br>0,&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\ge\beta<br>\end{cases}<br>$$</p>
+<p>where $\beta = \epsilon + \alpha$.</p>
+<p>This function penalizes the dissimilar pairs within the margin $\beta$ and ignores the others. (prevent the counteracting)</p>
+<h3 id="MVP-Matching-for-Hard-Samples-Pairs"><a href="#MVP-Matching-for-Hard-Samples-Pairs" class="headerlink" title="MVP Matching for Hard Samples Pairs"></a>MVP Matching for Hard Samples Pairs</h3><p>We define the matching variables $T_{ij}^+$ and $T_{ij}^−$ for the edge $(i, j)$ on these two weighted bipartite graphs $G_P$ and $G_N$:</p>
+<p>$$<br>t_{ij}=<br>\begin{cases}<br>1,\quad&amp;\mbox{indicates a matching pair}\\<br>0,&amp;\mbox{means unmatching one}<br>\end{cases}<br>$$</p>
+<p>where $t_{ij}\in T^{+(or-)}$</p>
+<p>$$\max_{T_{ij}\ge 0}\sum_{i,j=1}^nT_{ij}^{+(or-)}M_{ij}^{+(or-)}$$</p>
+<p>$$\mbox{s.t.}\quad\sum_{j=1}^nT_{ij}^{+(or-)}=1,\quad\sum_{i=1}^nT_{ij}^{+(or-)}=1$$</p>
+<h3 id="Kuhn-Munkres-assignment-KA-algorithm-8"><a href="#Kuhn-Munkres-assignment-KA-algorithm-8" class="headerlink" title="Kuhn-Munkres assignment (KA) algorithm [8]"></a>Kuhn-Munkres assignment (KA) algorithm [8]</h3><p><strong>Definition 3.1.</strong> <em>Feasible labeling</em> :</p>
+<p>$$l:\forall x_i, x_j\in U\cup V\rightarrow R$$</p>
+<p>$$\mbox{s.t.}\quad M_{ij}\le l(x_i)+l(x_j)$$</p>
+<p><strong>Definition 3.2.</strong> <em>Equality graph</em> :</p>
+<p>$$G_l=\lbrace\forall (i, j):M_{ij}=l(x_i)+l(x_j)\rbrace$$</p>
+<p><strong>Theorem 3.3.</strong> If $l$ is a feasible labeling function and $T$ is an arbitrary perfect matching (i.e., one-to-one matching) in the equality graph $G_l$, then $T$ must be a maximum-value perfect (MVP) matching $T^*$.</p>
+<p><strong><em>Proof</em></strong>: For $T$ in $G(U, V, E)$:</p>
+<p>$$\sum_{i, j}^{(x_i, x_j)\in T}M_{ij}\le\sum_i^{x_i\in U}l(x_i)+\sum_j^{x_j\in V}l(x_j)$$</p>
+<p>Only when $T$ is a matching in $G_l$:</p>
+<p>$$\sum_{i, j}^{(x_i, x_j)\in T^*}M_{ij}=\sum_i^{x_i\in U}l(x_i)+\sum_j^{x_j\in V}l(x_j)$$</p>
+<div align="center">
+    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Alg1.png" width="50%">
+</div>
+
+<h3 id="Batch-wise-MVP-Matching-based-Loss"><a href="#Batch-wise-MVP-Matching-based-Loss" class="headerlink" title="Batch-wise MVP Matching based Loss"></a>Batch-wise MVP Matching based Loss</h3><p>$$<br>\begin{split}<br>L(x_i, x_j; f)&amp;=L^++L^-\\<br>&amp;=\sum_{ij}^ny_{ij}T_{ij}^+M_{ij}^++\sum_{ij}^n(1-y_{ij})T_{ij}^-M_{ij}^-<br>\end{split}<br>$$</p>
+<p>where</p>
+<p>$$<br>y_{ij}=<br>\begin{cases}<br>1,\quad &amp;\mbox{if samples $x_i$ and $x_j$ are deemed similar}\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p>Update:</p>
+<p>$$\frac{\partial L}{\partial f(x_i)}=\sum_{j=1}^n2(f(x_i)-f(x_j))(\delta_{ij}^+y_{ij}T_{ij}^+-\delta_{ij}^-(1-y_{ij})T_{ij}^-)$$</p>
+<p>$$\frac{\partial L}{\partial f(x_j)}=-\sum_{i=1}^n2(f(x_i)-f(x_j))(\delta_{ij}^+y_{ij}T_{ij}^+-\delta_{ij}^-(1-y_{ij})T_{ij}^-)$$</p>
+<p>$\alpha$ is a learnable variable:</p>
+<p>$$\frac{\partial L}{\partial \alpha}=\sum_{i,j=1}^n[-y_{ij}\delta_{ij}^++(1-y_{ij})\delta_{ij}^-]$$</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Sumit Chopra, Raia Hadsell, and Yann LeCun. Learning a similarity metric discriminatively, with application to face verification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 539–546. IEEE, 2005. [<a href="http://www.cs.utoronto.ca/~hinton/csc2535_06/readings/chopra-05.pdf" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Gal Chechik, Varun Sharma, Uri Shalit, and Samy Bengio. Large scale online learning of image similarity through ranking. Journal of Machine Learning Research, 11(Mar):1109–1135, 2010. [<a href="http://www.jmlr.org/papers/v11/chechik10a.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Jane Bromley, Isabelle Guyon, Yann LeCun, Eduard S¨ackinger, and Roopak Shah. Signature verification using a “siamese” time delay neural network. In Advances in neural information processing systems, pages 737–744, 1994. [<a href="http://papers.nips.cc/paper/769-signature-verification-using-a-siamese-time-delay-neural-network" target="_blank" rel="noopener">link</a>]</p>
+<p>[4] Alexander Hermans, Lucas Beyer, and Bastian Leibe. In defense of the triplet loss for person re-identification. arXiv preprint arXiv:1703.07737, 2017. [<a href="https://arxiv.xilesou.top/abs/1703.07737" target="_blank" rel="noopener">link</a>]</p>
+<p>[5] Kihyuk Sohn. Improved deep metric learning with multiclass n-pair loss objective. In Advances in Neural Information Processing Systems, pages 1857–1865, 2016. [<a href="http://papers.nips.cc/paper/6200-improved-deep-metric-learning-with-multiclass" target="_blank" rel="noopener">link</a>]</p>
+<p>[6] Hyun Oh Song, Yu Xiang, Stefanie Jegelka, and Silvio Savarese. Deep metric learning via lifted structured feature embedding. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 4004–4012, 2016. [<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Song_Deep_Metric_Learning_CVPR_2016_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[7] Weihua Chen, Xiaotang Chen, Jianguo Zhang, and Kaiqi Huang. Beyond triplet loss: a deep quadruplet network for person re-identification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 403–412, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Chen_Beyond_Triplet_Loss_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[8] Harold W Kuhn. The hungarian method for the assignment problem. Naval research logistics quarterly, 2(1-2):83–97, 1955. [<a href="https://onlinelibrary_wiley.xilesou.top/doi/abs/10.1002/nav.3800020109" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Beyond Human Parts -- Dual Part-Aligned Representations</title>
+    <url>/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification"><a href="#Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification" class="headerlink" title="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification"></a>Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/ggjy/P2Net.pytorch" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Challenges-Misalignment-Problem"><a href="#Challenges-Misalignment-Problem" class="headerlink" title="Challenges - Misalignment Problem"></a>Challenges - Misalignment Problem</h2><p>The significant visual appearance changes caused by:</p>
+<ol>
+<li><p>human pose variation</p>
+</li>
+<li><p>lighting conditions</p>
+</li>
+<li><p>part occlusions</p>
+</li>
+<li><p>background cluttering</p>
+</li>
+<li><p>distinct camera viewpoints ……</p>
+</li>
+</ol>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
+<li><p>Hand-crafted partitioning</p>
+<p> relies on manually designed splits of the input image or the feature maps into grid cells or horizontal stripes, based on the assumption that the human parts are well-aligned in the RGB color space</p>
+</li>
+<li><p>The attention mechanism</p>
+<p> tries to learn an attention map over the last output feature map and constructs the aligned part features accordingly</p>
+</li>
+<li><p>Predicting a set of predefined attributes as useful features to guide the matching process.</p>
+</li>
+<li><p>Injecting human pose estimation or human parsing results to extract the human part aligned features based on the predicted human key points or semantic human part regions, while the success of such approaches heavily counts on the accuracy of human parsing models or pose estimators.</p>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>Most of the previous studies mainly focus on learning more accurate human part representations, while neglecting the influence of <strong>potentially useful contextual cues</strong> that could be addressed as <strong>“non-human” parts</strong>.</p>
+<p>Beyond these predefined part categories, there still exist many objects or parts which could be critical for person re-identification, but tend to be recognized as background by the pre-trained human parsing models.</p>
+<a id="more"></a>
+
+<h2 id="Dual-Part-Aligned-Representation"><a href="#Dual-Part-Aligned-Representation" class="headerlink" title="Dual Part-Aligned Representation"></a>Dual Part-Aligned Representation</h2><div align="center">
+    <img src="/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/Fig2.png">
+</div>
+
+<h3 id="Accurate-Human-Parts"><a href="#Accurate-Human-Parts" class="headerlink" title="Accurate Human Parts:"></a>Accurate Human Parts:</h3><ul>
+<li>Human parsing model CE2P [1] extracts the human part masks and computes the human part-aligned representations for the features from the low-levels to high-levels.</li>
+</ul>
+<p>the predicted label map: $L$ (rescaled to be of the same size as the feature map $X$ ($x_i$ is the representation of pixel $i$, essentially the $i_{th}$ row of $X$, $i=1,2,…,N$))</p>
+<p>$l_i$ represents the human part category of pixel $i$ of $L$, which is of $K$ different values including $K-1$ human part categories and one background category.</p>
+<p>$K$ confidence maps: $P_1, P_2, …, P_K$, where each confidence map $P_K$ is associated with a human part category (or the background category), $p_{ki}$ is the $i_{th}$ pixel of $P_k$.</p>
+<ul>
+<li>the representation of the $k_{th}$ human part (分量形式)：</li>
+</ul>
+<p>$$h_k=g(\sum_{i=1}^Np_{ki}x_i)$$</p>
+<ul>
+<li>矩阵形式:</li>
+</ul>
+<p>$$h_k^{C\times 1}=g(M^{C\times 1}P_k^{1\times N}\odot X^{C\times N}Y^{N\times 1})$$</p>
+<p>$M^{C\times 1}$: 所有元素全为 1 的向量，表示将 $P_k^{1\times N}$ 广播到 $C\times N$</p>
+<p>$Y^{N\times 1}$: 所有元素全为 1 的向量，表示按行求和 (对每一行求和)</p>
+<ul>
+<li>the human part-aligned feature map $X^{Human}$ (same size as $X$):</li>
+</ul>
+<p>$$X^{Human}=\sum_{k=1}^Kh_k^{C\times 1}P_k^{1\times N}$$</p>
+<h3 id="Coarse-Non-human-Parts"><a href="#Coarse-Non-human-Parts" class="headerlink" title="Coarse Non-human Parts:"></a>Coarse Non-human Parts:</h3><p>The latent part branch learns to predict $N$ coarse confidence maps $Q_1, Q_2, …, Q_N$ for all<br>$N$ pixels, $q_{ij}$ is the $j_{th}$ pixel of $Q_i$:</p>
+<p>$$q_{ij}=\frac{1}{Z_i}\exp(\theta(x_j)^T\phi(x_i))$$</p>
+<p>where</p>
+<p>$$Z_i=\sum_{j=1}^N\exp(\theta(x_j)^T\phi(x_i))$$</p>
+<ul>
+<li>the latent part-aligned feature map $X^{Latent}$:</li>
+</ul>
+<p>$$x_i^{Latent}=\sum_{j=1}{N}q_{ij}\psi(x_j)$$</p>
+<ol>
+<li><p>The self-attention mechanism [2, 3] learns to group all the pixels belonging to the same latent part together. We also extract the latent non-human part information on the feature maps from the low-levels to the high-levels.</p>
+</li>
+<li><p>Self-attention can learn to group the similar pixels together without extra supervision (also shown useful in segmentation).</p>
+</li>
+<li><p>The performance gains from the latent part branch, which is in fact the mixture of the coarse human and non-human part information, is mainly attributed to capturing non-human parts.</p>
+</li>
+<li><p>Although the latent part masks are learned from scratch, DPB (latent) achieves comparable results with the human part branch in general, which carries more strong prior information of the human parts knowledge, showing the importance of the non-human part context.</p>
+</li>
+</ol>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li><p>Through combining the advantages of the complementary information from both parts, our approach learns to augment the representation of each pixel with the representation of the part (human parts or non-human parts) that it belongs to.</p>
+</li>
+<li><p>Human part branch and latent part branch are complementary to each other.</p>
+</li>
+<li><p>Human part masks can eliminate the influence of background regions, while the predicted latent part masks serves as reliable surrogate for the non-human part.</p>
+</li>
+<li><p>The human part branch adopts off-the-shelf human parsing model to inject structural prior information by capturing the predefined semantic human parts for a person, while the latent part branch adopts a self-attention mechanism to help capture the detailed part categories beyond the injected prior information.</p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Ting Liu, Tao Ruan, Zilong Huang, Yunchao Wei, Shikui Wei, Yao Zhao, and Thomas Huang. Devil in the details: Towards accurate single and multiple human parsing. arXiv:1809.05996, 2018. [<a href="https://www.aaai.org/ojs/index.php/AAAI/article/view/4409" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. In NIPS, 2017. [<a href="http://papers.nips.cc/paper/7181-attention-is-all-you-need" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Xiaolong Wang, Ross Girshick, Abhinav Gupta, and Kaiming He. Non-local neural networks. In CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wang_Non-Local_Neural_Networks_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deep Reinforcement Active Learning</title>
+    <url>/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/</url>
+    <content><![CDATA[<h1 id="Deep-Reinforcement-Active-Learning-for-Human-In-The-Loop-Person-Re-Identification"><a href="#Deep-Reinforcement-Active-Learning-for-Human-In-The-Loop-Person-Re-Identification" class="headerlink" title="Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification"></a>Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Most existing supervised person Re-ID approaches employ a train-once-and-deploy scheme, i.e., a large amount of pre-labelled data is put into training phrase all at once.</p>
+<p>However, in practice this assumption is not easy to adapt:</p>
+<ol>
+<li><p>Pairwise pedestrian data is prohibitive to be collected since it is unlikely that a large amount of pedestrian may reappear in other camera views.</p>
+</li>
+<li><p>The increasing number of camera views amplifies the difficulties in searching the same person among multiple camera views.</p>
+</li>
+</ol>
+<p>Solutions:</p>
+<ol>
+<li><p>Unsupervised learning algorithms</p>
+<p> Unsupervised learning based Re-ID models are inherently weaker compared to supervised learning based models, compromising Re-ID effectiveness in any practical deployment.</p>
+</li>
+<li><p>Semi-supervised learning scheme</p>
+<p> These models are still based on a strong assumption that parts of the identities (e.g. one third of the training set) are fully labelled for every camera view. </p>
+</li>
+</ol>
+<p>-&gt; Reinforcement Learning + Active Learning:</p>
+<p>human-in-the-loop (HITL) model learning process [1]</p>
+<p>A step-by-step sequential active learning process is adopted by exploring human selective annotations on a much smaller pool of samples for model learning.</p>
+<p>These cumulatively labelled data by human binary verification are used to update model training for improving Re-ID performance.</p>
+<p>Such an approach to model learning is naturally suited for reinforcement learning together with active learning, the focus of this work.</p>
+<div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig1.png" width="50%">
+</div>
+
+<a id="more"></a>
+
+<h2 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h2><div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Alg1.png" width="50%">
+</div>
+
+<h3 id="Base-CNN-Network"><a href="#Base-CNN-Network" class="headerlink" title="Base CNN Network"></a>Base CNN Network</h3><p>$$L_{total}=L_{cross-entropy}+L_{triplet}$$</p>
+<h3 id="A-Deep-Reinforced-Active-Learner-An-Agent"><a href="#A-Deep-Reinforced-Active-Learner-An-Agent" class="headerlink" title="A Deep Reinforced Active Learner - An Agent"></a>A Deep Reinforced Active Learner - An Agent</h3><div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig2.png">
+</div>
+
+<p>As each query instance arrives, we perceive its $n_s$-nearest neighbors as the unlabelled gallery pool.</p>
+<h4 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h4><p>The action set defines to select an instance from the unlabelled gallery pool:</p>
+<p>$$\pi(A_t|S_t)$$</p>
+<p>Once $A_t=g_k$ is performed, the agent is unable to choose it again in the subsequent steps.</p>
+<p>The termination criterion of this process depends on a pre-defined $K_{max}$ which restricts the maximal annotation amount for each query anchor.</p>
+<h4 id="State"><a href="#State" class="headerlink" title="State"></a>State</h4><div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig3.png">
+</div>
+
+<p>At each discrete time step $t$, the environment provides an observation state $S_t$ which reveals the instances’ relationship, and receives a response from the agent by selecting an action $A_t$:</p>
+<ul>
+<li>Mahalanobis distance</li>
+</ul>
+<p>$$d(x, y)=\mbox{Mahalanobis}(x, y)=(x-y)^T\Sigma^{-1}(x-y)$$</p>
+<ul>
+<li>The k-reciprocal neighbors</li>
+</ul>
+<p>$$R(n_i, k)=\lbrace n_j|(n_i\in N(n_j, k))\land(n_j\in N(n_i, k))\rbrace$$</p>
+<p>where $N(n_i, k)$ is the top k-nearest neighbors of $n_i$</p>
+<ul>
+<li>Sparse similarity graph</li>
+</ul>
+<p>The similarity value between every two samples $i,j(i\ne j)$</p>
+<p>$$<br>\mbox{Sim}(i, j)=<br>\begin{cases}<br>1-\frac{d(i, j)}{\max_{i, j\in q, g}d(i, j)},\quad&amp;\mbox{if}\quad j\in R(i, k)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p>The similarity value of the node $n_i$ is remained, otherwise be assigned with zero.</p>
+<p>For a state $S_t$ at time $t$, the optimal action $A_t=g_k$ is selected via the policy network, which indicates the $k$-th instance among the unlabelled gallery pool being annotated by human oracle, who replies with binary feedback true or false against the query:</p>
+<ol>
+<li>True Match:</li>
+</ol>
+<p>$$y_k^t=1$$</p>
+<p>then,</p>
+<p>$$\mbox{Sim}(q, g_k)=1$$</p>
+<p>$$\mbox{Sim}(q, g_i)=\frac12[\mbox{Sim}(q, g_i)+\mbox{Sim}(g_k, g_i)]$$</p>
+<ol start="2">
+<li>False Match:</li>
+</ol>
+<p>$$y_k^t=-1$$</p>
+<p>then,</p>
+<p>$$\mbox{Sim}(q, g_k)=0$$</p>
+<p>$$<br>\mbox{Sim}(q, g_i)=<br>\begin{cases}<br>\mbox{Sim}(q, g_i)-\mbox{Sim}(g_k, g_i),\quad&amp;\mbox{if}\quad\mbox{Sim}(q, g_i)\gt\mbox{Sim}(g_k, g_i)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p><strong>zoom in the distance among positives</strong> and <strong>push out the distance among negatives</strong>.</p>
+<p>The k-reciprocal operation will also be adopt afterwards, and a renewed state $S_{t+1}$ is then obtained.</p>
+<p>repeats until the maximum annotation amount $K_{max}$ for each query is exhausted</p>
+<h4 id="Reward"><a href="#Reward" class="headerlink" title="Reward"></a>Reward</h4><p>Loss for action $\pi$</p>
+<p>We use data uncertainty as the objective function of the reinforcement learning policy, i.e., Higher uncertainty indicates that the sample is harder to be distinguished</p>
+<p>$$R_t=[m+y_k^t(\max_{x_i\in X_p^t}d(x_i, g_k)-\min_{x_j\in X_n^t}d(x_j, g_k))]_+$$</p>
+<p>All the future rewards $(R_{t+1}, R_{t+2}, \cdots)$:</p>
+<p>$$Q^*=\max_{\pi}E[R_t+\gamma R_{t+1}+\gamma^2R_{t+2}+\cdots|\pi, S_t, A_t]$$</p>
+<h4 id="CNN-Network-Updating"><a href="#CNN-Network-Updating" class="headerlink" title="CNN Network Updating"></a>CNN Network Updating</h4><p>When plentiful enough pair-wise labelled data are obtained, the CNN parameters enable to be updated via triplet loss function, which in return generates a new initial state for incoming data. Through iteratively executing the sample selection and CNN network refreshing, the proposed algorithm could quickly escalate.</p>
+<p>This progress terminates when each image in the training data pool has been browsed once by our DRAL agent.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li><p>The key task for the model design becomes how to select more informative samples at a fixed annotation cost.</p>
+</li>
+<li><p>DRAL method releases the restriction of pre-labelling and keeps model upgrading with progressively collected data.</p>
+</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Hanxiao Wang, Shaogang Gong, Xiatian Zhu, and Tao Xiang. Human-in-the-loop person re-identification. In ECCV, 2016. [<a href="https://link_springer.xilesou.top/chapter/10.1007/978-3-319-46493-0_25" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+        <tag>reinforcement learning</tag>
+        <tag>active learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Omni-Scale Feature Learning</title>
+    <url>/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Omni-Scale-Feature-Learning-for-Person-Re-Identification"><a href="#Omni-Scale-Feature-Learning-for-Person-Re-Identification" class="headerlink" title="Omni-Scale Feature Learning for Person Re-Identification"></a>Omni-Scale Feature Learning for Person Re-Identification</h1><p>全文链接：<br><a href="https://arxiv.xilesou.top/abs/1905.00953" target="_blank" rel="noopener">https://arxiv.xilesou.top/abs/1905.00953</a></p>
+<p>The source code is <a href="https://github.com/KaiyangZhou/deep-person-reid" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="Major-Challenges"><a href="#Major-Challenges" class="headerlink" title="Major Challenges"></a>Major Challenges</h3><div align="center">
+    <img src="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/Fig1.png" width="50%">
+</div>
+
+<p>As an instance-level recognition problem, person ReID faces two major challenges as illustrated in Figure 1 :</p>
+<ol>
+<li><p>The intra-class (instance/identity) variations are typically big due to the changes of camera viewing conditions. - <strong>hard positives</strong></p>
+</li>
+<li><p>Small inter-class variations - people in public space often wear similar clothes; from a distance as typically in surveillance videos, they can look incredibly similar. - <strong>hard negatives</strong></p>
+</li>
+</ol>
+<h3 id="Omni-Scale-Featrue"><a href="#Omni-Scale-Featrue" class="headerlink" title="Omni-Scale Featrue"></a>Omni-Scale Featrue</h3><p>To match people and distinguish them from impostors, features corresponding both <strong>small local regions</strong> and <strong>global whole body regions</strong> are important.</p>
+<ol>
+<li><p>Looking at the global-scale features would narrow down the search to the true match (middle) and an impostor (right).</p>
+</li>
+<li><p>The local-scale features gives away the fact that the person on the right is an impostor. (For more challenging cases, more complicated and richer features that span multiple scales are required.)</p>
+</li>
+</ol>
+<a id="more"></a>
+
+<h3 id="OSNet"><a href="#OSNet" class="headerlink" title="OSNet:"></a>OSNet:</h3><ol>
+<li><p>enabling omni-scale feature learning;</p>
+</li>
+<li><p>a lightweight network.</p>
+<p> benefits: </p>
+<p> 1) When trained on the ReID datasets, which are often of moderate sizes due to the difficulties in collecting across-camera matched person images, a lightweighted network with a small number of model parameters is <strong>less prone to overfitting</strong>.</p>
+<p> 2) In a large-scale surveillance application, the most practical way for ReID is to perform feature extraction at the camera end, in which case only features need to be sent to a central server instead of sending the raw videos.</p>
+</li>
+</ol>
+<h2 id="Depthwise-Seperable-Convolutions-notes"><a href="#Depthwise-Seperable-Convolutions-notes" class="headerlink" title="Depthwise Seperable Convolutions [notes]"></a>Depthwise Seperable Convolutions [<a href="https://github.com/scutan90/DeepLearning-500-questions/blob/master/ch17_%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E3%80%81%E5%8A%A0%E9%80%9F%E5%8F%8A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%83%A8%E7%BD%B2/%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0_%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E3%80%81%E5%8A%A0%E9%80%9F%E5%8F%8A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E9%83%A8%E7%BD%B2.md#1782-depthwise-separable-convolution" target="_blank" rel="noopener">notes</a>]</h2><h3 id="Traditional-Convolution"><a href="#Traditional-Convolution" class="headerlink" title="Traditional Convolution"></a>Traditional Convolution</h3><div align="center">
+    <img src="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/Conv.jpg" width="60%">
+</div>
+
+<h3 id="Depthwise-Convolution"><a href="#Depthwise-Convolution" class="headerlink" title="Depthwise Convolution"></a>Depthwise Convolution</h3><div align="center">
+    <img src="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/DepthwiseConv.jpg" width="60%">
+</div>
+
+<h3 id="Pointwise-Convolution"><a href="#Pointwise-Convolution" class="headerlink" title="Pointwise Convolution"></a>Pointwise Convolution</h3><p>即 $1\times 1$ 卷积：</p>
+<div align="center">
+    <img src="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/PointwiseConv.jpg" width="60%">
+</div>
+
+<h3 id="Lite-3-times-3-Convolution"><a href="#Lite-3-times-3-Convolution" class="headerlink" title="Lite $3\times 3$ Convolution"></a>Lite $3\times 3$ Convolution</h3><div align="center">
+    <img src="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/Fig3.png" width="60%">
+</div>
+
+<h2 id="Omni-Scale-Residual-Block"><a href="#Omni-Scale-Residual-Block" class="headerlink" title="Omni-Scale Residual Block"></a>Omni-Scale Residual Block</h2><h3 id="Multi-Scale-Feature-Learning"><a href="#Multi-Scale-Feature-Learning" class="headerlink" title="Multi-Scale Feature Learning"></a>Multi-Scale Feature Learning</h3><div align="center">
+    <img src="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/Fig4.png" width="60%">
+</div>
+
+<p>$$y=x+\tilde{x}$$</p>
+<p>where</p>
+<p>$$\tilde{x}=\sum_{t=1}^TF^t(x),\quad\mbox{s.t.}\quad T\ge 1$$</p>
+<h3 id="Unified-Aggregation-Gate"><a href="#Unified-Aggregation-Gate" class="headerlink" title="Unified Aggregation Gate"></a>Unified Aggregation Gate</h3><ul>
+<li><p>To learn omni-scale features, we propose to combine the outputs of different streams <strong>in a dynamic way</strong>, i.e., different weights are assigned to different scales according to the input image, rather than being fixed after training. - <strong>learnable neural network AG</strong></p>
+<ol>
+<li><p>The output of the AG network $G(x^t)$ is a <strong>vector</strong> rather a scalar for the $t$-th stream, resulting in a more fine-grained fusion that tunes each feature channel.</p>
+</li>
+<li><p>The weights are dynamically computed by being conditioned on the input data.</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>$$\tilde{x}=\sum_{t=1}^TG(x^t)\odot x^t,\quad\mbox{where}\quad x^t=F^t(x)$$</p>
+<ul>
+<li><p>The AG is <strong>shared</strong> for all feature streams in the same omni-scale residual block.</p>
+<p>  advantages:</p>
+<ol>
+<li><p>The number of parameters is independent of $T$ (number of streams), thus the model becomes more scalable.</p>
+</li>
+<li><p>The supervision signals from all streams are gathered together to guide the learning of $G$.</p>
+<p>$$\frac{\partial L}{\partial G}=\frac{\partial L}{\partial \tilde{x}}\frac{\partial \tilde{x}}{\partial G}=\frac{\partial L}{\partial \tilde{x}}(\sum_{t=1}^T x^t)$$</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Differences-to-Inception-and-ResNeXt"><a href="#Differences-to-Inception-and-ResNeXt" class="headerlink" title="Differences to Inception and ResNeXt"></a>Differences to Inception and ResNeXt</h3><ol>
+<li><p>The multi-stream design in OSNet strictly follows the scale-incremental principle dictated by the exponent $T$. Specifically, different streams have different receptive fields but are bulit with the same Lite $3\times 3$ layers. Such a design is more effective at capturing a wide range of scales. In contrast, Inception [1] was originally designed to have low computational costs by sharing computations with multiple streams. Therefore its structure, which includes mixed operations of convolution and pooling, was handcrafted. ResNeXt [2] has multiple equal-scale streams thus learning representations at the same scale.</p>
+</li>
+<li><p>Inception/ResNeXt aggregates features by concatenation/addition while OSNet uses a unified AG, which facilitates the learning of combinations of multi-scale feature. Critically, it means that the fusion is dynamic and adaptive to each individual input image. Therefore, OSNet’s architecture is fundamentally different from that of Inception/ResNeXt in nature.</p>
+</li>
+<li><p>OSNet uses factorised convolutions and thus the building block and subsequently the whole network is lightweight.</p>
+</li>
+</ol>
+<h3 id="Differences-to-SENet"><a href="#Differences-to-SENet" class="headerlink" title="Differences to SENet"></a>Differences to SENet</h3><p>SENet [3] aims to re-calibrate the feature channels by re-scaling the activation values for a single stream, whereas OSNet is designed to selectively fuse multiple feature streams of different receptive field sizes in order to learn omni-scale features.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed, Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, and Andrew Rabinovich. Going deeper with convolutions. In CVPR, 2015. [<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Szegedy_Going_Deeper_With_2015_CVPR_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Saining Xie, Ross Girshick, Piotr Doll´ar, Zhuowen Tu, and Kaiming He. Aggregated residual transformations for deep neural networks. In CVPR, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Xie_Aggregated_Residual_Transformations_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Jie Hu, Li Shen, and Gang Sun. Squeeze-and-excitation networks. In CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>architecture</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Robust Person Re-ID By Modelling Feature Uncertainty</title>
+    <url>/2019/12/11/RobustPersonRe-IDByModellingFeatureUncertainty/</url>
+    <content><![CDATA[<h1 id="Robust-Person-Re-Identification-by-Modelling-Feature-Uncertainty"><a href="#Robust-Person-Re-Identification-by-Modelling-Feature-Uncertainty" class="headerlink" title="Robust Person Re-Identification by Modelling Feature Uncertainty"></a>Robust Person Re-Identification by Modelling Feature Uncertainty</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Yu_Robust_Person_Re-Identification_by_Modelling_Feature_Uncertainty_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Yu_Robust_Person_Re-Identification_by_Modelling_Feature_Uncertainty_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/TianyuanYu/DistributionNet" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
+<li><p>Two types of noise are prevalent in practice:</p>
+<ol>
+<li><p>label noise caused by human annotator errors, i.e., people assigned with the wrong identities</p>
+</li>
+<li><p>data outliers caused by person detector errors or occlusion</p>
+</li>
+</ol>
+</li>
+<li><p>Having both types of noisy samples in a training set inevitably has a detrimental effect on the learned feature embedding:</p>
+</li>
+</ul>
+<p><strong>Noisy samples are often far from inliers of the same class in the input (image) space.</strong></p>
+<p><strong>To minimise intra-class distance and pull the noisy samples close to their class centre, a ReID model often needs to sacrifice inter-class separability, leading to performance degradation.</strong></p>
+<a id="more"></a>
+
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><p>Existing robust deep learning approaches can be grouped into two categories depending whether human supervision/verification of noise is required.</p>
+<ol>
+<li><p>no such additional human noise annotation or pattern estimation is needed.</p>
+<p> These methods address label noise by either iterative label correction via bootstrapping, adding additional layers on top of a classification layer to estimate the noise pattern [1, 2] or loss correlation [3].</p>
+</li>
+<li><p>requires a subset of noisy data to be re-annotated (cleaned) by more reliable sources to verify which samples contain noise. This subset is then used as seed/reference set so that noisy samples in the full training set can be identified.</p>
+<p> (1) The recently proposed CleanNet [4] learns the similarity between class- and query- embedding vectors, which is then used to detect noisy samples.</p>
+<p> (2) MentorNet [5] on the other hand resorts to curriculum learning and knowledge distillation to focus on samples whose labels are more likely to be correct.</p>
+</li>
+</ol>
+<h2 id="DistributionNet"><a href="#DistributionNet" class="headerlink" title="DistributionNet"></a>DistributionNet</h2><div align="center">
+    <img src="/2019/12/11/RobustPersonRe-IDByModellingFeatureUncertainty/Fig3.png" width="60%">
+</div>
+
+<p>We propose to explicitly model the feature distribution of an individual image as Gaussian, i.e., we assume the feature vector of an image is drawn from a Gaussian distribution parametrised.</p>
+<h3 id="Loss"><a href="#Loss" class="headerlink" title="Loss"></a>Loss</h3><p>$$L_{ce}=l(g_\phi(\mu), y)+\lambda(\frac{1}{N}\sum_{j=1}^N l(g_\phi(z^{(j)}), y))$$</p>
+<p>$$L_{fu}=\max(0, \gamma-\sum_{i=1}^n q^{(i)})$$</p>
+<p>DistributionNet models uncertainty and allocates it appropriately by introducing losses to promote high net uncertainty.</p>
+<p><strong>Given a noisy training sample</strong>, instead of forcing it to be closer to other inliers of the same class, <strong>DistributionNet computes a large variance</strong>, indicating that it is uncertain about what feature values should be assigned to the sample.</p>
+<p>Training samples of larger variances have less impact on the learned feature embedding space.</p>
+<p>Together with the supervised loss, they help the model identify noisy training samples, discount them/mitigate the negative impact of the noisy samples by assigning large variances and focus more on the clean inliers rather than overfitting to noisy samples, resulting in better class separability and better generalisation to test data.</p>
+<h3 id="Reparameterisation-Trick"><a href="#Reparameterisation-Trick" class="headerlink" title="Reparameterisation Trick"></a>Reparameterisation Trick</h3><p>$$z=\mu+\epsilon\Sigma,\qquad\epsilon\sim N(0, I)$$</p>
+<h2 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h2><h3 id="Why-large-variances-for-noisy-samples"><a href="#Why-large-variances-for-noisy-samples" class="headerlink" title="Why large variances for noisy samples"></a>Why large variances for noisy samples</h3><p>First, we need to understand what the supervised classification loss $L_{ce}$ wants: samples with large variances will lead to large loss values of $L_{ce}$; it is also noted that samples with wrong labels or outlying also have the same effect because they are normally far away from the class centres and the clean inliers.</p>
+<p>Second, we explained that with the feature uncertainty loss $L_{fu}$, the model cannot simply satisfy $L_{ce}$ by reducing the variance of every sample to zero – the overall variance/uncertainty level has to be maintained.</p>
+<p>So who will get the large variance?</p>
+<p>Now the decision is clear: <strong>reducing variances of noisy samples would still lead to large $L_{ce}$, whilst reducing those of clean inliers will have a direct impact of reducing $L_{ce}$</strong>; the model therefore allocates large variance to noisy samples.</p>
+<h3 id="Why-samples-with-larger-variance-contribute-less-for-model-training"><a href="#Why-samples-with-larger-variance-contribute-less-for-model-training" class="headerlink" title="Why samples with larger variance contribute less for model training"></a>Why samples with larger variance contribute less for model training</h3><p>The reason is intuitive – if an image embedding has a large variance, when it is sampled, the outcome $z$ will be far away from its original point (the mean vector $\mu$) but with the same class label. So when several diverse $z^{(1)}, z^{(2)}, …, z^{(N)}$ and $\mu$ are fed to the classifier, it is likely that <strong>their gradients will cancel each other out</strong>.</p>
+<p>On the other hand, when a sample has a small variance, all $z^{(j)}$ will be close to $\mu$; feeding these to the classifier gives consistent gradients thus reinforcing the importance of the sample.</p>
+<p>The variance/uncertainty thus provides a mechanism for DistributionNet to give more/less importance to different training samples. Since noisy samples are given large variance, their contribution to model training is reduced, resulting in a better feature embedding space.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Sainbayar Sukhbaatar, Joan Bruna, Manohar Paluri, Lubomir Bourdev, and Rob Fergus. Training convolutional networks with noisy labels. In ICLR, 2015. [<a href="https://arxiv.xilesou.top/abs/1406.2080" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Jacob Goldberger and Ehud Ben-Reuven. Training deep neural-networks using a noise adaptation layer. In ICLR, 2017. [<a href="https://openreview.net/forum?id=H12GRgcxg&noteId=H12GRgcxg" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Giorgio Patrini, Alessandro Rozza, Aditya Krishna Menon, Richard Nock, and Lizhen Qu. Making deep neural networks robust to label noise: A loss correction approach. In CVPR, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Patrini_Making_Deep_Neural_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[4] Kuang-Huei Lee, Xiaodong He, Lei Zhang, and Linjun Yang. Cleannet: Transfer learning for scalable image classifier training with label noise. In ICCV, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Lee_CleanNet_Transfer_Learning_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[5] Lu Jiang, Zhengyuan Zhou, Thomas Leung, Li-Jia Li, and Li Fei-Fei. Mentornet: Learning data-driven curriculum for very deep neural networks on corrupted labels. In ICML, 2018. [<a href="https://arxiv.xilesou.top/abs/1712.05055" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Self-Similarity Grouping</title>
+    <url>/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Self-Similarity-Grouping-A-Simple-Unsupervised-Cross-Domain-Adaptation-Approach-for-Person-Re-Identification"><a href="#Self-Similarity-Grouping-A-Simple-Unsupervised-Cross-Domain-Adaptation-Approach-for-Person-Re-Identification" class="headerlink" title="Self-Similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-Identification"></a>Self-Similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/OasisYang/SSG" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ol>
+<li><p>Deep re-ID models trained on the source domain may have a significant performance drop on the target domain due to <strong>the data-bias</strong> existing between source and target datasets.</p>
+<p> -&gt; unsupervised domain adaptation (UDA)</p>
+<p> -&gt; generative adversarial network (GAN)</p>
+</li>
+<li><p><strong>The disparities of cameras</strong> are another critical factor influencing re-ID performance.</p>
+<p> -&gt; Hetero-Homogeneous Learning (HHL [1])</p>
+</li>
+</ol>
+<p>However, the performances of these UDA approaches are still far behind their fully-supervised counterparts. The main reason is that <strong>most previous works focus on increasing the training samples or comparing the similarity or dissimilarity between the source dataset and the target dataset but ignoring the similar natural characteristics existing in the training samples from the target domain</strong>.</p>
+<a id="more"></a>
+
+<h2 id="Fully-Supervised-Pre-training"><a href="#Fully-Supervised-Pre-training" class="headerlink" title="Fully Supervised Pre-training"></a>Fully Supervised Pre-training</h2><p>$$L_{baseline}=L_{softmax}+L_{triplet}$$</p>
+<h2 id="Self-Similarity-Grouping"><a href="#Self-Similarity-Grouping" class="headerlink" title="Self-Similarity Grouping"></a>Self-Similarity Grouping</h2><div align="center">
+    <img src="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig2.png">
+</div>
+
+<p>We compare the similarities between two persons not only by <strong>global information obtaining from the whole body</strong> but also by more <strong>fine and local information getting from upper and lower parts of a person</strong>, i.e., <strong>proposed SSG mines the potential similarity existing in target dataset automatically by different appearance cues (from global to local) in an unsupervised manner</strong>.</p>
+<p>DBSCAN (Density Based Spatial Clustering of Applications with Noise)</p>
+<p>$$L_{ssg}=L_{triple}(f_t, y_t)+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_t)$$</p>
+<h2 id="Clustering-guided-Semi-Supervised-Training"><a href="#Clustering-guided-Semi-Supervised-Training" class="headerlink" title="Clustering-guided Semi-Supervised Training"></a>Clustering-guided Semi-Supervised Training</h2><div align="center">
+    <img src="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig3.png" width="60%">
+</div>
+
+<ul>
+<li><p>We employ the k-reciprocal encoding [2], a variation of Jaccard distance between nearest neighbor sets, as the distance metric for similarity measurement.</p>
+</li>
+<li><p>We randomly sample a single image from each group to form a very small sub-dataset $X_g$ with $N_g$ images.</p>
+</li>
+<li><p>We label this small sub-dataset manually and perform labels assignment based on this annotation.</p>
+</li>
+<li><p>Since each image in $X_g$ is from different groups, it’s less possible that two different images share the same identity, which allows us to adopt the one shot learning approach [3] and further improve the performance. (<strong>multi gallery shot -&gt; one shot</strong>)</p>
+</li>
+</ul>
+<p>$$L_{semi}=L_{triple}(f_t, y_{t_g})+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_{t_g})$$</p>
+<h2 id="Joint-training-strategy"><a href="#Joint-training-strategy" class="headerlink" title="Joint training strategy"></a>Joint training strategy</h2><p>$$L_{jointly}=L_{ssg}+L_{semi}$$</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Zhun Zhong, Liang Zheng, Shaozi Li, and Yi Yang. Generalizing a person retrieval model hetero-and homogeneously. In ECCV, pages 172–188, 2018 [<a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Zhun_Zhong_Generalizing_A_Person_ECCV_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Zhun Zhong, Liang Zheng, Donglin Cao, and Shaozi Li. Reranking person re-identification with k-reciprocal encoding. In IEEE CVPR, pages 3652–3661, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Zhong_Re-Ranking_Person_Re-Identification_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Yu Wu, Yutian Lin, Xuanyi Dong, Yan Yan, Wanli Ouyang, and Yi Yang. Exploit the unknown gradually: One-shot video-based person re-identification by stepwise learning. In IEEE CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Exploit_the_Unknown_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>ICCV2019</tag>
+        <tag>unsupervised</tag>
+        <tag>transfer learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Self-Critical Attention Learning For Person Re-ID</title>
+    <url>/2019/12/20/Self-CriticalAttentionLearningForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Self-Critical-Attention-Learning-for-Person-Re-Identification"><a href="#Self-Critical-Attention-Learning-for-Person-Re-Identification" class="headerlink" title="Self-Critical Attention Learning for Person Re-Identification"></a>Self-Critical Attention Learning for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Chen_Self-Critical_Attention_Learning_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Chen_Self-Critical_Attention_Learning_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><ul>
+<li><p>Most <strong>attention</strong> modules are usually <strong>trained in a weakly-supervised manner</strong> with the final objective, for example, <strong>the supervision from the triple loss or classification loss</strong> in the person ReID task.</p>
+<ol>
+<li><p>As the supervision is not specifically designed for the attention module, the gradients from this weak supervisory signal might be vanishing in the back propagation process.</p>
+</li>
+<li><p>The attention maps learned in such manner are not always “transparent” in their meaning, and lack discrimination ability and robustness.</p>
+</li>
+<li><p>The redundant and misleading attention maps are hardly corrected without direct and appropriate supervisory signal.</p>
+</li>
+<li><p>The quality of the attention during training process can only be evaluated qualitatively by the human end-users, examining the attention map one by one, which is labor-intensive and inefficient.</p>
+</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p>We learn the attention with a critic which measures the attention quality and provides a powerful supervisory signal to guide the learning process.</p>
+</li>
+<li><p>Since most effective evaluation indicators are usually non-differentiable, e.g. the gain of attention model over the basic network, we jointly train our attention agent and critic in a <strong>reinforcement learning</strong> manner, where the agent produces the visual attention while the critic analyzes the gain from the attention and guides the agent to maximize this gain.</p>
+</li>
+<li><p>We design spatial- and channel-wise attention models with our critic module.</p>
+</li>
+</ol>
+<div align="center">
+    <img src="/2019/12/20/Self-CriticalAttentionLearningForPersonRe-ID/Fig1.png" width="70%">
+</div>
+
+<a id="more"></a>
+
+<h2 id="Approach"><a href="#Approach" class="headerlink" title="Approach"></a>Approach</h2><h3 id="Self-critical-Attention-Learning"><a href="#Self-critical-Attention-Learning" class="headerlink" title="Self-critical Attention Learning"></a>Self-critical Attention Learning</h3><ul>
+<li>Given the input image $I$ as the state, the feature maps $X$ extracted by the basic network $F$ is</li>
+</ul>
+<p>$$<br>\begin{equation}<br>X=F(I|\psi)<br>\end{equation}<br>$$</p>
+<p>where $\psi$ denotes the parameters of the basic network.</p>
+<ul>
+<li>The attention maps $A$ based on the feature maps $X$ is</li>
+</ul>
+<p>$$<br>\begin{equation}<br>A=A(X|\theta)<br>\end{equation}<br>$$</p>
+<p>where $\theta$ is the parameters of the attention agent $A$.</p>
+<ul>
+<li>Critic module $V$ is formulated as</li>
+</ul>
+<p>$$<br>\begin{equation}<br>V=C(X, A|\phi)<br>\end{equation}<br>$$</p>
+<p>where $\phi$ defines the parameters of the critic network.</p>
+<ul>
+<li>The classification reward $R_c$</li>
+</ul>
+<p>$$<br>R_c=<br>\begin{cases}<br>1,\quad &amp;y_i^c=y_i^p\\<br>0,&amp;y_i^c\ne y_i^p<br>\end{cases}<br>$$</p>
+<p>where $y_i^p$ denotes the prediction label by the attention-based features about person $i$ and the $y_i^c$ is the ground-truth classification label.</p>
+<ul>
+<li>The amelioration reward $R_a$</li>
+</ul>
+<p>$$<br>R_a=<br>\begin{cases}<br>1,\quad &amp;p^k(A_i, X_i)\gt p^k(X_i)\\<br>0,&amp;p^k(A_i, X_i)\le p^k(X_i)<br>\end{cases}<br>$$</p>
+<p>where $p^k$ indicates the predicted probability of the true classification.</p>
+<ul>
+<li>The final reward of the attention model $R$</li>
+</ul>
+<p>$$R=R_c+R_a$$</p>
+<div align="center">
+    <img src="/2019/12/20/Self-CriticalAttentionLearningForPersonRe-ID/Fig2.png">
+</div>
+
+<h3 id="Attention-Agent"><a href="#Attention-Agent" class="headerlink" title="Attention Agent"></a>Attention Agent</h3><div align="center">
+    <img src="/2019/12/20/Self-CriticalAttentionLearningForPersonRe-ID/Fig3.png">
+</div>
+
+<h4 id="Spatial-Attention"><a href="#Spatial-Attention" class="headerlink" title="Spatial Attention"></a>Spatial Attention</h4><p>$$A^s=\sigma(W_2^s\max(0, W_1^s\overline X))$$</p>
+<h4 id="Channel-wise-Attention"><a href="#Channel-wise-Attention" class="headerlink" title="Channel-wise Attention"></a>Channel-wise Attention</h4><p>$$A^c=\sigma(W_2^c\max(0, W_1^cX_{pool}))$$</p>
+<h4 id="Stacked-Attention-Model"><a href="#Stacked-Attention-Model" class="headerlink" title="Stacked Attention Model"></a>Stacked Attention Model</h4><p>We stacked five attention models on the ResNet-50 network.</p>
+<h3 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h3><h4 id="Triplet-loss"><a href="#Triplet-loss" class="headerlink" title="Triplet loss"></a>Triplet loss</h4><p>$$J_{tri}(\psi, \theta)=\frac1N\sum_{i=1}^N[||f_i-f_i^+||_2^2-||f_i-f_i^-||_2^2+m]_+$$</p>
+<h4 id="Cross-entropy-loss-with-the-label-smooth-regularization-1"><a href="#Cross-entropy-loss-with-the-label-smooth-regularization-1" class="headerlink" title="Cross-entropy loss with the label smooth regularization [1]"></a>Cross-entropy loss with the label smooth regularization [1]</h4><p>$$J_{cls}(\psi, \theta)=-\frac1N\sum_{i=1}^N\sum_{k=1}^K\log(p_i^k)((1-\epsilon)y_i^k+\frac{\epsilon}{K})$$</p>
+<p>Since the classification loss is sensitive to the scales of features, we add a batch-norm (BN) layer before classification loss to normalize the scales.</p>
+<h4 id="The-critic-loss"><a href="#The-critic-loss" class="headerlink" title="The critic loss"></a>The critic loss</h4><p>$$J_{cri}(\theta)=-V_{\phi}^{A_{\theta}}(X, A)$$</p>
+<h4 id="The-Mean-Square-Error-MSE-loss"><a href="#The-Mean-Square-Error-MSE-loss" class="headerlink" title="The Mean Square Error (MSE) loss"></a>The Mean Square Error (MSE) loss</h4><p>$$J_{mse}(\phi)=(V_{\phi}^{A_{\theta}}(X, A)-R)^2$$</p>
+<div align="center">
+    <img src="/2019/12/20/Self-CriticalAttentionLearningForPersonRe-ID/Alg1.png" width="70%">
+</div>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jon Shlens, and Zbigniew Wojna. Rethinking the inception architecture for computer vision. In CVPR, pages 2818–2826, 2016. [<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Szegedy_Rethinking_the_Inception_CVPR_2016_paper.html" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>attention</tag>
+        <tag>reinforcement learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spectral Feature Transformation For Person Re-ID</title>
+    <url>/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Spectral-Feature-Transformation-for-Person-Re-Identification"><a href="#Spectral-Feature-Transformation-for-Person-Re-Identification" class="headerlink" title="Spectral Feature Transformation for Person Re-Identification"></a>Spectral Feature Transformation for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/LuckyDC/SFT_REID" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><ul>
+<li><p>The two most prevalent types of loss functions in ReID are classification loss (e.g. softmax cross entropy loss) and metric learning based loss (e.g. triplet loss and contrastive loss):</p>
+<ol>
+<li><p>Classification loss has promising convergence but is vulnerable to overfitting. It processes samples individually and only builds connections implicitly through the classifier.</p>
+</li>
+<li><p>Metric learning based loss explicitly optimizes the distances between samples. While the similarity structure it builds only involves a pair/triplet of data points and ignores other informative samples. This leads to a large proportion of trivial pairs/triplets which could overwhelm the training process and eventually makes the model suffer from slow convergence.</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Most existing methods process data points individually or only involves a fraction of samples while building a similarity structure. They ignore dense informative connections among samples more or less. The lack of holistic observation eventually leads to inferior performance. To relieve the issue, we propose to formulate the whole data batch as a similarity graph.</strong></p>
+</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="Spectral-Feature-Transformation"><a href="#Spectral-Feature-Transformation" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h2><div align="center">
+    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Fig2.png">
+</div>
+
+<p>The final embedding of a training batch is regarded as a similarity graph.</p>
+<h3 id="Affinity-Matrix-W"><a href="#Affinity-Matrix-W" class="headerlink" title="Affinity Matrix $W$:"></a>Affinity Matrix $W$:</h3><p>$$w_{ij}=\exp\left(\frac{x_i^Tx_j}{\sigma\cdot||x_i||_2\cdot||x_j||_2}\right)$$</p>
+<p>where $\sigma$ is temperature hyper-parameter.</p>
+<h3 id="Transition-Probability-Matrix-T-归一化的-W"><a href="#Transition-Probability-Matrix-T-归一化的-W" class="headerlink" title="Transition Probability Matrix $T$ (归一化的 $W$):"></a>Transition Probability Matrix $T$ (归一化的 $W$):</h3><p>$$T=softmax(W)$$</p>
+<h3 id="Spectral-Feature-Transformation-1"><a href="#Spectral-Feature-Transformation-1" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h3><p>$$X’=TX$$</p>
+<hr>
+<p><strong>Note</strong>:</p>
+<ol>
+<li><p>To fully liberate the power of spectral clustering, it is necessary to satisfy the assumption that the input data obey the underlying cluster structure, i.e., <strong>there must be sufficient images for each identity in the training batch</strong>.</p>
+</li>
+<li><p>The proposed spectral feature transformation is just applied in the training process and would be discarded during inference.</p>
+</li>
+</ol>
+<hr>
+<p>核心代码:</p>
+<div align="center">
+    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Code.png">
+</div>
+
+<h2 id="Local-Blurring-Re-ranking"><a href="#Local-Blurring-Re-ranking" class="headerlink" title="Local Blurring Re-ranking"></a>Local Blurring Re-ranking</h2><ol>
+<li><p>Given a probe image, images in the gallery are ranked according to the cosine similarity with it.</p>
+</li>
+<li><p>We collect features of top-n entries and perform spectral feature transformation on them.</p>
+</li>
+<li><p>The top-n rank list is recomputed based on the similarity derived from transformed features.</p>
+</li>
+</ol>
+<p>The extension is based on the assumption that there underlies a cluster structure in the neighborhood of the probe images. This is exactly the case when the feature extractor has been properly trained on the training data. As expressed in the mathematical formulation of spectral feature transformation, <strong>the embedding of each data point will be blurred by the others according to the similarities between them</strong>. Each data point will be moved towards the high-density area (i.e. cluster center) which has more short paths to it. This process is equivalent to conduct a clustering operation on local neighbors of the probe image. Therefore, it can make the cluster structure more compact and relieve the ambiguous issue in retrieval.</p>
+<p>Compared with k-reciprocal re-ranking which is operated on the whole test set, the proposed re-ranking is much more efficient.</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+        <tag>spectral feature</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Unsupervised Graph Association For Person Re-ID</title>
+    <url>/2019/12/11/UnsupervisedGraphAssociationForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Unsupervised-Graph-Association-for-Person-Re-Identification"><a href="#Unsupervised-Graph-Association-for-Person-Re-Identification" class="headerlink" title="Unsupervised Graph Association for Person Re-Identification"></a>Unsupervised Graph Association for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Wu_Unsupervised_Graph_Association_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Wu_Unsupervised_Graph_Association_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/yichuan9527/Unsupervised-Graph-Association-for-Person-Re-identification" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="Chanllenge-One"><a href="#Chanllenge-One" class="headerlink" title="Chanllenge One"></a>Chanllenge One</h3><p>Since in supervised learning deep CNN is a data-driven method, it requires a large number of pair-wise labelled data in training to learn view-invariant representations. However, labelling sufficient pairwise RE-ID data is expensive and time-consuming. How to improve the performance and scalability of deep RE-ID algorithm without pair-wise labelled data (i.e., unsupervised learning) is a great challenge in recent person RE-ID research.</p>
+<h3 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h3><p>There have been a series of unsupervised image based methods to address this problem, which can be roughly divided into three categories:</p>
+<ol>
+<li><p>image-to-image translation</p>
+<p> transfer the source domain images to the target domain by GAN network</p>
+</li>
+<li><p>domain adaptation</p>
+<p> transfer the source domain trained model to the target domain in an unsupervised manner</p>
+</li>
+<li><p>unsupervised clustering</p>
+<p> obtain the pseudo labels of target domain data through the unsupervised clustering algorithms and fine tune the source domain model with pseudo labels on target domain.</p>
+</li>
+</ol>
+<h3 id="Chanllenge-Two"><a href="#Chanllenge-Two" class="headerlink" title="Chanllenge Two"></a>Chanllenge Two</h3><p>The precondition of above mentioned methods is that there are some similarities between the source domain and the target domain.</p>
+<a id="more"></a>
+
+<h3 id="Tracklet-Based-Methods"><a href="#Tracklet-Based-Methods" class="headerlink" title="Tracklet Based Methods"></a>Tracklet Based Methods</h3><p>Due to the fact that UTAL [1] and TAUDL [2] match the underlying positive pairs in the mini batch, both of them need a large batch size to sample the underlying positive pairs.</p>
+<p>RACE [3] and BUC [4], which progressively merge the underlying positive pairs in training, are easily damaged by merging noisy pairs.</p>
+<h2 id="Unsupervised-Graph-Association"><a href="#Unsupervised-Graph-Association" class="headerlink" title="Unsupervised Graph Association"></a>Unsupervised Graph Association</h2><p>The core points are <strong>mining the cross-view relationships and reducing the damage of noisy associations</strong>.</p>
+<p>Intra-camera learning stage is to learn representations of a person with regards to camera information, which helps to reduce false cross-view associations in inter-camera learning stage.</p>
+<h3 id="Intra-camera-Learning-Stage"><a href="#Intra-camera-Learning-Stage" class="headerlink" title="Intra-camera Learning Stage"></a>Intra-camera Learning Stage</h3><p>Each classifier branch corresponds to one camera’s classification task.</p>
+<div align="center">
+    <img src="/2019/12/11/UnsupervisedGraphAssociationForPersonRe-ID/Fig2.png">
+</div>
+
+<p>Suppose we have a dataset, captured from $T$ cameras. We adopt the sparse space-time tracklets sampling (SSTT [2]) to sample the training tracklets $\lbrace s_t^i, y_t^i\rbrace$ from each camera.</p>
+<p>Denoting $s_t^i=\lbrace I_1^{s_t^i}, I_2^{s_t^i}, …, I_n^{s_t^i}\rbrace$, where $I_n^{s_t^i}$ is the $n$-th image of the $i$-th tracklet ($i∈ [1, . . . , Mt]$) in $t$-th camera ($t ∈ [1, . . . , T ]$).</p>
+<p>We randomly assign a unique pseudo label $y_t^i$($y_t^i\in \lbrace y_t^1, …, y_t^{M_t}\rbrace$) for the $s_t^i$.</p>
+<p>$\phi(\cdot )$ is the backbone function.</p>
+<hr>
+<p><strong>Note</strong>:</p>
+<ol>
+<li><p>The batch normalization layer is effective to avoid overfitting and restrain negative pairs, i.e., reduce the average similarity score of the negative pairs and make the negative pairs easier to be distinguished.</p>
+</li>
+<li><p>The assumption of our experiments is that one person has only one tracklet in each camera through SSTT sampling.</p>
+</li>
+</ol>
+<hr>
+<h3 id="Inter-camera-Learning-Stage"><a href="#Inter-camera-Learning-Stage" class="headerlink" title="Inter-camera Learning Stage"></a>Inter-camera Learning Stage</h3><h4 id="Tracklet’s-representation"><a href="#Tracklet’s-representation" class="headerlink" title="Tracklet’s representation"></a>Tracklet’s representation</h4><p>$$c_t^i=\frac{1}{N_{s_t^i}}\sum_{n=1}^{N_{s_t^i}}\phi(I_n^{s_t^i}),\quad I_n^{s_t^i}\in s_t^i$$</p>
+<h4 id="Cross-View-Graph"><a href="#Cross-View-Graph" class="headerlink" title="Cross-View Graph"></a>Cross-View Graph</h4><p>KNN set $\lbrace c_t^i\rbrace_K^m$ of $c_t^i$, which finds the nearest $K$ tracklets of $c_t^i$ in camera $m$.</p>
+<p>$$<br>e(c_t^i, c_m^j)=<br>\begin{cases}<br>\cos(c_t^i, c_m^j),\quad &amp;\mbox{if}\quad\cos(c_t^i, c_m^j)\gt \lambda\quad \&amp;\quad c_m^j\in \lbrace c_t^i\rbrace_K^m\quad \&amp;\quad c_t^i\in \lbrace c_m^j\rbrace_K^t\\<br>1, &amp;\mbox{if}\quad c_t^i=c_m^j\\<br>0, &amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<h4 id="Cross-camera-loss"><a href="#Cross-camera-loss" class="headerlink" title="Cross-camera loss"></a>Cross-camera loss</h4><p>Graph neighbor set $N(s_t^i)$:</p>
+<p>$$N(s_t^i)=\lbrace (s_m^a, y_m^a)|if\ e(c_t^i, c_m^a)\ne 0\rbrace$$</p>
+<p>The weights of MBC are replaced with the corresponding nodes of CVG to fast updating CVG in the training process:</p>
+<p>$$l_{ce}(I_n^{s_t^i}, s_m^a)=-\sum_{j=1}^{M_m}\log\left(\frac{\exp((c_m^j)^T\phi(I_n^{s_t^i}))}{\sum_{k=1}^{M_m}\exp((c_m^k)^T\phi(I_n^{s_t^i}))}\right)$$</p>
+<h4 id="Graph-weighted-cross-camera-loss"><a href="#Graph-weighted-cross-camera-loss" class="headerlink" title="Graph weighted cross-camera loss"></a>Graph weighted cross-camera loss</h4><p>$$<br>\begin{split}<br>l_{inter}(I_n^{s_t^i})&amp;=\sum_{N(s_t^i)-s_t^i}e(c_t^i, c_m^a)l_{ce}(I_n^{s_t^i}, s_m^a)+\alpha l_{ce}(I_n^{s_t^i}, s_t^i)\\<br>&amp;=\sum_{N(s_t^i)}e(c_t^i, c_m^a)l_{ce}(I_n^{s_t^i}, s_m^a),\qquad\mbox{where}\quad\alpha=e(c_t^i, c_t^i)<br>\end{split}<br>$$</p>
+<h4 id="CVG’s-Updating"><a href="#CVG’s-Updating" class="headerlink" title="CVG’s Updating"></a>CVG’s Updating</h4><p>$$\frac{\partial l_{inter}}{\partial c_m^a}=-\sum_{N_{bs}}err(I_n^{s_t^i})e(c_t^i, c_m^a)\phi(I_n^{s_t^i})$$</p>
+<p>where</p>
+<p>$$err(I_n^{s_t^i})=1(y_m^a==j)-\frac{\exp((c_m^j)^T\phi(I_n^{s_t^i}))}{\sum_{k=1}^{M_m}\exp((c_m^k)^T\phi(I_n^{s_t^i}))}$$</p>
+<p>$$c_m^a\leftarrow c_m^a+\eta\frac{\partial l_{inter}}{\partial c_m^a}$$</p>
+<p>The updating of $c_t^i$ makes full use of underlying positive pairs from all camera views.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Minxian Li, Xiatian Zhu, and Shaogang Gong. Unsupervised tracklet person re-identification. IEEE Transactions on Pattern Analysis and Machine Intelligence, pages 1–1, 2019. [<a href="https://ieeexplore_ieee.xilesou.top/abstract/document/8658110" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Minxian Li, Xiatian Zhu, and Shaogang Gong. Unsupervised person re-identification by deep learning tracklet association. In Proceedings of the European Conference on Computer Vision (ECCV), pages 737–753, 2018. [<a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Minxian_Li_Unsupervised_Person_Re-identification_ECCV_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Mang Ye, Andy J Ma, Liang Zheng, Jiawei Li, and Pong C Yuen. Dynamic label graph matching for unsupervised video re-identification. In Proceedings of the IEEE International Conference on Computer Vision, pages 5142–5150, 2017. [<a href="http://openaccess.thecvf.com/content_iccv_2017/html/Ye_Dynamic_Label_Graph_ICCV_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[4] Yutian Lin, Xuanyi Dong, Liang Zheng, Yan Yan, and Yi Yang. A bottom-up clustering approach to unsupervised person re-identification. In AAAI Conference on Artificial Intelligence, volume 2, 2019. [<a href="https://wvvw.aaai.org/ojs/index.php/AAAI/article/view/4898" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+        <tag>unsupervised</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决无法打开 TeX Live 的问题</title>
+    <url>/2021/05/21/TexLive/</url>
+    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
+<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><ol>
+<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
+</li>
+<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
+</li>
+<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
+</li>
+<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
+</li>
+</ol>
+<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
+]]></content>
+      <categories>
+        <category>Technology</category>
+      </categories>
+      <tags>
+        <tag>LaTeX</tag>
+      </tags>
+  </entry>
+</search>
