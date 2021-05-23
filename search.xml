@@ -1,87 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Batch DropBlock Network</title>
-    <url>/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/</url>
-    <content><![CDATA[<h1 id="Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond"><a href="#Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond" class="headerlink" title="Batch DropBlock Network for Person Re-Identification and Beyond"></a>Batch DropBlock Network for Person Re-Identification and Beyond</h1><p>全文链接：<br><a href="https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea" target="_blank" rel="noopener">https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea</a></p>
-<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
-<li><p>the large variation of poses, background, illumination, camera conditions and view angle changes</p>
-</li>
-<li><p>Because the body parts such as faces, hands and feet are unstable as the view angle changes, <strong>the CNN tends to focus on the main body part and the other descriminative body parts</strong>, i.e., <strong>some attentive local features are consequently suppressed</strong>.</p>
-</li>
-</ul>
-<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
-<li><p>Pose-based works seek to localize different body parts and align their associated features.</p>
-</li>
-<li><p>Part-based works use coarse partitions or attention selection network to improve feature learning.</p>
-</li>
-</ol>
-<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ol>
-<li><p>Pose-based networks usually require additional body pose or segment information.</p>
-</li>
-<li><p>These networks are designed using specific partition mechanisms, such as a horizontal partition, which is fit for person re-ID but hard to be generalized to other metric learning tasks.</p>
-</li>
-</ol>
-<a id="more"></a>
-
-<h2 id="Batch-DropBlock-Network"><a href="#Batch-DropBlock-Network" class="headerlink" title="Batch DropBlock Network"></a>Batch DropBlock Network</h2><ul>
-<li><p>The global branch encodes the global feature representations while the feature dropping branch learns local detailed features.</p>
-<p>  Specifically, Batch DropBlock randomly drops the same region of all the feature maps, namely the same semantic body parts, in a batch during training and reinforces the attentive feature learning of local regions, i.e., the remaining parts.</p>
-</li>
-<li><p>Batch DropBlock can also be adopted in different metric learning schemes.</p>
-<p>   Metric Learning Problem:</p>
-<p>   aims to find embedding features for input images in order to measure their semantic similarity</p>
-<p>   such as contrastive loss, triplet loss, lifted structure loss, quadruplet loss, histogram loss</p>
-</li>
-</ul>
-<div align="center">
-    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig3.png">
-</div>
-
-<ul>
-<li><p><strong>Global max pooling (GMP)</strong> encourages the network to identify comparatively weak salient features after the most descriminative part is dropped, i.e., encourages the network to strength the weak features.</p>
-</li>
-<li><p>Without <strong>the stack of convolution layers on feature map T</strong>, the global average pooling layer and the global max pooling layer would be applied simultaneously on T, making the network hard to converge.</p>
-</li>
-</ul>
-<ol>
-<li><p>The Batch DropBlock Layer is parameter free and will not increase the network size.</p>
-</li>
-<li><p>The Batch DropBlock Layer can be easily adopted in other metric learning tasks beyond person re-ID.</p>
-<p> The triplet loss is a vital part of BDB Network since the Batch DropBlock layer has effect only when considering relationship between images.</p>
-</li>
-<li><p>The Batch DropBlock hyper-parameters are tunable without changing the network structure for different tasks, such as image retrieval problem.</p>
-<p> BDB Network requires input images to be roughly aligned.</p>
-</li>
-<li><p>BDB Network can still benefit from image erasing data augmentation methods such as Cutout [1] and Random Erasing, because the BDB Network contains a global branch which sees the complete feature map.</p>
-</li>
-</ol>
-<h2 id="Comparison-with-Dropout-and-DropBlock"><a href="#Comparison-with-Dropout-and-DropBlock" class="headerlink" title="Comparison with Dropout and DropBlock"></a>Comparison with Dropout and DropBlock</h2><div align="center">
-    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig6.png" width="60%">
-</div>
-
-<p>Comparison with DropBlock [2]:</p>
-<ol>
-<li><p>Batch DropBlock is an attentive feature learning module for metric learning tasks while DropBlock is a regularization method for classification tasks.</p>
-</li>
-<li><p>Batch DropBlock drops the same block for a batch of images during a single iteration, while DropBlock erases randomly across different images.</p>
-</li>
-</ol>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Terrance DeVries and Graham W Taylor. Improved regularization of convolutional neural networks with cutout. arXiv preprint arXiv:1708.04552, 2017. [<a href="https://arxiv.xilesou.top/abs/1708.04552" target="_blank" rel="noopener">link</a>]</p>
-<p>[2] Golnaz Ghiasi, Tsung-Yi Lin, and Quoc V Le. Dropblock: A regularization method for convolutional networks. arXiv:1810.12890, 2018. [<a href="http://papers.nips.cc/paper/8271-dropblock-a-regularization-method-for-convolutional-networks" target="_blank" rel="noopener">link</a>]</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>trick</tag>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>A Maximum-value Perfect Matching for Mining Hard Samples</title>
     <url>/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/</url>
     <content><![CDATA[<h1 id="MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification"><a href="#MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification" class="headerlink" title="MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification"></a>MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html</a></p>
@@ -181,10 +100,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>graph</tag>
       </tags>
   </entry>
   <entry>
@@ -286,6 +205,87 @@
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
         <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Batch DropBlock Network</title>
+    <url>/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/</url>
+    <content><![CDATA[<h1 id="Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond"><a href="#Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond" class="headerlink" title="Batch DropBlock Network for Person Re-Identification and Beyond"></a>Batch DropBlock Network for Person Re-Identification and Beyond</h1><p>全文链接：<br><a href="https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea" target="_blank" rel="noopener">https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea</a></p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
+<li><p>the large variation of poses, background, illumination, camera conditions and view angle changes</p>
+</li>
+<li><p>Because the body parts such as faces, hands and feet are unstable as the view angle changes, <strong>the CNN tends to focus on the main body part and the other descriminative body parts</strong>, i.e., <strong>some attentive local features are consequently suppressed</strong>.</p>
+</li>
+</ul>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
+<li><p>Pose-based works seek to localize different body parts and align their associated features.</p>
+</li>
+<li><p>Part-based works use coarse partitions or attention selection network to improve feature learning.</p>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ol>
+<li><p>Pose-based networks usually require additional body pose or segment information.</p>
+</li>
+<li><p>These networks are designed using specific partition mechanisms, such as a horizontal partition, which is fit for person re-ID but hard to be generalized to other metric learning tasks.</p>
+</li>
+</ol>
+<a id="more"></a>
+
+<h2 id="Batch-DropBlock-Network"><a href="#Batch-DropBlock-Network" class="headerlink" title="Batch DropBlock Network"></a>Batch DropBlock Network</h2><ul>
+<li><p>The global branch encodes the global feature representations while the feature dropping branch learns local detailed features.</p>
+<p>  Specifically, Batch DropBlock randomly drops the same region of all the feature maps, namely the same semantic body parts, in a batch during training and reinforces the attentive feature learning of local regions, i.e., the remaining parts.</p>
+</li>
+<li><p>Batch DropBlock can also be adopted in different metric learning schemes.</p>
+<p>   Metric Learning Problem:</p>
+<p>   aims to find embedding features for input images in order to measure their semantic similarity</p>
+<p>   such as contrastive loss, triplet loss, lifted structure loss, quadruplet loss, histogram loss</p>
+</li>
+</ul>
+<div align="center">
+    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig3.png">
+</div>
+
+<ul>
+<li><p><strong>Global max pooling (GMP)</strong> encourages the network to identify comparatively weak salient features after the most descriminative part is dropped, i.e., encourages the network to strength the weak features.</p>
+</li>
+<li><p>Without <strong>the stack of convolution layers on feature map T</strong>, the global average pooling layer and the global max pooling layer would be applied simultaneously on T, making the network hard to converge.</p>
+</li>
+</ul>
+<ol>
+<li><p>The Batch DropBlock Layer is parameter free and will not increase the network size.</p>
+</li>
+<li><p>The Batch DropBlock Layer can be easily adopted in other metric learning tasks beyond person re-ID.</p>
+<p> The triplet loss is a vital part of BDB Network since the Batch DropBlock layer has effect only when considering relationship between images.</p>
+</li>
+<li><p>The Batch DropBlock hyper-parameters are tunable without changing the network structure for different tasks, such as image retrieval problem.</p>
+<p> BDB Network requires input images to be roughly aligned.</p>
+</li>
+<li><p>BDB Network can still benefit from image erasing data augmentation methods such as Cutout [1] and Random Erasing, because the BDB Network contains a global branch which sees the complete feature map.</p>
+</li>
+</ol>
+<h2 id="Comparison-with-Dropout-and-DropBlock"><a href="#Comparison-with-Dropout-and-DropBlock" class="headerlink" title="Comparison with Dropout and DropBlock"></a>Comparison with Dropout and DropBlock</h2><div align="center">
+    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig6.png" width="60%">
+</div>
+
+<p>Comparison with DropBlock [2]:</p>
+<ol>
+<li><p>Batch DropBlock is an attentive feature learning module for metric learning tasks while DropBlock is a regularization method for classification tasks.</p>
+</li>
+<li><p>Batch DropBlock drops the same block for a batch of images during a single iteration, while DropBlock erases randomly across different images.</p>
+</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Terrance DeVries and Graham W Taylor. Improved regularization of convolutional neural networks with cutout. arXiv preprint arXiv:1708.04552, 2017. [<a href="https://arxiv.xilesou.top/abs/1708.04552" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Golnaz Ghiasi, Tsung-Yi Lin, and Quoc V Le. Dropblock: A regularization method for convolutional networks. arXiv:1810.12890, 2018. [<a href="http://papers.nips.cc/paper/8271-dropblock-a-regularization-method-for-convolutional-networks" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>trick</tag>
       </tags>
   </entry>
   <entry>
@@ -392,10 +392,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>graph</tag>
         <tag>reinforcement learning</tag>
         <tag>active learning</tag>
       </tags>
@@ -566,66 +566,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Self-Similarity Grouping</title>
-    <url>/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/</url>
-    <content><![CDATA[<h1 id="Self-Similarity-Grouping-A-Simple-Unsupervised-Cross-Domain-Adaptation-Approach-for-Person-Re-Identification"><a href="#Self-Similarity-Grouping-A-Simple-Unsupervised-Cross-Domain-Adaptation-Approach-for-Person-Re-Identification" class="headerlink" title="Self-Similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-Identification"></a>Self-Similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html</a></p>
-<p>The source code is <a href="https://github.com/OasisYang/SSG" target="_blank" rel="noopener">here</a>.</p>
-<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ol>
-<li><p>Deep re-ID models trained on the source domain may have a significant performance drop on the target domain due to <strong>the data-bias</strong> existing between source and target datasets.</p>
-<p> -&gt; unsupervised domain adaptation (UDA)</p>
-<p> -&gt; generative adversarial network (GAN)</p>
-</li>
-<li><p><strong>The disparities of cameras</strong> are another critical factor influencing re-ID performance.</p>
-<p> -&gt; Hetero-Homogeneous Learning (HHL [1])</p>
-</li>
-</ol>
-<p>However, the performances of these UDA approaches are still far behind their fully-supervised counterparts. The main reason is that <strong>most previous works focus on increasing the training samples or comparing the similarity or dissimilarity between the source dataset and the target dataset but ignoring the similar natural characteristics existing in the training samples from the target domain</strong>.</p>
-<a id="more"></a>
-
-<h2 id="Fully-Supervised-Pre-training"><a href="#Fully-Supervised-Pre-training" class="headerlink" title="Fully Supervised Pre-training"></a>Fully Supervised Pre-training</h2><p>$$L_{baseline}=L_{softmax}+L_{triplet}$$</p>
-<h2 id="Self-Similarity-Grouping"><a href="#Self-Similarity-Grouping" class="headerlink" title="Self-Similarity Grouping"></a>Self-Similarity Grouping</h2><div align="center">
-    <img src="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig2.png">
-</div>
-
-<p>We compare the similarities between two persons not only by <strong>global information obtaining from the whole body</strong> but also by more <strong>fine and local information getting from upper and lower parts of a person</strong>, i.e., <strong>proposed SSG mines the potential similarity existing in target dataset automatically by different appearance cues (from global to local) in an unsupervised manner</strong>.</p>
-<p>DBSCAN (Density Based Spatial Clustering of Applications with Noise)</p>
-<p>$$L_{ssg}=L_{triple}(f_t, y_t)+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_t)$$</p>
-<h2 id="Clustering-guided-Semi-Supervised-Training"><a href="#Clustering-guided-Semi-Supervised-Training" class="headerlink" title="Clustering-guided Semi-Supervised Training"></a>Clustering-guided Semi-Supervised Training</h2><div align="center">
-    <img src="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig3.png" width="60%">
-</div>
-
-<ul>
-<li><p>We employ the k-reciprocal encoding [2], a variation of Jaccard distance between nearest neighbor sets, as the distance metric for similarity measurement.</p>
-</li>
-<li><p>We randomly sample a single image from each group to form a very small sub-dataset $X_g$ with $N_g$ images.</p>
-</li>
-<li><p>We label this small sub-dataset manually and perform labels assignment based on this annotation.</p>
-</li>
-<li><p>Since each image in $X_g$ is from different groups, it’s less possible that two different images share the same identity, which allows us to adopt the one shot learning approach [3] and further improve the performance. (<strong>multi gallery shot -&gt; one shot</strong>)</p>
-</li>
-</ul>
-<p>$$L_{semi}=L_{triple}(f_t, y_{t_g})+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_{t_g})$$</p>
-<h2 id="Joint-training-strategy"><a href="#Joint-training-strategy" class="headerlink" title="Joint training strategy"></a>Joint training strategy</h2><p>$$L_{jointly}=L_{ssg}+L_{semi}$$</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Zhun Zhong, Liang Zheng, Shaozi Li, and Yi Yang. Generalizing a person retrieval model hetero-and homogeneously. In ECCV, pages 172–188, 2018 [<a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Zhun_Zhong_Generalizing_A_Person_ECCV_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
-<p>[2] Zhun Zhong, Liang Zheng, Donglin Cao, and Shaozi Li. Reranking person re-identification with k-reciprocal encoding. In IEEE CVPR, pages 3652–3661, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Zhong_Re-Ranking_Person_Re-Identification_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
-<p>[3] Yu Wu, Yutian Lin, Xuanyi Dong, Yan Yan, Wanli Ouyang, and Yi Yang. Exploit the unknown gradually: One-shot video-based person re-identification by stepwise learning. In IEEE CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Exploit_the_Unknown_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>person re-id</tag>
-        <tag>ICCV2019</tag>
-        <tag>unsupervised</tag>
-        <tag>transfer learning</tag>
       </tags>
   </entry>
   <entry>
@@ -724,6 +668,62 @@
       </tags>
   </entry>
   <entry>
+    <title>Self-Similarity Grouping</title>
+    <url>/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Self-Similarity-Grouping-A-Simple-Unsupervised-Cross-Domain-Adaptation-Approach-for-Person-Re-Identification"><a href="#Self-Similarity-Grouping-A-Simple-Unsupervised-Cross-Domain-Adaptation-Approach-for-Person-Re-Identification" class="headerlink" title="Self-Similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-Identification"></a>Self-Similarity Grouping: A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/OasisYang/SSG" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ol>
+<li><p>Deep re-ID models trained on the source domain may have a significant performance drop on the target domain due to <strong>the data-bias</strong> existing between source and target datasets.</p>
+<p> -&gt; unsupervised domain adaptation (UDA)</p>
+<p> -&gt; generative adversarial network (GAN)</p>
+</li>
+<li><p><strong>The disparities of cameras</strong> are another critical factor influencing re-ID performance.</p>
+<p> -&gt; Hetero-Homogeneous Learning (HHL [1])</p>
+</li>
+</ol>
+<p>However, the performances of these UDA approaches are still far behind their fully-supervised counterparts. The main reason is that <strong>most previous works focus on increasing the training samples or comparing the similarity or dissimilarity between the source dataset and the target dataset but ignoring the similar natural characteristics existing in the training samples from the target domain</strong>.</p>
+<a id="more"></a>
+
+<h2 id="Fully-Supervised-Pre-training"><a href="#Fully-Supervised-Pre-training" class="headerlink" title="Fully Supervised Pre-training"></a>Fully Supervised Pre-training</h2><p>$$L_{baseline}=L_{softmax}+L_{triplet}$$</p>
+<h2 id="Self-Similarity-Grouping"><a href="#Self-Similarity-Grouping" class="headerlink" title="Self-Similarity Grouping"></a>Self-Similarity Grouping</h2><div align="center">
+    <img src="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig2.png">
+</div>
+
+<p>We compare the similarities between two persons not only by <strong>global information obtaining from the whole body</strong> but also by more <strong>fine and local information getting from upper and lower parts of a person</strong>, i.e., <strong>proposed SSG mines the potential similarity existing in target dataset automatically by different appearance cues (from global to local) in an unsupervised manner</strong>.</p>
+<p>DBSCAN (Density Based Spatial Clustering of Applications with Noise)</p>
+<p>$$L_{ssg}=L_{triple}(f_t, y_t)+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_t)$$</p>
+<h2 id="Clustering-guided-Semi-Supervised-Training"><a href="#Clustering-guided-Semi-Supervised-Training" class="headerlink" title="Clustering-guided Semi-Supervised Training"></a>Clustering-guided Semi-Supervised Training</h2><div align="center">
+    <img src="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig3.png" width="60%">
+</div>
+
+<ul>
+<li><p>We employ the k-reciprocal encoding [2], a variation of Jaccard distance between nearest neighbor sets, as the distance metric for similarity measurement.</p>
+</li>
+<li><p>We randomly sample a single image from each group to form a very small sub-dataset $X_g$ with $N_g$ images.</p>
+</li>
+<li><p>We label this small sub-dataset manually and perform labels assignment based on this annotation.</p>
+</li>
+<li><p>Since each image in $X_g$ is from different groups, it’s less possible that two different images share the same identity, which allows us to adopt the one shot learning approach [3] and further improve the performance. (<strong>multi gallery shot -&gt; one shot</strong>)</p>
+</li>
+</ul>
+<p>$$L_{semi}=L_{triple}(f_t, y_{t_g})+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_{t_g})$$</p>
+<h2 id="Joint-training-strategy"><a href="#Joint-training-strategy" class="headerlink" title="Joint training strategy"></a>Joint training strategy</h2><p>$$L_{jointly}=L_{ssg}+L_{semi}$$</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Zhun Zhong, Liang Zheng, Shaozi Li, and Yi Yang. Generalizing a person retrieval model hetero-and homogeneously. In ECCV, pages 172–188, 2018 [<a href="http://openaccess.thecvf.com/content_ECCV_2018/html/Zhun_Zhong_Generalizing_A_Person_ECCV_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Zhun Zhong, Liang Zheng, Donglin Cao, and Shaozi Li. Reranking person re-identification with k-reciprocal encoding. In IEEE CVPR, pages 3652–3661, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Zhong_Re-Ranking_Person_Re-Identification_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Yu Wu, Yutian Lin, Xuanyi Dong, Yan Yan, Wanli Ouyang, and Yi Yang. Exploit the unknown gradually: One-shot video-based person re-identification by stepwise learning. In IEEE CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Exploit_the_Unknown_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>ICCV2019</tag>
+        <tag>unsupervised</tag>
+        <tag>transfer learning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spectral Feature Transformation For Person Re-ID</title>
     <url>/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/</url>
     <content><![CDATA[<h1 id="Spectral-Feature-Transformation-for-Person-Re-Identification"><a href="#Spectral-Feature-Transformation-for-Person-Re-Identification" class="headerlink" title="Spectral Feature Transformation for Person Re-Identification"></a>Spectral Feature Transformation for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
@@ -781,11 +781,34 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>graph</tag>
         <tag>spectral feature</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决无法打开 TeX Live 的问题</title>
+    <url>/2021/05/21/TexLive/</url>
+    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
+<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><ol>
+<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
+</li>
+<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
+</li>
+<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
+</li>
+<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
+</li>
+</ol>
+<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
+]]></content>
+      <categories>
+        <category>Technology</category>
+      </categories>
+      <tags>
+        <tag>LaTeX</tag>
       </tags>
   </entry>
   <entry>
@@ -854,33 +877,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>ICCV2019</tag>
-        <tag>graph</tag>
         <tag>unsupervised</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决无法打开 TeX Live 的问题</title>
-    <url>/2021/05/21/TexLive/</url>
-    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
-<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><ol>
-<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
-</li>
-<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
-</li>
-<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
-</li>
-<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
-</li>
-</ol>
-<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
-]]></content>
-      <categories>
-        <category>Technology</category>
-      </categories>
-      <tags>
-        <tag>LaTeX</tag>
       </tags>
   </entry>
 </search>
