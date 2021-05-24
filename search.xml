@@ -1,112 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>A Maximum-value Perfect Matching for Mining Hard Samples</title>
-    <url>/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/</url>
-    <content><![CDATA[<h1 id="MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification"><a href="#MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification" class="headerlink" title="MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification"></a>MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html</a></p>
-<p>The source code is <a href="https://github.com/IAAI-CVResearchGroup/MVP-metric" target="_blank" rel="noopener">here</a>.</p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="Hard-Samples"><a href="#Hard-Samples" class="headerlink" title="Hard Samples"></a>Hard Samples</h3><ol>
-<li><p>The appearance of different pedestrians may be highly similar;</p>
-</li>
-<li><p>The pose of a person may vary significantly as time and space changed;</p>
-</li>
-<li><p>The light conditions taken by some cameras are sometimes poor.</p>
-</li>
-</ol>
-<p>These hard samples would strongly <strong>slow down the convergence rate</strong> of the metric learning, which works on pulling similar samples to cluster together while pushing dissimilar ones to widen apart.</p>
-<p>Or worse of all, the learned embedding metric and feature representation could be heavily biased by these hard samples.</p>
-<a id="more"></a>
-
-<h3 id="Deep-metric-learning"><a href="#Deep-metric-learning" class="headerlink" title="Deep metric learning"></a>Deep metric learning</h3><ul>
-<li><p>Seminal contrastive loss [1] or triplet loss [2] learns the semantical information within image pairs or triplets based on the siamese-like networks [3]. They do not make full use of all available information within a batch of samples.</p>
-</li>
-<li><p>Batch all triplet loss [4] and N-pair loss [5] have been developed to remedy this flaw, but they do not attach enough attention to hard samples and require expensive resampling techniques to boost the performance.</p>
-</li>
-<li><p>Lifted loss [6] and quadruplet loss [7] only consider hard negative samples mining while ignoring the hard positive samples.</p>
-</li>
-<li><p>Batch hard triplet loss [4] considers the hardest positive and negative mining depended on the distances of features simply. Its performance is easily influenced by some outlier samples (e.g., indistinguishable or mislabeled images in person re-ID datasets), which could be regarded as hardest sample pairs by many other samples simultaneously and lead to oscillation during metric learning process.</p>
-</li>
-</ul>
-<div align="center">
-    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Fig1.png" width="46%">
-</div>
-
-<p>Conventional batchwise loss objectives for metric learning can be optimized using all available information within training batches, so that all similar positive pairs with large ground distances and dissimilar negative pairs with small ground distances would be emphasized simultaneously.</p>
-<ol>
-<li><p><strong>Overtraining</strong>:</p>
-<p> Similar positive pairs with small distances would still be optimized (e.g., $x_1$ and $x_4$).</p>
-</li>
-<li><p><strong>Counteracting</strong>:</p>
-<p> Or worse, if we treat the optimization as a whole rather than the individual particle, the metric learning process of these methods is vulnerable to oscillation. Since the hard samples might be emphasized by many particles simultaneously, they could all cancel each other out (e.g., $x_2$ and $x_5$).</p>
-</li>
-</ol>
-<p>In contrast, metric learning with the MVP matching based loss objective can guarantee that each sample selects one exclusive hard positive and negative pairs.</p>
-<p>Thus, the learned MVP matching could deal with <strong>unbalanced samples</strong> according to the adaptive edge weights in the bipartite graph and the <strong>adverse optimization</strong>, e.g., overtraining and counteracting yielded by other anchors as black arrows shown in Figure 1.(c), <strong>would be effectively eliminated</strong>.</p>
-<p>As a consequence, the convergence rate and recognition performance of metric learning could be improved significantly.</p>
-<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><div align="center">
-    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Fig2.png">
-</div>
-
-<h3 id="Adaptive-Weighting-for-Positives-and-Negatives"><a href="#Adaptive-Weighting-for-Positives-and-Negatives" class="headerlink" title="Adaptive Weighting for Positives and Negatives"></a>Adaptive Weighting for Positives and Negatives</h3><p>We divide the complete bipartite graph $G(U,V,E)$ into two bipartite graphs $G_P$ and $G_N$ for positive and negative pairs respectively.</p>
-<p>An adaptive weight $M_{ij}^+$ and $M_{ij}^−$ of each edge $(i, j)$ in $G_P$ and $G_N$:</p>
-<p>$$<br>M_{ij}^+(x_i, x_j; f)=<br>\begin{cases}<br>||f(x_i)-f(x_j)||_2^2-\alpha,\quad&amp;\mbox{if}\quad\delta_{ij}^+=1\\<br>0,&amp;\mbox{if}\quad\delta_{ij}^+=0<br>\end{cases}<br>$$</p>
-<p>where</p>
-<p>$$<br>\delta_{ij}^+=<br>\begin{cases}<br>1,\quad&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\gt\alpha\\<br>0,&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\le\alpha<br>\end{cases}<br>$$</p>
-<p>where $\alpha$ is a learnable variable.</p>
-<p>This function would prevent the overtraining for positive samples in contrastive loss, which demands similar pairs gather as close as possible.</p>
-<p>$$<br>M_{ij}^-(x_i, x_j; f)=<br>\begin{cases}<br>\beta-||f(x_i)-f(x_j)||_2^2,\quad&amp;\mbox{if}\quad\delta_{ij}^-=1\\<br>0,&amp;\mbox{if}\quad\delta_{ij}^-=0<br>\end{cases}<br>$$</p>
-<p>where</p>
-<p>$$<br>\delta_{ij}^-=<br>\begin{cases}<br>1,\quad&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\lt\beta\\<br>0,&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\ge\beta<br>\end{cases}<br>$$</p>
-<p>where $\beta = \epsilon + \alpha$.</p>
-<p>This function penalizes the dissimilar pairs within the margin $\beta$ and ignores the others. (prevent the counteracting)</p>
-<h3 id="MVP-Matching-for-Hard-Samples-Pairs"><a href="#MVP-Matching-for-Hard-Samples-Pairs" class="headerlink" title="MVP Matching for Hard Samples Pairs"></a>MVP Matching for Hard Samples Pairs</h3><p>We define the matching variables $T_{ij}^+$ and $T_{ij}^−$ for the edge $(i, j)$ on these two weighted bipartite graphs $G_P$ and $G_N$:</p>
-<p>$$<br>t_{ij}=<br>\begin{cases}<br>1,\quad&amp;\mbox{indicates a matching pair}\\<br>0,&amp;\mbox{means unmatching one}<br>\end{cases}<br>$$</p>
-<p>where $t_{ij}\in T^{+(or-)}$</p>
-<p>$$\max_{T_{ij}\ge 0}\sum_{i,j=1}^nT_{ij}^{+(or-)}M_{ij}^{+(or-)}$$</p>
-<p>$$\mbox{s.t.}\quad\sum_{j=1}^nT_{ij}^{+(or-)}=1,\quad\sum_{i=1}^nT_{ij}^{+(or-)}=1$$</p>
-<h3 id="Kuhn-Munkres-assignment-KA-algorithm-8"><a href="#Kuhn-Munkres-assignment-KA-algorithm-8" class="headerlink" title="Kuhn-Munkres assignment (KA) algorithm [8]"></a>Kuhn-Munkres assignment (KA) algorithm [8]</h3><p><strong>Definition 3.1.</strong> <em>Feasible labeling</em> :</p>
-<p>$$l:\forall x_i, x_j\in U\cup V\rightarrow R$$</p>
-<p>$$\mbox{s.t.}\quad M_{ij}\le l(x_i)+l(x_j)$$</p>
-<p><strong>Definition 3.2.</strong> <em>Equality graph</em> :</p>
-<p>$$G_l=\lbrace\forall (i, j):M_{ij}=l(x_i)+l(x_j)\rbrace$$</p>
-<p><strong>Theorem 3.3.</strong> If $l$ is a feasible labeling function and $T$ is an arbitrary perfect matching (i.e., one-to-one matching) in the equality graph $G_l$, then $T$ must be a maximum-value perfect (MVP) matching $T^*$.</p>
-<p><strong><em>Proof</em></strong>: For $T$ in $G(U, V, E)$:</p>
-<p>$$\sum_{i, j}^{(x_i, x_j)\in T}M_{ij}\le\sum_i^{x_i\in U}l(x_i)+\sum_j^{x_j\in V}l(x_j)$$</p>
-<p>Only when $T$ is a matching in $G_l$:</p>
-<p>$$\sum_{i, j}^{(x_i, x_j)\in T^*}M_{ij}=\sum_i^{x_i\in U}l(x_i)+\sum_j^{x_j\in V}l(x_j)$$</p>
-<div align="center">
-    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Alg1.png" width="50%">
-</div>
-
-<h3 id="Batch-wise-MVP-Matching-based-Loss"><a href="#Batch-wise-MVP-Matching-based-Loss" class="headerlink" title="Batch-wise MVP Matching based Loss"></a>Batch-wise MVP Matching based Loss</h3><p>$$<br>\begin{split}<br>L(x_i, x_j; f)&amp;=L^++L^-\\<br>&amp;=\sum_{ij}^ny_{ij}T_{ij}^+M_{ij}^++\sum_{ij}^n(1-y_{ij})T_{ij}^-M_{ij}^-<br>\end{split}<br>$$</p>
-<p>where</p>
-<p>$$<br>y_{ij}=<br>\begin{cases}<br>1,\quad &amp;\mbox{if samples $x_i$ and $x_j$ are deemed similar}\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
-<p>Update:</p>
-<p>$$\frac{\partial L}{\partial f(x_i)}=\sum_{j=1}^n2(f(x_i)-f(x_j))(\delta_{ij}^+y_{ij}T_{ij}^+-\delta_{ij}^-(1-y_{ij})T_{ij}^-)$$</p>
-<p>$$\frac{\partial L}{\partial f(x_j)}=-\sum_{i=1}^n2(f(x_i)-f(x_j))(\delta_{ij}^+y_{ij}T_{ij}^+-\delta_{ij}^-(1-y_{ij})T_{ij}^-)$$</p>
-<p>$\alpha$ is a learnable variable:</p>
-<p>$$\frac{\partial L}{\partial \alpha}=\sum_{i,j=1}^n[-y_{ij}\delta_{ij}^++(1-y_{ij})\delta_{ij}^-]$$</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Sumit Chopra, Raia Hadsell, and Yann LeCun. Learning a similarity metric discriminatively, with application to face verification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 539–546. IEEE, 2005. [<a href="http://www.cs.utoronto.ca/~hinton/csc2535_06/readings/chopra-05.pdf" target="_blank" rel="noopener">link</a>]</p>
-<p>[2] Gal Chechik, Varun Sharma, Uri Shalit, and Samy Bengio. Large scale online learning of image similarity through ranking. Journal of Machine Learning Research, 11(Mar):1109–1135, 2010. [<a href="http://www.jmlr.org/papers/v11/chechik10a.html" target="_blank" rel="noopener">link</a>]</p>
-<p>[3] Jane Bromley, Isabelle Guyon, Yann LeCun, Eduard S¨ackinger, and Roopak Shah. Signature verification using a “siamese” time delay neural network. In Advances in neural information processing systems, pages 737–744, 1994. [<a href="http://papers.nips.cc/paper/769-signature-verification-using-a-siamese-time-delay-neural-network" target="_blank" rel="noopener">link</a>]</p>
-<p>[4] Alexander Hermans, Lucas Beyer, and Bastian Leibe. In defense of the triplet loss for person re-identification. arXiv preprint arXiv:1703.07737, 2017. [<a href="https://arxiv.xilesou.top/abs/1703.07737" target="_blank" rel="noopener">link</a>]</p>
-<p>[5] Kihyuk Sohn. Improved deep metric learning with multiclass n-pair loss objective. In Advances in Neural Information Processing Systems, pages 1857–1865, 2016. [<a href="http://papers.nips.cc/paper/6200-improved-deep-metric-learning-with-multiclass" target="_blank" rel="noopener">link</a>]</p>
-<p>[6] Hyun Oh Song, Yu Xiang, Stefanie Jegelka, and Silvio Savarese. Deep metric learning via lifted structured feature embedding. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 4004–4012, 2016. [<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Song_Deep_Metric_Learning_CVPR_2016_paper.html" target="_blank" rel="noopener">link</a>]</p>
-<p>[7] Weihua Chen, Xiaotang Chen, Jianguo Zhang, and Kaiqi Huang. Beyond triplet loss: a deep quadruplet network for person re-identification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 403–412, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Chen_Beyond_Triplet_Loss_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
-<p>[8] Harold W Kuhn. The hungarian method for the assignment problem. Naval research logistics quarterly, 2(1-2):83–97, 1955. [<a href="https://onlinelibrary_wiley.xilesou.top/doi/abs/10.1002/nav.3800020109" target="_blank" rel="noopener">link</a>]</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>graph</tag>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Beyond Human Parts -- Dual Part-Aligned Representations</title>
     <url>/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/</url>
     <content><![CDATA[<h1 id="Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification"><a href="#Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification" class="headerlink" title="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification"></a>Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
@@ -201,91 +95,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
         <tag>attention</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Batch DropBlock Network</title>
-    <url>/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/</url>
-    <content><![CDATA[<h1 id="Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond"><a href="#Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond" class="headerlink" title="Batch DropBlock Network for Person Re-Identification and Beyond"></a>Batch DropBlock Network for Person Re-Identification and Beyond</h1><p>全文链接：<br><a href="https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea" target="_blank" rel="noopener">https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea</a></p>
-<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
-<li><p>the large variation of poses, background, illumination, camera conditions and view angle changes</p>
-</li>
-<li><p>Because the body parts such as faces, hands and feet are unstable as the view angle changes, <strong>the CNN tends to focus on the main body part and the other descriminative body parts</strong>, i.e., <strong>some attentive local features are consequently suppressed</strong>.</p>
-</li>
-</ul>
-<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
-<li><p>Pose-based works seek to localize different body parts and align their associated features.</p>
-</li>
-<li><p>Part-based works use coarse partitions or attention selection network to improve feature learning.</p>
-</li>
-</ol>
-<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ol>
-<li><p>Pose-based networks usually require additional body pose or segment information.</p>
-</li>
-<li><p>These networks are designed using specific partition mechanisms, such as a horizontal partition, which is fit for person re-ID but hard to be generalized to other metric learning tasks.</p>
-</li>
-</ol>
-<a id="more"></a>
-
-<h2 id="Batch-DropBlock-Network"><a href="#Batch-DropBlock-Network" class="headerlink" title="Batch DropBlock Network"></a>Batch DropBlock Network</h2><ul>
-<li><p>The global branch encodes the global feature representations while the feature dropping branch learns local detailed features.</p>
-<p>  Specifically, Batch DropBlock randomly drops the same region of all the feature maps, namely the same semantic body parts, in a batch during training and reinforces the attentive feature learning of local regions, i.e., the remaining parts.</p>
-</li>
-<li><p>Batch DropBlock can also be adopted in different metric learning schemes.</p>
-<p>   Metric Learning Problem:</p>
-<p>   aims to find embedding features for input images in order to measure their semantic similarity</p>
-<p>   such as contrastive loss, triplet loss, lifted structure loss, quadruplet loss, histogram loss</p>
-</li>
-</ul>
-<div align="center">
-    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig3.png">
-</div>
-
-<ul>
-<li><p><strong>Global max pooling (GMP)</strong> encourages the network to identify comparatively weak salient features after the most descriminative part is dropped, i.e., encourages the network to strength the weak features.</p>
-</li>
-<li><p>Without <strong>the stack of convolution layers on feature map T</strong>, the global average pooling layer and the global max pooling layer would be applied simultaneously on T, making the network hard to converge.</p>
-</li>
-</ul>
-<ol>
-<li><p>The Batch DropBlock Layer is parameter free and will not increase the network size.</p>
-</li>
-<li><p>The Batch DropBlock Layer can be easily adopted in other metric learning tasks beyond person re-ID.</p>
-<p> The triplet loss is a vital part of BDB Network since the Batch DropBlock layer has effect only when considering relationship between images.</p>
-</li>
-<li><p>The Batch DropBlock hyper-parameters are tunable without changing the network structure for different tasks, such as image retrieval problem.</p>
-<p> BDB Network requires input images to be roughly aligned.</p>
-</li>
-<li><p>BDB Network can still benefit from image erasing data augmentation methods such as Cutout [1] and Random Erasing, because the BDB Network contains a global branch which sees the complete feature map.</p>
-</li>
-</ol>
-<h2 id="Comparison-with-Dropout-and-DropBlock"><a href="#Comparison-with-Dropout-and-DropBlock" class="headerlink" title="Comparison with Dropout and DropBlock"></a>Comparison with Dropout and DropBlock</h2><div align="center">
-    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig6.png" width="60%">
-</div>
-
-<p>Comparison with DropBlock [2]:</p>
-<ol>
-<li><p>Batch DropBlock is an attentive feature learning module for metric learning tasks while DropBlock is a regularization method for classification tasks.</p>
-</li>
-<li><p>Batch DropBlock drops the same block for a batch of images during a single iteration, while DropBlock erases randomly across different images.</p>
-</li>
-</ol>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Terrance DeVries and Graham W Taylor. Improved regularization of convolutional neural networks with cutout. arXiv preprint arXiv:1708.04552, 2017. [<a href="https://arxiv.xilesou.top/abs/1708.04552" target="_blank" rel="noopener">link</a>]</p>
-<p>[2] Golnaz Ghiasi, Tsung-Yi Lin, and Quoc V Le. Dropblock: A regularization method for convolutional networks. arXiv:1810.12890, 2018. [<a href="http://papers.nips.cc/paper/8271-dropblock-a-regularization-method-for-convolutional-networks" target="_blank" rel="noopener">link</a>]</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>trick</tag>
       </tags>
   </entry>
   <entry>
@@ -392,12 +205,199 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
-        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
         <tag>reinforcement learning</tag>
         <tag>active learning</tag>
+        <tag>graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Batch DropBlock Network</title>
+    <url>/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/</url>
+    <content><![CDATA[<h1 id="Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond"><a href="#Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond" class="headerlink" title="Batch DropBlock Network for Person Re-Identification and Beyond"></a>Batch DropBlock Network for Person Re-Identification and Beyond</h1><p>全文链接：<br><a href="https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea" target="_blank" rel="noopener">https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea</a></p>
+<h2 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h2><ul>
+<li><p>the large variation of poses, background, illumination, camera conditions and view angle changes</p>
+</li>
+<li><p>Because the body parts such as faces, hands and feet are unstable as the view angle changes, <strong>the CNN tends to focus on the main body part and the other descriminative body parts</strong>, i.e., <strong>some attentive local features are consequently suppressed</strong>.</p>
+</li>
+</ul>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
+<li><p>Pose-based works seek to localize different body parts and align their associated features.</p>
+</li>
+<li><p>Part-based works use coarse partitions or attention selection network to improve feature learning.</p>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><ol>
+<li><p>Pose-based networks usually require additional body pose or segment information.</p>
+</li>
+<li><p>These networks are designed using specific partition mechanisms, such as a horizontal partition, which is fit for person re-ID but hard to be generalized to other metric learning tasks.</p>
+</li>
+</ol>
+<a id="more"></a>
+
+<h2 id="Batch-DropBlock-Network"><a href="#Batch-DropBlock-Network" class="headerlink" title="Batch DropBlock Network"></a>Batch DropBlock Network</h2><ul>
+<li><p>The global branch encodes the global feature representations while the feature dropping branch learns local detailed features.</p>
+<p>  Specifically, Batch DropBlock randomly drops the same region of all the feature maps, namely the same semantic body parts, in a batch during training and reinforces the attentive feature learning of local regions, i.e., the remaining parts.</p>
+</li>
+<li><p>Batch DropBlock can also be adopted in different metric learning schemes.</p>
+<p>   Metric Learning Problem:</p>
+<p>   aims to find embedding features for input images in order to measure their semantic similarity</p>
+<p>   such as contrastive loss, triplet loss, lifted structure loss, quadruplet loss, histogram loss</p>
+</li>
+</ul>
+<div align="center">
+    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig3.png">
+</div>
+
+<ul>
+<li><p><strong>Global max pooling (GMP)</strong> encourages the network to identify comparatively weak salient features after the most descriminative part is dropped, i.e., encourages the network to strength the weak features.</p>
+</li>
+<li><p>Without <strong>the stack of convolution layers on feature map T</strong>, the global average pooling layer and the global max pooling layer would be applied simultaneously on T, making the network hard to converge.</p>
+</li>
+</ul>
+<ol>
+<li><p>The Batch DropBlock Layer is parameter free and will not increase the network size.</p>
+</li>
+<li><p>The Batch DropBlock Layer can be easily adopted in other metric learning tasks beyond person re-ID.</p>
+<p> The triplet loss is a vital part of BDB Network since the Batch DropBlock layer has effect only when considering relationship between images.</p>
+</li>
+<li><p>The Batch DropBlock hyper-parameters are tunable without changing the network structure for different tasks, such as image retrieval problem.</p>
+<p> BDB Network requires input images to be roughly aligned.</p>
+</li>
+<li><p>BDB Network can still benefit from image erasing data augmentation methods such as Cutout [1] and Random Erasing, because the BDB Network contains a global branch which sees the complete feature map.</p>
+</li>
+</ol>
+<h2 id="Comparison-with-Dropout-and-DropBlock"><a href="#Comparison-with-Dropout-and-DropBlock" class="headerlink" title="Comparison with Dropout and DropBlock"></a>Comparison with Dropout and DropBlock</h2><div align="center">
+    <img src="/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/Fig6.png" width="60%">
+</div>
+
+<p>Comparison with DropBlock [2]:</p>
+<ol>
+<li><p>Batch DropBlock is an attentive feature learning module for metric learning tasks while DropBlock is a regularization method for classification tasks.</p>
+</li>
+<li><p>Batch DropBlock drops the same block for a batch of images during a single iteration, while DropBlock erases randomly across different images.</p>
+</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Terrance DeVries and Graham W Taylor. Improved regularization of convolutional neural networks with cutout. arXiv preprint arXiv:1708.04552, 2017. [<a href="https://arxiv.xilesou.top/abs/1708.04552" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Golnaz Ghiasi, Tsung-Yi Lin, and Quoc V Le. Dropblock: A regularization method for convolutional networks. arXiv:1810.12890, 2018. [<a href="http://papers.nips.cc/paper/8271-dropblock-a-regularization-method-for-convolutional-networks" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>trick</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>A Maximum-value Perfect Matching for Mining Hard Samples</title>
+    <url>/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification"><a href="#MVP-Matching-A-Maximum-value-Perfect-Matching-for-Mining-Hard-Samples-with-Application-to-Person-Re-identification" class="headerlink" title="MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification"></a>MVP Matching: A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Sun_MVP_Matching_A_Maximum-Value_Perfect_Matching_for_Mining_Hard_Samples_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/IAAI-CVResearchGroup/MVP-metric" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="Hard-Samples"><a href="#Hard-Samples" class="headerlink" title="Hard Samples"></a>Hard Samples</h3><ol>
+<li><p>The appearance of different pedestrians may be highly similar;</p>
+</li>
+<li><p>The pose of a person may vary significantly as time and space changed;</p>
+</li>
+<li><p>The light conditions taken by some cameras are sometimes poor.</p>
+</li>
+</ol>
+<p>These hard samples would strongly <strong>slow down the convergence rate</strong> of the metric learning, which works on pulling similar samples to cluster together while pushing dissimilar ones to widen apart.</p>
+<p>Or worse of all, the learned embedding metric and feature representation could be heavily biased by these hard samples.</p>
+<a id="more"></a>
+
+<h3 id="Deep-metric-learning"><a href="#Deep-metric-learning" class="headerlink" title="Deep metric learning"></a>Deep metric learning</h3><ul>
+<li><p>Seminal contrastive loss [1] or triplet loss [2] learns the semantical information within image pairs or triplets based on the siamese-like networks [3]. They do not make full use of all available information within a batch of samples.</p>
+</li>
+<li><p>Batch all triplet loss [4] and N-pair loss [5] have been developed to remedy this flaw, but they do not attach enough attention to hard samples and require expensive resampling techniques to boost the performance.</p>
+</li>
+<li><p>Lifted loss [6] and quadruplet loss [7] only consider hard negative samples mining while ignoring the hard positive samples.</p>
+</li>
+<li><p>Batch hard triplet loss [4] considers the hardest positive and negative mining depended on the distances of features simply. Its performance is easily influenced by some outlier samples (e.g., indistinguishable or mislabeled images in person re-ID datasets), which could be regarded as hardest sample pairs by many other samples simultaneously and lead to oscillation during metric learning process.</p>
+</li>
+</ul>
+<div align="center">
+    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Fig1.png" width="46%">
+</div>
+
+<p>Conventional batchwise loss objectives for metric learning can be optimized using all available information within training batches, so that all similar positive pairs with large ground distances and dissimilar negative pairs with small ground distances would be emphasized simultaneously.</p>
+<ol>
+<li><p><strong>Overtraining</strong>:</p>
+<p> Similar positive pairs with small distances would still be optimized (e.g., $x_1$ and $x_4$).</p>
+</li>
+<li><p><strong>Counteracting</strong>:</p>
+<p> Or worse, if we treat the optimization as a whole rather than the individual particle, the metric learning process of these methods is vulnerable to oscillation. Since the hard samples might be emphasized by many particles simultaneously, they could all cancel each other out (e.g., $x_2$ and $x_5$).</p>
+</li>
+</ol>
+<p>In contrast, metric learning with the MVP matching based loss objective can guarantee that each sample selects one exclusive hard positive and negative pairs.</p>
+<p>Thus, the learned MVP matching could deal with <strong>unbalanced samples</strong> according to the adaptive edge weights in the bipartite graph and the <strong>adverse optimization</strong>, e.g., overtraining and counteracting yielded by other anchors as black arrows shown in Figure 1.(c), <strong>would be effectively eliminated</strong>.</p>
+<p>As a consequence, the convergence rate and recognition performance of metric learning could be improved significantly.</p>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><div align="center">
+    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Fig2.png">
+</div>
+
+<h3 id="Adaptive-Weighting-for-Positives-and-Negatives"><a href="#Adaptive-Weighting-for-Positives-and-Negatives" class="headerlink" title="Adaptive Weighting for Positives and Negatives"></a>Adaptive Weighting for Positives and Negatives</h3><p>We divide the complete bipartite graph $G(U,V,E)$ into two bipartite graphs $G_P$ and $G_N$ for positive and negative pairs respectively.</p>
+<p>An adaptive weight $M_{ij}^+$ and $M_{ij}^−$ of each edge $(i, j)$ in $G_P$ and $G_N$:</p>
+<p>$$<br>M_{ij}^+(x_i, x_j; f)=<br>\begin{cases}<br>||f(x_i)-f(x_j)||_2^2-\alpha,\quad&amp;\mbox{if}\quad\delta_{ij}^+=1\\<br>0,&amp;\mbox{if}\quad\delta_{ij}^+=0<br>\end{cases}<br>$$</p>
+<p>where</p>
+<p>$$<br>\delta_{ij}^+=<br>\begin{cases}<br>1,\quad&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\gt\alpha\\<br>0,&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\le\alpha<br>\end{cases}<br>$$</p>
+<p>where $\alpha$ is a learnable variable.</p>
+<p>This function would prevent the overtraining for positive samples in contrastive loss, which demands similar pairs gather as close as possible.</p>
+<p>$$<br>M_{ij}^-(x_i, x_j; f)=<br>\begin{cases}<br>\beta-||f(x_i)-f(x_j)||_2^2,\quad&amp;\mbox{if}\quad\delta_{ij}^-=1\\<br>0,&amp;\mbox{if}\quad\delta_{ij}^-=0<br>\end{cases}<br>$$</p>
+<p>where</p>
+<p>$$<br>\delta_{ij}^-=<br>\begin{cases}<br>1,\quad&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\lt\beta\\<br>0,&amp;\mbox{if}\quad ||f(x_i)-f(x_j)||_2^2\ge\beta<br>\end{cases}<br>$$</p>
+<p>where $\beta = \epsilon + \alpha$.</p>
+<p>This function penalizes the dissimilar pairs within the margin $\beta$ and ignores the others. (prevent the counteracting)</p>
+<h3 id="MVP-Matching-for-Hard-Samples-Pairs"><a href="#MVP-Matching-for-Hard-Samples-Pairs" class="headerlink" title="MVP Matching for Hard Samples Pairs"></a>MVP Matching for Hard Samples Pairs</h3><p>We define the matching variables $T_{ij}^+$ and $T_{ij}^−$ for the edge $(i, j)$ on these two weighted bipartite graphs $G_P$ and $G_N$:</p>
+<p>$$<br>t_{ij}=<br>\begin{cases}<br>1,\quad&amp;\mbox{indicates a matching pair}\\<br>0,&amp;\mbox{means unmatching one}<br>\end{cases}<br>$$</p>
+<p>where $t_{ij}\in T^{+(or-)}$</p>
+<p>$$\max_{T_{ij}\ge 0}\sum_{i,j=1}^nT_{ij}^{+(or-)}M_{ij}^{+(or-)}$$</p>
+<p>$$\mbox{s.t.}\quad\sum_{j=1}^nT_{ij}^{+(or-)}=1,\quad\sum_{i=1}^nT_{ij}^{+(or-)}=1$$</p>
+<h3 id="Kuhn-Munkres-assignment-KA-algorithm-8"><a href="#Kuhn-Munkres-assignment-KA-algorithm-8" class="headerlink" title="Kuhn-Munkres assignment (KA) algorithm [8]"></a>Kuhn-Munkres assignment (KA) algorithm [8]</h3><p><strong>Definition 3.1.</strong> <em>Feasible labeling</em> :</p>
+<p>$$l:\forall x_i, x_j\in U\cup V\rightarrow R$$</p>
+<p>$$\mbox{s.t.}\quad M_{ij}\le l(x_i)+l(x_j)$$</p>
+<p><strong>Definition 3.2.</strong> <em>Equality graph</em> :</p>
+<p>$$G_l=\lbrace\forall (i, j):M_{ij}=l(x_i)+l(x_j)\rbrace$$</p>
+<p><strong>Theorem 3.3.</strong> If $l$ is a feasible labeling function and $T$ is an arbitrary perfect matching (i.e., one-to-one matching) in the equality graph $G_l$, then $T$ must be a maximum-value perfect (MVP) matching $T^*$.</p>
+<p><strong><em>Proof</em></strong>: For $T$ in $G(U, V, E)$:</p>
+<p>$$\sum_{i, j}^{(x_i, x_j)\in T}M_{ij}\le\sum_i^{x_i\in U}l(x_i)+\sum_j^{x_j\in V}l(x_j)$$</p>
+<p>Only when $T$ is a matching in $G_l$:</p>
+<p>$$\sum_{i, j}^{(x_i, x_j)\in T^*}M_{ij}=\sum_i^{x_i\in U}l(x_i)+\sum_j^{x_j\in V}l(x_j)$$</p>
+<div align="center">
+    <img src="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/Alg1.png" width="50%">
+</div>
+
+<h3 id="Batch-wise-MVP-Matching-based-Loss"><a href="#Batch-wise-MVP-Matching-based-Loss" class="headerlink" title="Batch-wise MVP Matching based Loss"></a>Batch-wise MVP Matching based Loss</h3><p>$$<br>\begin{split}<br>L(x_i, x_j; f)&amp;=L^++L^-\\<br>&amp;=\sum_{ij}^ny_{ij}T_{ij}^+M_{ij}^++\sum_{ij}^n(1-y_{ij})T_{ij}^-M_{ij}^-<br>\end{split}<br>$$</p>
+<p>where</p>
+<p>$$<br>y_{ij}=<br>\begin{cases}<br>1,\quad &amp;\mbox{if samples $x_i$ and $x_j$ are deemed similar}\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p>Update:</p>
+<p>$$\frac{\partial L}{\partial f(x_i)}=\sum_{j=1}^n2(f(x_i)-f(x_j))(\delta_{ij}^+y_{ij}T_{ij}^+-\delta_{ij}^-(1-y_{ij})T_{ij}^-)$$</p>
+<p>$$\frac{\partial L}{\partial f(x_j)}=-\sum_{i=1}^n2(f(x_i)-f(x_j))(\delta_{ij}^+y_{ij}T_{ij}^+-\delta_{ij}^-(1-y_{ij})T_{ij}^-)$$</p>
+<p>$\alpha$ is a learnable variable:</p>
+<p>$$\frac{\partial L}{\partial \alpha}=\sum_{i,j=1}^n[-y_{ij}\delta_{ij}^++(1-y_{ij})\delta_{ij}^-]$$</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Sumit Chopra, Raia Hadsell, and Yann LeCun. Learning a similarity metric discriminatively, with application to face verification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 539–546. IEEE, 2005. [<a href="http://www.cs.utoronto.ca/~hinton/csc2535_06/readings/chopra-05.pdf" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Gal Chechik, Varun Sharma, Uri Shalit, and Samy Bengio. Large scale online learning of image similarity through ranking. Journal of Machine Learning Research, 11(Mar):1109–1135, 2010. [<a href="http://www.jmlr.org/papers/v11/chechik10a.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Jane Bromley, Isabelle Guyon, Yann LeCun, Eduard S¨ackinger, and Roopak Shah. Signature verification using a “siamese” time delay neural network. In Advances in neural information processing systems, pages 737–744, 1994. [<a href="http://papers.nips.cc/paper/769-signature-verification-using-a-siamese-time-delay-neural-network" target="_blank" rel="noopener">link</a>]</p>
+<p>[4] Alexander Hermans, Lucas Beyer, and Bastian Leibe. In defense of the triplet loss for person re-identification. arXiv preprint arXiv:1703.07737, 2017. [<a href="https://arxiv.xilesou.top/abs/1703.07737" target="_blank" rel="noopener">link</a>]</p>
+<p>[5] Kihyuk Sohn. Improved deep metric learning with multiclass n-pair loss objective. In Advances in Neural Information Processing Systems, pages 1857–1865, 2016. [<a href="http://papers.nips.cc/paper/6200-improved-deep-metric-learning-with-multiclass" target="_blank" rel="noopener">link</a>]</p>
+<p>[6] Hyun Oh Song, Yu Xiang, Stefanie Jegelka, and Silvio Savarese. Deep metric learning via lifted structured feature embedding. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 4004–4012, 2016. [<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/html/Song_Deep_Metric_Learning_CVPR_2016_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[7] Weihua Chen, Xiaotang Chen, Jianguo Zhang, and Kaiqi Huang. Beyond triplet loss: a deep quadruplet network for person re-identification. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 403–412, 2017. [<a href="http://openaccess.thecvf.com/content_cvpr_2017/html/Chen_Beyond_Triplet_Loss_CVPR_2017_paper.html" target="_blank" rel="noopener">link</a>]</p>
+<p>[8] Harold W Kuhn. The hungarian method for the assignment problem. Naval research logistics quarterly, 2(1-2):83–97, 1955. [<a href="https://onlinelibrary_wiley.xilesou.top/doi/abs/10.1002/nav.3800020109" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
       </tags>
   </entry>
   <entry>
@@ -506,6 +506,32 @@
       </tags>
   </entry>
   <entry>
+    <title>解决无法打开 TeX Live 的问题</title>
+    <url>/2021/05/21/TexLive/</url>
+    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
+<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><a id="more"></a>
+
+<ol>
+<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
+</li>
+<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
+</li>
+<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
+</li>
+<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
+</li>
+</ol>
+<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
+]]></content>
+      <categories>
+        <category>Technology</category>
+      </categories>
+      <tags>
+        <tag>LaTeX</tag>
+        <tag>TeX Live</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Robust Person Re-ID By Modelling Feature Uncertainty</title>
     <url>/2019/12/11/RobustPersonRe-IDByModellingFeatureUncertainty/</url>
     <content><![CDATA[<h1 id="Robust-Person-Re-Identification-by-Modelling-Feature-Uncertainty"><a href="#Robust-Person-Re-Identification-by-Modelling-Feature-Uncertainty" class="headerlink" title="Robust Person Re-Identification by Modelling Feature Uncertainty"></a>Robust Person Re-Identification by Modelling Feature Uncertainty</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Yu_Robust_Person_Re-Identification_by_Modelling_Feature_Uncertainty_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Yu_Robust_Person_Re-Identification_by_Modelling_Feature_Uncertainty_ICCV_2019_paper.html</a></p>
@@ -566,10 +592,75 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
-        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
+        <tag>graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spectral Feature Transformation For Person Re-ID</title>
+    <url>/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Spectral-Feature-Transformation-for-Person-Re-Identification"><a href="#Spectral-Feature-Transformation-for-Person-Re-Identification" class="headerlink" title="Spectral Feature Transformation for Person Re-Identification"></a>Spectral Feature Transformation for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/LuckyDC/SFT_REID" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><ul>
+<li><p>The two most prevalent types of loss functions in ReID are classification loss (e.g. softmax cross entropy loss) and metric learning based loss (e.g. triplet loss and contrastive loss):</p>
+<ol>
+<li><p>Classification loss has promising convergence but is vulnerable to overfitting. It processes samples individually and only builds connections implicitly through the classifier.</p>
+</li>
+<li><p>Metric learning based loss explicitly optimizes the distances between samples. While the similarity structure it builds only involves a pair/triplet of data points and ignores other informative samples. This leads to a large proportion of trivial pairs/triplets which could overwhelm the training process and eventually makes the model suffer from slow convergence.</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Most existing methods process data points individually or only involves a fraction of samples while building a similarity structure. They ignore dense informative connections among samples more or less. The lack of holistic observation eventually leads to inferior performance. To relieve the issue, we propose to formulate the whole data batch as a similarity graph.</strong></p>
+</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="Spectral-Feature-Transformation"><a href="#Spectral-Feature-Transformation" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h2><div align="center">
+    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Fig2.png">
+</div>
+
+<p>The final embedding of a training batch is regarded as a similarity graph.</p>
+<h3 id="Affinity-Matrix-W"><a href="#Affinity-Matrix-W" class="headerlink" title="Affinity Matrix $W$:"></a>Affinity Matrix $W$:</h3><p>$$w_{ij}=\exp\left(\frac{x_i^Tx_j}{\sigma\cdot||x_i||_2\cdot||x_j||_2}\right)$$</p>
+<p>where $\sigma$ is temperature hyper-parameter.</p>
+<h3 id="Transition-Probability-Matrix-T-归一化的-W"><a href="#Transition-Probability-Matrix-T-归一化的-W" class="headerlink" title="Transition Probability Matrix $T$ (归一化的 $W$):"></a>Transition Probability Matrix $T$ (归一化的 $W$):</h3><p>$$T=softmax(W)$$</p>
+<h3 id="Spectral-Feature-Transformation-1"><a href="#Spectral-Feature-Transformation-1" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h3><p>$$X’=TX$$</p>
+<hr>
+<p><strong>Note</strong>:</p>
+<ol>
+<li><p>To fully liberate the power of spectral clustering, it is necessary to satisfy the assumption that the input data obey the underlying cluster structure, i.e., <strong>there must be sufficient images for each identity in the training batch</strong>.</p>
+</li>
+<li><p>The proposed spectral feature transformation is just applied in the training process and would be discarded during inference.</p>
+</li>
+</ol>
+<hr>
+<p>核心代码:</p>
+<div align="center">
+    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Code.png">
+</div>
+
+<h2 id="Local-Blurring-Re-ranking"><a href="#Local-Blurring-Re-ranking" class="headerlink" title="Local Blurring Re-ranking"></a>Local Blurring Re-ranking</h2><ol>
+<li><p>Given a probe image, images in the gallery are ranked according to the cosine similarity with it.</p>
+</li>
+<li><p>We collect features of top-n entries and perform spectral feature transformation on them.</p>
+</li>
+<li><p>The top-n rank list is recomputed based on the similarity derived from transformed features.</p>
+</li>
+</ol>
+<p>The extension is based on the assumption that there underlies a cluster structure in the neighborhood of the probe images. This is exactly the case when the feature extractor has been properly trained on the training data. As expressed in the mathematical formulation of spectral feature transformation, <strong>the embedding of each data point will be blurred by the others according to the similarities between them</strong>. Each data point will be moved towards the high-density area (i.e. cluster center) which has more short paths to it. This process is equivalent to conduct a clustering operation on local neighbors of the probe image. Therefore, it can make the cluster structure more compact and relieve the ambiguous issue in retrieval.</p>
+<p>Compared with k-reciprocal re-ranking which is operated on the whole test set, the proposed re-ranking is much more efficient.</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+        <tag>spectral feature</tag>
       </tags>
   </entry>
   <entry>
@@ -660,10 +751,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>attention</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>attention</tag>
         <tag>reinforcement learning</tag>
       </tags>
   </entry>
@@ -721,96 +812,6 @@
         <tag>ICCV2019</tag>
         <tag>unsupervised</tag>
         <tag>transfer learning</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spectral Feature Transformation For Person Re-ID</title>
-    <url>/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/</url>
-    <content><![CDATA[<h1 id="Spectral-Feature-Transformation-for-Person-Re-Identification"><a href="#Spectral-Feature-Transformation-for-Person-Re-Identification" class="headerlink" title="Spectral Feature Transformation for Person Re-Identification"></a>Spectral Feature Transformation for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
-<p>The source code is <a href="https://github.com/LuckyDC/SFT_REID" target="_blank" rel="noopener">here</a>.</p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><ul>
-<li><p>The two most prevalent types of loss functions in ReID are classification loss (e.g. softmax cross entropy loss) and metric learning based loss (e.g. triplet loss and contrastive loss):</p>
-<ol>
-<li><p>Classification loss has promising convergence but is vulnerable to overfitting. It processes samples individually and only builds connections implicitly through the classifier.</p>
-</li>
-<li><p>Metric learning based loss explicitly optimizes the distances between samples. While the similarity structure it builds only involves a pair/triplet of data points and ignores other informative samples. This leads to a large proportion of trivial pairs/triplets which could overwhelm the training process and eventually makes the model suffer from slow convergence.</p>
-</li>
-</ol>
-</li>
-<li><p><strong>Most existing methods process data points individually or only involves a fraction of samples while building a similarity structure. They ignore dense informative connections among samples more or less. The lack of holistic observation eventually leads to inferior performance. To relieve the issue, we propose to formulate the whole data batch as a similarity graph.</strong></p>
-</li>
-</ul>
-<a id="more"></a>
-
-<h2 id="Spectral-Feature-Transformation"><a href="#Spectral-Feature-Transformation" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h2><div align="center">
-    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Fig2.png">
-</div>
-
-<p>The final embedding of a training batch is regarded as a similarity graph.</p>
-<h3 id="Affinity-Matrix-W"><a href="#Affinity-Matrix-W" class="headerlink" title="Affinity Matrix $W$:"></a>Affinity Matrix $W$:</h3><p>$$w_{ij}=\exp\left(\frac{x_i^Tx_j}{\sigma\cdot||x_i||_2\cdot||x_j||_2}\right)$$</p>
-<p>where $\sigma$ is temperature hyper-parameter.</p>
-<h3 id="Transition-Probability-Matrix-T-归一化的-W"><a href="#Transition-Probability-Matrix-T-归一化的-W" class="headerlink" title="Transition Probability Matrix $T$ (归一化的 $W$):"></a>Transition Probability Matrix $T$ (归一化的 $W$):</h3><p>$$T=softmax(W)$$</p>
-<h3 id="Spectral-Feature-Transformation-1"><a href="#Spectral-Feature-Transformation-1" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h3><p>$$X’=TX$$</p>
-<hr>
-<p><strong>Note</strong>:</p>
-<ol>
-<li><p>To fully liberate the power of spectral clustering, it is necessary to satisfy the assumption that the input data obey the underlying cluster structure, i.e., <strong>there must be sufficient images for each identity in the training batch</strong>.</p>
-</li>
-<li><p>The proposed spectral feature transformation is just applied in the training process and would be discarded during inference.</p>
-</li>
-</ol>
-<hr>
-<p>核心代码:</p>
-<div align="center">
-    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Code.png">
-</div>
-
-<h2 id="Local-Blurring-Re-ranking"><a href="#Local-Blurring-Re-ranking" class="headerlink" title="Local Blurring Re-ranking"></a>Local Blurring Re-ranking</h2><ol>
-<li><p>Given a probe image, images in the gallery are ranked according to the cosine similarity with it.</p>
-</li>
-<li><p>We collect features of top-n entries and perform spectral feature transformation on them.</p>
-</li>
-<li><p>The top-n rank list is recomputed based on the similarity derived from transformed features.</p>
-</li>
-</ol>
-<p>The extension is based on the assumption that there underlies a cluster structure in the neighborhood of the probe images. This is exactly the case when the feature extractor has been properly trained on the training data. As expressed in the mathematical formulation of spectral feature transformation, <strong>the embedding of each data point will be blurred by the others according to the similarities between them</strong>. Each data point will be moved towards the high-density area (i.e. cluster center) which has more short paths to it. This process is equivalent to conduct a clustering operation on local neighbors of the probe image. Therefore, it can make the cluster structure more compact and relieve the ambiguous issue in retrieval.</p>
-<p>Compared with k-reciprocal re-ranking which is operated on the whole test set, the proposed re-ranking is much more efficient.</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>graph</tag>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
-        <tag>spectral feature</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决无法打开 TeX Live 的问题</title>
-    <url>/2021/05/21/TexLive/</url>
-    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
-<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><a id="more"></a>
-
-<ol>
-<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
-</li>
-<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
-</li>
-<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
-</li>
-<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
-</li>
-</ol>
-<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
-]]></content>
-      <categories>
-        <category>Technology</category>
-      </categories>
-      <tags>
-        <tag>LaTeX</tag>
       </tags>
   </entry>
   <entry>
@@ -879,9 +880,9 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
-        <tag>graph</tag>
         <tag>person re-id</tag>
         <tag>ICCV2019</tag>
+        <tag>graph</tag>
         <tag>unsupervised</tag>
       </tags>
   </entry>
