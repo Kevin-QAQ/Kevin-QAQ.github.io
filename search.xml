@@ -1,219 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Beyond Human Parts -- Dual Part-Aligned Representations</title>
-    <url>/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/</url>
-    <content><![CDATA[<h1 id="Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification"><a href="#Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification" class="headerlink" title="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification"></a>Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
-<p>The source code is <a href="https://github.com/ggjy/P2Net.pytorch" target="_blank" rel="noopener">here</a>.</p>
-<h2 id="Challenges-Misalignment-Problem"><a href="#Challenges-Misalignment-Problem" class="headerlink" title="Challenges - Misalignment Problem"></a>Challenges - Misalignment Problem</h2><p>The significant visual appearance changes caused by:</p>
-<ol>
-<li><p>human pose variation</p>
-</li>
-<li><p>lighting conditions</p>
-</li>
-<li><p>part occlusions</p>
-</li>
-<li><p>background cluttering</p>
-</li>
-<li><p>distinct camera viewpoints ……</p>
-</li>
-</ol>
-<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
-<li><p>Hand-crafted partitioning</p>
-<p> relies on manually designed splits of the input image or the feature maps into grid cells or horizontal stripes, based on the assumption that the human parts are well-aligned in the RGB color space</p>
-</li>
-<li><p>The attention mechanism</p>
-<p> tries to learn an attention map over the last output feature map and constructs the aligned part features accordingly</p>
-</li>
-<li><p>Predicting a set of predefined attributes as useful features to guide the matching process.</p>
-</li>
-<li><p>Injecting human pose estimation or human parsing results to extract the human part aligned features based on the predicted human key points or semantic human part regions, while the success of such approaches heavily counts on the accuracy of human parsing models or pose estimators.</p>
-</li>
-</ol>
-<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>Most of the previous studies mainly focus on learning more accurate human part representations, while neglecting the influence of <strong>potentially useful contextual cues</strong> that could be addressed as <strong>“non-human” parts</strong>.</p>
-<p>Beyond these predefined part categories, there still exist many objects or parts which could be critical for person re-identification, but tend to be recognized as background by the pre-trained human parsing models.</p>
-<a id="more"></a>
-
-<h2 id="Dual-Part-Aligned-Representation"><a href="#Dual-Part-Aligned-Representation" class="headerlink" title="Dual Part-Aligned Representation"></a>Dual Part-Aligned Representation</h2><div align="center">
-    <img src="/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/Fig2.png">
-</div>
-
-<h3 id="Accurate-Human-Parts"><a href="#Accurate-Human-Parts" class="headerlink" title="Accurate Human Parts:"></a>Accurate Human Parts:</h3><ul>
-<li>Human parsing model CE2P [1] extracts the human part masks and computes the human part-aligned representations for the features from the low-levels to high-levels.</li>
-</ul>
-<p>the predicted label map: $L$ (rescaled to be of the same size as the feature map $X$ ($x_i$ is the representation of pixel $i$, essentially the $i_{th}$ row of $X$, $i=1,2,…,N$))</p>
-<p>$l_i$ represents the human part category of pixel $i$ of $L$, which is of $K$ different values including $K-1$ human part categories and one background category.</p>
-<p>$K$ confidence maps: $P_1, P_2, …, P_K$, where each confidence map $P_K$ is associated with a human part category (or the background category), $p_{ki}$ is the $i_{th}$ pixel of $P_k$.</p>
-<ul>
-<li>the representation of the $k_{th}$ human part (分量形式)：</li>
-</ul>
-<p>$$h_k=g(\sum_{i=1}^Np_{ki}x_i)$$</p>
-<ul>
-<li>矩阵形式:</li>
-</ul>
-<p>$$h_k^{C\times 1}=g(M^{C\times 1}P_k^{1\times N}\odot X^{C\times N}Y^{N\times 1})$$</p>
-<p>$M^{C\times 1}$: 所有元素全为 1 的向量，表示将 $P_k^{1\times N}$ 广播到 $C\times N$</p>
-<p>$Y^{N\times 1}$: 所有元素全为 1 的向量，表示按行求和 (对每一行求和)</p>
-<ul>
-<li>the human part-aligned feature map $X^{Human}$ (same size as $X$):</li>
-</ul>
-<p>$$X^{Human}=\sum_{k=1}^Kh_k^{C\times 1}P_k^{1\times N}$$</p>
-<h3 id="Coarse-Non-human-Parts"><a href="#Coarse-Non-human-Parts" class="headerlink" title="Coarse Non-human Parts:"></a>Coarse Non-human Parts:</h3><p>The latent part branch learns to predict $N$ coarse confidence maps $Q_1, Q_2, …, Q_N$ for all<br>$N$ pixels, $q_{ij}$ is the $j_{th}$ pixel of $Q_i$:</p>
-<p>$$q_{ij}=\frac{1}{Z_i}\exp(\theta(x_j)^T\phi(x_i))$$</p>
-<p>where</p>
-<p>$$Z_i=\sum_{j=1}^N\exp(\theta(x_j)^T\phi(x_i))$$</p>
-<ul>
-<li>the latent part-aligned feature map $X^{Latent}$:</li>
-</ul>
-<p>$$x_i^{Latent}=\sum_{j=1}{N}q_{ij}\psi(x_j)$$</p>
-<ol>
-<li><p>The self-attention mechanism [2, 3] learns to group all the pixels belonging to the same latent part together. We also extract the latent non-human part information on the feature maps from the low-levels to the high-levels.</p>
-</li>
-<li><p>Self-attention can learn to group the similar pixels together without extra supervision (also shown useful in segmentation).</p>
-</li>
-<li><p>The performance gains from the latent part branch, which is in fact the mixture of the coarse human and non-human part information, is mainly attributed to capturing non-human parts.</p>
-</li>
-<li><p>Although the latent part masks are learned from scratch, DPB (latent) achieves comparable results with the human part branch in general, which carries more strong prior information of the human parts knowledge, showing the importance of the non-human part context.</p>
-</li>
-</ol>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
-<li><p>Through combining the advantages of the complementary information from both parts, our approach learns to augment the representation of each pixel with the representation of the part (human parts or non-human parts) that it belongs to.</p>
-</li>
-<li><p>Human part branch and latent part branch are complementary to each other.</p>
-</li>
-<li><p>Human part masks can eliminate the influence of background regions, while the predicted latent part masks serves as reliable surrogate for the non-human part.</p>
-</li>
-<li><p>The human part branch adopts off-the-shelf human parsing model to inject structural prior information by capturing the predefined semantic human parts for a person, while the latent part branch adopts a self-attention mechanism to help capture the detailed part categories beyond the injected prior information.</p>
-</li>
-</ul>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Ting Liu, Tao Ruan, Zilong Huang, Yunchao Wei, Shikui Wei, Yao Zhao, and Thomas Huang. Devil in the details: Towards accurate single and multiple human parsing. arXiv:1809.05996, 2018. [<a href="https://www.aaai.org/ojs/index.php/AAAI/article/view/4409" target="_blank" rel="noopener">link</a>]</p>
-<p>[2] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. In NIPS, 2017. [<a href="http://papers.nips.cc/paper/7181-attention-is-all-you-need" target="_blank" rel="noopener">link</a>]</p>
-<p>[3] Xiaolong Wang, Ross Girshick, Abhinav Gupta, and Kaiming He. Non-local neural networks. In CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wang_Non-Local_Neural_Networks_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Deep Reinforcement Active Learning</title>
-    <url>/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/</url>
-    <content><![CDATA[<h1 id="Deep-Reinforcement-Active-Learning-for-Human-In-The-Loop-Person-Re-Identification"><a href="#Deep-Reinforcement-Active-Learning-for-Human-In-The-Loop-Person-Re-Identification" class="headerlink" title="Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification"></a>Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html</a></p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Most existing supervised person Re-ID approaches employ a train-once-and-deploy scheme, i.e., a large amount of pre-labelled data is put into training phrase all at once.</p>
-<p>However, in practice this assumption is not easy to adapt:</p>
-<ol>
-<li><p>Pairwise pedestrian data is prohibitive to be collected since it is unlikely that a large amount of pedestrian may reappear in other camera views.</p>
-</li>
-<li><p>The increasing number of camera views amplifies the difficulties in searching the same person among multiple camera views.</p>
-</li>
-</ol>
-<p>Solutions:</p>
-<ol>
-<li><p>Unsupervised learning algorithms</p>
-<p> Unsupervised learning based Re-ID models are inherently weaker compared to supervised learning based models, compromising Re-ID effectiveness in any practical deployment.</p>
-</li>
-<li><p>Semi-supervised learning scheme</p>
-<p> These models are still based on a strong assumption that parts of the identities (e.g. one third of the training set) are fully labelled for every camera view. </p>
-</li>
-</ol>
-<p>-&gt; Reinforcement Learning + Active Learning:</p>
-<p>human-in-the-loop (HITL) model learning process [1]</p>
-<p>A step-by-step sequential active learning process is adopted by exploring human selective annotations on a much smaller pool of samples for model learning.</p>
-<p>These cumulatively labelled data by human binary verification are used to update model training for improving Re-ID performance.</p>
-<p>Such an approach to model learning is naturally suited for reinforcement learning together with active learning, the focus of this work.</p>
-<div align="center">
-    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig1.png" width="50%">
-</div>
-
-<a id="more"></a>
-
-<h2 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h2><div align="center">
-    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Alg1.png" width="50%">
-</div>
-
-<h3 id="Base-CNN-Network"><a href="#Base-CNN-Network" class="headerlink" title="Base CNN Network"></a>Base CNN Network</h3><p>$$L_{total}=L_{cross-entropy}+L_{triplet}$$</p>
-<h3 id="A-Deep-Reinforced-Active-Learner-An-Agent"><a href="#A-Deep-Reinforced-Active-Learner-An-Agent" class="headerlink" title="A Deep Reinforced Active Learner - An Agent"></a>A Deep Reinforced Active Learner - An Agent</h3><div align="center">
-    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig2.png">
-</div>
-
-<p>As each query instance arrives, we perceive its $n_s$-nearest neighbors as the unlabelled gallery pool.</p>
-<h4 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h4><p>The action set defines to select an instance from the unlabelled gallery pool:</p>
-<p>$$\pi(A_t|S_t)$$</p>
-<p>Once $A_t=g_k$ is performed, the agent is unable to choose it again in the subsequent steps.</p>
-<p>The termination criterion of this process depends on a pre-defined $K_{max}$ which restricts the maximal annotation amount for each query anchor.</p>
-<h4 id="State"><a href="#State" class="headerlink" title="State"></a>State</h4><div align="center">
-    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig3.png">
-</div>
-
-<p>At each discrete time step $t$, the environment provides an observation state $S_t$ which reveals the instances’ relationship, and receives a response from the agent by selecting an action $A_t$:</p>
-<ul>
-<li>Mahalanobis distance</li>
-</ul>
-<p>$$d(x, y)=\mbox{Mahalanobis}(x, y)=(x-y)^T\Sigma^{-1}(x-y)$$</p>
-<ul>
-<li>The k-reciprocal neighbors</li>
-</ul>
-<p>$$R(n_i, k)=\lbrace n_j|(n_i\in N(n_j, k))\land(n_j\in N(n_i, k))\rbrace$$</p>
-<p>where $N(n_i, k)$ is the top k-nearest neighbors of $n_i$</p>
-<ul>
-<li>Sparse similarity graph</li>
-</ul>
-<p>The similarity value between every two samples $i,j(i\ne j)$</p>
-<p>$$<br>\mbox{Sim}(i, j)=<br>\begin{cases}<br>1-\frac{d(i, j)}{\max_{i, j\in q, g}d(i, j)},\quad&amp;\mbox{if}\quad j\in R(i, k)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
-<p>The similarity value of the node $n_i$ is remained, otherwise be assigned with zero.</p>
-<p>For a state $S_t$ at time $t$, the optimal action $A_t=g_k$ is selected via the policy network, which indicates the $k$-th instance among the unlabelled gallery pool being annotated by human oracle, who replies with binary feedback true or false against the query:</p>
-<ol>
-<li>True Match:</li>
-</ol>
-<p>$$y_k^t=1$$</p>
-<p>then,</p>
-<p>$$\mbox{Sim}(q, g_k)=1$$</p>
-<p>$$\mbox{Sim}(q, g_i)=\frac12[\mbox{Sim}(q, g_i)+\mbox{Sim}(g_k, g_i)]$$</p>
-<ol start="2">
-<li>False Match:</li>
-</ol>
-<p>$$y_k^t=-1$$</p>
-<p>then,</p>
-<p>$$\mbox{Sim}(q, g_k)=0$$</p>
-<p>$$<br>\mbox{Sim}(q, g_i)=<br>\begin{cases}<br>\mbox{Sim}(q, g_i)-\mbox{Sim}(g_k, g_i),\quad&amp;\mbox{if}\quad\mbox{Sim}(q, g_i)\gt\mbox{Sim}(g_k, g_i)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
-<p><strong>zoom in the distance among positives</strong> and <strong>push out the distance among negatives</strong>.</p>
-<p>The k-reciprocal operation will also be adopt afterwards, and a renewed state $S_{t+1}$ is then obtained.</p>
-<p>repeats until the maximum annotation amount $K_{max}$ for each query is exhausted</p>
-<h4 id="Reward"><a href="#Reward" class="headerlink" title="Reward"></a>Reward</h4><p>Loss for action $\pi$</p>
-<p>We use data uncertainty as the objective function of the reinforcement learning policy, i.e., Higher uncertainty indicates that the sample is harder to be distinguished</p>
-<p>$$R_t=[m+y_k^t(\max_{x_i\in X_p^t}d(x_i, g_k)-\min_{x_j\in X_n^t}d(x_j, g_k))]_+$$</p>
-<p>All the future rewards $(R_{t+1}, R_{t+2}, \cdots)$:</p>
-<p>$$Q^*=\max_{\pi}E[R_t+\gamma R_{t+1}+\gamma^2R_{t+2}+\cdots|\pi, S_t, A_t]$$</p>
-<h4 id="CNN-Network-Updating"><a href="#CNN-Network-Updating" class="headerlink" title="CNN Network Updating"></a>CNN Network Updating</h4><p>When plentiful enough pair-wise labelled data are obtained, the CNN parameters enable to be updated via triplet loss function, which in return generates a new initial state for incoming data. Through iteratively executing the sample selection and CNN network refreshing, the proposed algorithm could quickly escalate.</p>
-<p>This progress terminates when each image in the training data pool has been browsed once by our DRAL agent.</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
-<li><p>The key task for the model design becomes how to select more informative samples at a fixed annotation cost.</p>
-</li>
-<li><p>DRAL method releases the restriction of pre-labelling and keeps model upgrading with progressively collected data.</p>
-</li>
-</ul>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Hanxiao Wang, Shaogang Gong, Xiatian Zhu, and Tao Xiang. Human-in-the-loop person re-identification. In ECCV, 2016. [<a href="https://link_springer.xilesou.top/chapter/10.1007/978-3-319-46493-0_25" target="_blank" rel="noopener">link</a>]</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
-        <tag>reinforcement learning</tag>
-        <tag>active learning</tag>
-        <tag>graph</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Batch DropBlock Network</title>
     <url>/2019/12/11/BatchDropBlockNetworkForPersonRe-IDAndBeyond/</url>
     <content><![CDATA[<h1 id="Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond"><a href="#Batch-DropBlock-Network-for-Person-Re-Identification-and-Beyond" class="headerlink" title="Batch DropBlock Network for Person Re-Identification and Beyond"></a>Batch DropBlock Network for Person Re-Identification and Beyond</h1><p>全文链接：<br><a href="https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea" target="_blank" rel="noopener">https://www.semanticscholar.org/paper/Batch-DropBlock-Network-for-Person-and-Beyond-Dai-Chen/2e4e3d80e0a789dcf45e61401c8af4e3fa96dfea</a></p>
@@ -288,10 +75,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
+        <tag>trick</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
-        <tag>trick</tag>
       </tags>
   </entry>
   <entry>
@@ -401,6 +188,219 @@
       </tags>
   </entry>
   <entry>
+    <title>Beyond Human Parts -- Dual Part-Aligned Representations</title>
+    <url>/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification"><a href="#Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification" class="headerlink" title="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification"></a>Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/ggjy/P2Net.pytorch" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Challenges-Misalignment-Problem"><a href="#Challenges-Misalignment-Problem" class="headerlink" title="Challenges - Misalignment Problem"></a>Challenges - Misalignment Problem</h2><p>The significant visual appearance changes caused by:</p>
+<ol>
+<li><p>human pose variation</p>
+</li>
+<li><p>lighting conditions</p>
+</li>
+<li><p>part occlusions</p>
+</li>
+<li><p>background cluttering</p>
+</li>
+<li><p>distinct camera viewpoints ……</p>
+</li>
+</ol>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
+<li><p>Hand-crafted partitioning</p>
+<p> relies on manually designed splits of the input image or the feature maps into grid cells or horizontal stripes, based on the assumption that the human parts are well-aligned in the RGB color space</p>
+</li>
+<li><p>The attention mechanism</p>
+<p> tries to learn an attention map over the last output feature map and constructs the aligned part features accordingly</p>
+</li>
+<li><p>Predicting a set of predefined attributes as useful features to guide the matching process.</p>
+</li>
+<li><p>Injecting human pose estimation or human parsing results to extract the human part aligned features based on the predicted human key points or semantic human part regions, while the success of such approaches heavily counts on the accuracy of human parsing models or pose estimators.</p>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>Most of the previous studies mainly focus on learning more accurate human part representations, while neglecting the influence of <strong>potentially useful contextual cues</strong> that could be addressed as <strong>“non-human” parts</strong>.</p>
+<p>Beyond these predefined part categories, there still exist many objects or parts which could be critical for person re-identification, but tend to be recognized as background by the pre-trained human parsing models.</p>
+<a id="more"></a>
+
+<h2 id="Dual-Part-Aligned-Representation"><a href="#Dual-Part-Aligned-Representation" class="headerlink" title="Dual Part-Aligned Representation"></a>Dual Part-Aligned Representation</h2><div align="center">
+    <img src="/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/Fig2.png">
+</div>
+
+<h3 id="Accurate-Human-Parts"><a href="#Accurate-Human-Parts" class="headerlink" title="Accurate Human Parts:"></a>Accurate Human Parts:</h3><ul>
+<li>Human parsing model CE2P [1] extracts the human part masks and computes the human part-aligned representations for the features from the low-levels to high-levels.</li>
+</ul>
+<p>the predicted label map: $L$ (rescaled to be of the same size as the feature map $X$ ($x_i$ is the representation of pixel $i$, essentially the $i_{th}$ row of $X$, $i=1,2,…,N$))</p>
+<p>$l_i$ represents the human part category of pixel $i$ of $L$, which is of $K$ different values including $K-1$ human part categories and one background category.</p>
+<p>$K$ confidence maps: $P_1, P_2, …, P_K$, where each confidence map $P_K$ is associated with a human part category (or the background category), $p_{ki}$ is the $i_{th}$ pixel of $P_k$.</p>
+<ul>
+<li>the representation of the $k_{th}$ human part (分量形式)：</li>
+</ul>
+<p>$$h_k=g(\sum_{i=1}^Np_{ki}x_i)$$</p>
+<ul>
+<li>矩阵形式:</li>
+</ul>
+<p>$$h_k^{C\times 1}=g(M^{C\times 1}P_k^{1\times N}\odot X^{C\times N}Y^{N\times 1})$$</p>
+<p>$M^{C\times 1}$: 所有元素全为 1 的向量，表示将 $P_k^{1\times N}$ 广播到 $C\times N$</p>
+<p>$Y^{N\times 1}$: 所有元素全为 1 的向量，表示按行求和 (对每一行求和)</p>
+<ul>
+<li>the human part-aligned feature map $X^{Human}$ (same size as $X$):</li>
+</ul>
+<p>$$X^{Human}=\sum_{k=1}^Kh_k^{C\times 1}P_k^{1\times N}$$</p>
+<h3 id="Coarse-Non-human-Parts"><a href="#Coarse-Non-human-Parts" class="headerlink" title="Coarse Non-human Parts:"></a>Coarse Non-human Parts:</h3><p>The latent part branch learns to predict $N$ coarse confidence maps $Q_1, Q_2, …, Q_N$ for all<br>$N$ pixels, $q_{ij}$ is the $j_{th}$ pixel of $Q_i$:</p>
+<p>$$q_{ij}=\frac{1}{Z_i}\exp(\theta(x_j)^T\phi(x_i))$$</p>
+<p>where</p>
+<p>$$Z_i=\sum_{j=1}^N\exp(\theta(x_j)^T\phi(x_i))$$</p>
+<ul>
+<li>the latent part-aligned feature map $X^{Latent}$:</li>
+</ul>
+<p>$$x_i^{Latent}=\sum_{j=1}{N}q_{ij}\psi(x_j)$$</p>
+<ol>
+<li><p>The self-attention mechanism [2, 3] learns to group all the pixels belonging to the same latent part together. We also extract the latent non-human part information on the feature maps from the low-levels to the high-levels.</p>
+</li>
+<li><p>Self-attention can learn to group the similar pixels together without extra supervision (also shown useful in segmentation).</p>
+</li>
+<li><p>The performance gains from the latent part branch, which is in fact the mixture of the coarse human and non-human part information, is mainly attributed to capturing non-human parts.</p>
+</li>
+<li><p>Although the latent part masks are learned from scratch, DPB (latent) achieves comparable results with the human part branch in general, which carries more strong prior information of the human parts knowledge, showing the importance of the non-human part context.</p>
+</li>
+</ol>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li><p>Through combining the advantages of the complementary information from both parts, our approach learns to augment the representation of each pixel with the representation of the part (human parts or non-human parts) that it belongs to.</p>
+</li>
+<li><p>Human part branch and latent part branch are complementary to each other.</p>
+</li>
+<li><p>Human part masks can eliminate the influence of background regions, while the predicted latent part masks serves as reliable surrogate for the non-human part.</p>
+</li>
+<li><p>The human part branch adopts off-the-shelf human parsing model to inject structural prior information by capturing the predefined semantic human parts for a person, while the latent part branch adopts a self-attention mechanism to help capture the detailed part categories beyond the injected prior information.</p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Ting Liu, Tao Ruan, Zilong Huang, Yunchao Wei, Shikui Wei, Yao Zhao, and Thomas Huang. Devil in the details: Towards accurate single and multiple human parsing. arXiv:1809.05996, 2018. [<a href="https://www.aaai.org/ojs/index.php/AAAI/article/view/4409" target="_blank" rel="noopener">link</a>]</p>
+<p>[2] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. In NIPS, 2017. [<a href="http://papers.nips.cc/paper/7181-attention-is-all-you-need" target="_blank" rel="noopener">link</a>]</p>
+<p>[3] Xiaolong Wang, Ross Girshick, Abhinav Gupta, and Kaiming He. Non-local neural networks. In CVPR, 2018. [<a href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wang_Non-Local_Neural_Networks_CVPR_2018_paper.html" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deep Reinforcement Active Learning</title>
+    <url>/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/</url>
+    <content><![CDATA[<h1 id="Deep-Reinforcement-Active-Learning-for-Human-In-The-Loop-Person-Re-Identification"><a href="#Deep-Reinforcement-Active-Learning-for-Human-In-The-Loop-Person-Re-Identification" class="headerlink" title="Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification"></a>Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Most existing supervised person Re-ID approaches employ a train-once-and-deploy scheme, i.e., a large amount of pre-labelled data is put into training phrase all at once.</p>
+<p>However, in practice this assumption is not easy to adapt:</p>
+<ol>
+<li><p>Pairwise pedestrian data is prohibitive to be collected since it is unlikely that a large amount of pedestrian may reappear in other camera views.</p>
+</li>
+<li><p>The increasing number of camera views amplifies the difficulties in searching the same person among multiple camera views.</p>
+</li>
+</ol>
+<p>Solutions:</p>
+<ol>
+<li><p>Unsupervised learning algorithms</p>
+<p> Unsupervised learning based Re-ID models are inherently weaker compared to supervised learning based models, compromising Re-ID effectiveness in any practical deployment.</p>
+</li>
+<li><p>Semi-supervised learning scheme</p>
+<p> These models are still based on a strong assumption that parts of the identities (e.g. one third of the training set) are fully labelled for every camera view. </p>
+</li>
+</ol>
+<p>-&gt; Reinforcement Learning + Active Learning:</p>
+<p>human-in-the-loop (HITL) model learning process [1]</p>
+<p>A step-by-step sequential active learning process is adopted by exploring human selective annotations on a much smaller pool of samples for model learning.</p>
+<p>These cumulatively labelled data by human binary verification are used to update model training for improving Re-ID performance.</p>
+<p>Such an approach to model learning is naturally suited for reinforcement learning together with active learning, the focus of this work.</p>
+<div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig1.png" width="50%">
+</div>
+
+<a id="more"></a>
+
+<h2 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h2><div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Alg1.png" width="50%">
+</div>
+
+<h3 id="Base-CNN-Network"><a href="#Base-CNN-Network" class="headerlink" title="Base CNN Network"></a>Base CNN Network</h3><p>$$L_{total}=L_{cross-entropy}+L_{triplet}$$</p>
+<h3 id="A-Deep-Reinforced-Active-Learner-An-Agent"><a href="#A-Deep-Reinforced-Active-Learner-An-Agent" class="headerlink" title="A Deep Reinforced Active Learner - An Agent"></a>A Deep Reinforced Active Learner - An Agent</h3><div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig2.png">
+</div>
+
+<p>As each query instance arrives, we perceive its $n_s$-nearest neighbors as the unlabelled gallery pool.</p>
+<h4 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h4><p>The action set defines to select an instance from the unlabelled gallery pool:</p>
+<p>$$\pi(A_t|S_t)$$</p>
+<p>Once $A_t=g_k$ is performed, the agent is unable to choose it again in the subsequent steps.</p>
+<p>The termination criterion of this process depends on a pre-defined $K_{max}$ which restricts the maximal annotation amount for each query anchor.</p>
+<h4 id="State"><a href="#State" class="headerlink" title="State"></a>State</h4><div align="center">
+    <img src="/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig3.png">
+</div>
+
+<p>At each discrete time step $t$, the environment provides an observation state $S_t$ which reveals the instances’ relationship, and receives a response from the agent by selecting an action $A_t$:</p>
+<ul>
+<li>Mahalanobis distance</li>
+</ul>
+<p>$$d(x, y)=\mbox{Mahalanobis}(x, y)=(x-y)^T\Sigma^{-1}(x-y)$$</p>
+<ul>
+<li>The k-reciprocal neighbors</li>
+</ul>
+<p>$$R(n_i, k)=\lbrace n_j|(n_i\in N(n_j, k))\land(n_j\in N(n_i, k))\rbrace$$</p>
+<p>where $N(n_i, k)$ is the top k-nearest neighbors of $n_i$</p>
+<ul>
+<li>Sparse similarity graph</li>
+</ul>
+<p>The similarity value between every two samples $i,j(i\ne j)$</p>
+<p>$$<br>\mbox{Sim}(i, j)=<br>\begin{cases}<br>1-\frac{d(i, j)}{\max_{i, j\in q, g}d(i, j)},\quad&amp;\mbox{if}\quad j\in R(i, k)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p>The similarity value of the node $n_i$ is remained, otherwise be assigned with zero.</p>
+<p>For a state $S_t$ at time $t$, the optimal action $A_t=g_k$ is selected via the policy network, which indicates the $k$-th instance among the unlabelled gallery pool being annotated by human oracle, who replies with binary feedback true or false against the query:</p>
+<ol>
+<li>True Match:</li>
+</ol>
+<p>$$y_k^t=1$$</p>
+<p>then,</p>
+<p>$$\mbox{Sim}(q, g_k)=1$$</p>
+<p>$$\mbox{Sim}(q, g_i)=\frac12[\mbox{Sim}(q, g_i)+\mbox{Sim}(g_k, g_i)]$$</p>
+<ol start="2">
+<li>False Match:</li>
+</ol>
+<p>$$y_k^t=-1$$</p>
+<p>then,</p>
+<p>$$\mbox{Sim}(q, g_k)=0$$</p>
+<p>$$<br>\mbox{Sim}(q, g_i)=<br>\begin{cases}<br>\mbox{Sim}(q, g_i)-\mbox{Sim}(g_k, g_i),\quad&amp;\mbox{if}\quad\mbox{Sim}(q, g_i)\gt\mbox{Sim}(g_k, g_i)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p><strong>zoom in the distance among positives</strong> and <strong>push out the distance among negatives</strong>.</p>
+<p>The k-reciprocal operation will also be adopt afterwards, and a renewed state $S_{t+1}$ is then obtained.</p>
+<p>repeats until the maximum annotation amount $K_{max}$ for each query is exhausted</p>
+<h4 id="Reward"><a href="#Reward" class="headerlink" title="Reward"></a>Reward</h4><p>Loss for action $\pi$</p>
+<p>We use data uncertainty as the objective function of the reinforcement learning policy, i.e., Higher uncertainty indicates that the sample is harder to be distinguished</p>
+<p>$$R_t=[m+y_k^t(\max_{x_i\in X_p^t}d(x_i, g_k)-\min_{x_j\in X_n^t}d(x_j, g_k))]_+$$</p>
+<p>All the future rewards $(R_{t+1}, R_{t+2}, \cdots)$:</p>
+<p>$$Q^*=\max_{\pi}E[R_t+\gamma R_{t+1}+\gamma^2R_{t+2}+\cdots|\pi, S_t, A_t]$$</p>
+<h4 id="CNN-Network-Updating"><a href="#CNN-Network-Updating" class="headerlink" title="CNN Network Updating"></a>CNN Network Updating</h4><p>When plentiful enough pair-wise labelled data are obtained, the CNN parameters enable to be updated via triplet loss function, which in return generates a new initial state for incoming data. Through iteratively executing the sample selection and CNN network refreshing, the proposed algorithm could quickly escalate.</p>
+<p>This progress terminates when each image in the training data pool has been browsed once by our DRAL agent.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li><p>The key task for the model design becomes how to select more informative samples at a fixed annotation cost.</p>
+</li>
+<li><p>DRAL method releases the restriction of pre-labelling and keeps model upgrading with progressively collected data.</p>
+</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Hanxiao Wang, Shaogang Gong, Xiatian Zhu, and Tao Xiang. Human-in-the-loop person re-identification. In ECCV, 2016. [<a href="https://link_springer.xilesou.top/chapter/10.1007/978-3-319-46493-0_25" target="_blank" rel="noopener">link</a>]</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+        <tag>reinforcement learning</tag>
+        <tag>active learning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Omni-Scale Feature Learning</title>
     <url>/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/</url>
     <content><![CDATA[<h1 id="Omni-Scale-Feature-Learning-for-Person-Re-Identification"><a href="#Omni-Scale-Feature-Learning-for-Person-Re-Identification" class="headerlink" title="Omni-Scale Feature Learning for Person Re-Identification"></a>Omni-Scale Feature Learning for Person Re-Identification</h1><p>全文链接：<br><a href="https://arxiv.xilesou.top/abs/1905.00953" target="_blank" rel="noopener">https://arxiv.xilesou.top/abs/1905.00953</a></p>
@@ -506,29 +506,44 @@
       </tags>
   </entry>
   <entry>
-    <title>解决无法打开 TeX Live 的问题</title>
-    <url>/2021/05/21/TexLive/</url>
-    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
-<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><a id="more"></a>
-
-<ol>
-<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
-</li>
-<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
-</li>
-<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
-</li>
-<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
-</li>
-</ol>
-<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
+    <title>如何搭建本博客</title>
+    <url>/2021/05/24/HowToBuildThisBlog/</url>
+    <content><![CDATA[<h1 id="如何搭建本博客"><a href="#如何搭建本博客" class="headerlink" title="如何搭建本博客"></a>如何搭建本博客</h1><h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2><p>参考<a href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496" target="_blank" rel="noopener">廖雪峰官方网站的Git教程</a></p>
+<p>Windows上，从<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git官网</a>下载安装Git。</p>
+<p>安装完成后，还需要最后一步设置，在Git Bash命令行输入</p>
+<pre><code>$ git config --global user.name &quot;Your Name&quot;
+$ git config --global user.email &quot;email@example.com&quot;</code></pre><p>示例：</p>
+<pre><code>$ git config --global user.name &quot;xw&quot;
+$ git config --global user.email &quot;xieweikevin@qq.com&quot;</code></pre><h2 id="使用SSH连接到GitHub"><a href="#使用SSH连接到GitHub" class="headerlink" title="使用SSH连接到GitHub"></a>使用SSH连接到GitHub</h2><p>参考<a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh" target="_blank" rel="noopener">GitHub官网教程</a></p>
+<h3 id="生成新SSH密钥"><a href="#生成新SSH密钥" class="headerlink" title="生成新SSH密钥"></a>生成新SSH密钥</h3><p>（默认您初始没有SSH密钥，可使用下一节的方法检查您是否有任何现有的SSH密钥）</p>
+<p>生成新SSH密钥，在Git Bash中粘贴下面的文本（替换为您的GitHub电子邮件地址）</p>
+<pre><code>$ ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</code></pre><p>提示您“Enter a file in which to save the key（输入要保存密钥的文件）”时，按 Enter 键。 这将接受默认文件位置。</p>
+<pre><code>&gt; Enter a file in which to save the key (/c/Users/you/.ssh/id_ed25519):[Press enter]</code></pre><p>在提示时输入安全密码。 For more information, see “Working with SSH key passphrases.”</p>
+<pre><code>&gt; Enter passphrase (empty for no passphrase): [Type a passphrase]
+&gt; Enter same passphrase again: [Type passphrase again]</code></pre><h3 id="检查现有SSH密钥"><a href="#检查现有SSH密钥" class="headerlink" title="检查现有SSH密钥"></a>检查现有SSH密钥</h3><p>在Git Bash中输入如下命令以查看是否存在现有SSH密钥：</p>
+<pre><code>$ ls -al ~/.ssh
+# Lists the files in your .ssh directory, if they exist</code></pre><p>检查目录列表以查看是否已经有 SSH 公钥。 默认情况下，公钥的文件名是以下之一：</p>
+<pre><code>- id_rsa.pub
+- id_ecdsa.pub
+- id_ed25519.pub</code></pre><h3 id="新增SSH密钥到GitHub账户"><a href="#新增SSH密钥到GitHub账户" class="headerlink" title="新增SSH密钥到GitHub账户"></a>新增SSH密钥到GitHub账户</h3><p>如果您的 SSH 公钥文件与示例代码不同，请修改文件名以匹配您当前的设置。 在复制密钥时，请勿添加任何新行或空格。</p>
+<pre><code>$ clip &lt; ~/.ssh/id_ed25519.pub
+# Copies the contents of the id_ed25519.pub file to your clipboard</code></pre><blockquote>
+<p><strong>提示：</strong>如果<code>clip</code>不可用，可找到隐藏的<code>.ssh</code>文件夹（C:\Users\xw.ssh），在常用的文本编辑器中打开该文件，并将其复制到剪贴板。</p>
+</blockquote>
+<p>将其添加到您的GitHub账户设置的SSH and keys中，参考<a href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account" target="_blank" rel="noopener">官网教程</a>。</p>
+<p><a href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh/testing-your-ssh-connection" target="_blank" rel="noopener">测试SSH连接</a>以及<a href="https://docs.github.com/cn/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent" target="_blank" rel="noopener">将SSH密钥添加到ssh-agent</a>等更多内容请参考GitHub官网教程</p>
+<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>参考<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo官网教程</a></p>
+<h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><p>在<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">Node.js官网</a>下载并安装。默认设置即可，无需勾选“自动安装必要工具”。</p>
+<h3 id="安装全局Hexo"><a href="#安装全局Hexo" class="headerlink" title="安装全局Hexo"></a>安装全局Hexo</h3><p>重开Git Bash，输入如下命令，<code>-g</code>表示全局安装</p>
+<pre><code>$ npm install -g hexo-cli</code></pre><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>[1] <a href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496" target="_blank" rel="noopener">廖雪峰官方网站的Git教程</a><br>[2] <a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh" target="_blank" rel="noopener">使用SSH连接到GitHub</a><br>[3] <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo官网</a></p>
 ]]></content>
       <categories>
         <category>Technology</category>
       </categories>
       <tags>
-        <tag>LaTeX</tag>
-        <tag>TeX Live</tag>
+        <tag>blog</tag>
+        <tag>hexo</tag>
+        <tag>next</tag>
       </tags>
   </entry>
   <entry>
@@ -596,71 +611,6 @@
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
         <tag>graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spectral Feature Transformation For Person Re-ID</title>
-    <url>/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/</url>
-    <content><![CDATA[<h1 id="Spectral-Feature-Transformation-for-Person-Re-Identification"><a href="#Spectral-Feature-Transformation-for-Person-Re-Identification" class="headerlink" title="Spectral Feature Transformation for Person Re-Identification"></a>Spectral Feature Transformation for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
-<p>The source code is <a href="https://github.com/LuckyDC/SFT_REID" target="_blank" rel="noopener">here</a>.</p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><ul>
-<li><p>The two most prevalent types of loss functions in ReID are classification loss (e.g. softmax cross entropy loss) and metric learning based loss (e.g. triplet loss and contrastive loss):</p>
-<ol>
-<li><p>Classification loss has promising convergence but is vulnerable to overfitting. It processes samples individually and only builds connections implicitly through the classifier.</p>
-</li>
-<li><p>Metric learning based loss explicitly optimizes the distances between samples. While the similarity structure it builds only involves a pair/triplet of data points and ignores other informative samples. This leads to a large proportion of trivial pairs/triplets which could overwhelm the training process and eventually makes the model suffer from slow convergence.</p>
-</li>
-</ol>
-</li>
-<li><p><strong>Most existing methods process data points individually or only involves a fraction of samples while building a similarity structure. They ignore dense informative connections among samples more or less. The lack of holistic observation eventually leads to inferior performance. To relieve the issue, we propose to formulate the whole data batch as a similarity graph.</strong></p>
-</li>
-</ul>
-<a id="more"></a>
-
-<h2 id="Spectral-Feature-Transformation"><a href="#Spectral-Feature-Transformation" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h2><div align="center">
-    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Fig2.png">
-</div>
-
-<p>The final embedding of a training batch is regarded as a similarity graph.</p>
-<h3 id="Affinity-Matrix-W"><a href="#Affinity-Matrix-W" class="headerlink" title="Affinity Matrix $W$:"></a>Affinity Matrix $W$:</h3><p>$$w_{ij}=\exp\left(\frac{x_i^Tx_j}{\sigma\cdot||x_i||_2\cdot||x_j||_2}\right)$$</p>
-<p>where $\sigma$ is temperature hyper-parameter.</p>
-<h3 id="Transition-Probability-Matrix-T-归一化的-W"><a href="#Transition-Probability-Matrix-T-归一化的-W" class="headerlink" title="Transition Probability Matrix $T$ (归一化的 $W$):"></a>Transition Probability Matrix $T$ (归一化的 $W$):</h3><p>$$T=softmax(W)$$</p>
-<h3 id="Spectral-Feature-Transformation-1"><a href="#Spectral-Feature-Transformation-1" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h3><p>$$X’=TX$$</p>
-<hr>
-<p><strong>Note</strong>:</p>
-<ol>
-<li><p>To fully liberate the power of spectral clustering, it is necessary to satisfy the assumption that the input data obey the underlying cluster structure, i.e., <strong>there must be sufficient images for each identity in the training batch</strong>.</p>
-</li>
-<li><p>The proposed spectral feature transformation is just applied in the training process and would be discarded during inference.</p>
-</li>
-</ol>
-<hr>
-<p>核心代码:</p>
-<div align="center">
-    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Code.png">
-</div>
-
-<h2 id="Local-Blurring-Re-ranking"><a href="#Local-Blurring-Re-ranking" class="headerlink" title="Local Blurring Re-ranking"></a>Local Blurring Re-ranking</h2><ol>
-<li><p>Given a probe image, images in the gallery are ranked according to the cosine similarity with it.</p>
-</li>
-<li><p>We collect features of top-n entries and perform spectral feature transformation on them.</p>
-</li>
-<li><p>The top-n rank list is recomputed based on the similarity derived from transformed features.</p>
-</li>
-</ol>
-<p>The extension is based on the assumption that there underlies a cluster structure in the neighborhood of the probe images. This is exactly the case when the feature extractor has been properly trained on the training data. As expressed in the mathematical formulation of spectral feature transformation, <strong>the embedding of each data point will be blurred by the others according to the similarities between them</strong>. Each data point will be moved towards the high-density area (i.e. cluster center) which has more short paths to it. This process is equivalent to conduct a clustering operation on local neighbors of the probe image. Therefore, it can make the cluster structure more compact and relieve the ambiguous issue in retrieval.</p>
-<p>Compared with k-reciprocal re-ranking which is operated on the whole test set, the proposed re-ranking is much more efficient.</p>
-]]></content>
-      <categories>
-        <category>Paper Notes</category>
-        <category>Person Re-ID</category>
-      </categories>
-      <tags>
-        <tag>person re-id</tag>
-        <tag>supervised</tag>
-        <tag>ICCV2019</tag>
-        <tag>graph</tag>
-        <tag>spectral feature</tag>
       </tags>
   </entry>
   <entry>
@@ -751,10 +701,10 @@
         <category>Person Re-ID</category>
       </categories>
       <tags>
-        <tag>attention</tag>
         <tag>person re-id</tag>
         <tag>supervised</tag>
         <tag>ICCV2019</tag>
+        <tag>attention</tag>
         <tag>reinforcement learning</tag>
       </tags>
   </entry>
@@ -812,6 +762,97 @@
         <tag>ICCV2019</tag>
         <tag>unsupervised</tag>
         <tag>transfer learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spectral Feature Transformation For Person Re-ID</title>
+    <url>/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/</url>
+    <content><![CDATA[<h1 id="Spectral-Feature-Transformation-for-Person-Re-Identification"><a href="#Spectral-Feature-Transformation-for-Person-Re-Identification" class="headerlink" title="Spectral Feature Transformation for Person Re-Identification"></a>Spectral Feature Transformation for Person Re-Identification</h1><p>全文链接：<br><a href="http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html" target="_blank" rel="noopener">http://openaccess.thecvf.com/content_ICCV_2019/html/Luo_Spectral_Feature_Transformation_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a href="https://github.com/LuckyDC/SFT_REID" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><ul>
+<li><p>The two most prevalent types of loss functions in ReID are classification loss (e.g. softmax cross entropy loss) and metric learning based loss (e.g. triplet loss and contrastive loss):</p>
+<ol>
+<li><p>Classification loss has promising convergence but is vulnerable to overfitting. It processes samples individually and only builds connections implicitly through the classifier.</p>
+</li>
+<li><p>Metric learning based loss explicitly optimizes the distances between samples. While the similarity structure it builds only involves a pair/triplet of data points and ignores other informative samples. This leads to a large proportion of trivial pairs/triplets which could overwhelm the training process and eventually makes the model suffer from slow convergence.</p>
+</li>
+</ol>
+</li>
+<li><p><strong>Most existing methods process data points individually or only involves a fraction of samples while building a similarity structure. They ignore dense informative connections among samples more or less. The lack of holistic observation eventually leads to inferior performance. To relieve the issue, we propose to formulate the whole data batch as a similarity graph.</strong></p>
+</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="Spectral-Feature-Transformation"><a href="#Spectral-Feature-Transformation" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h2><div align="center">
+    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Fig2.png">
+</div>
+
+<p>The final embedding of a training batch is regarded as a similarity graph.</p>
+<h3 id="Affinity-Matrix-W"><a href="#Affinity-Matrix-W" class="headerlink" title="Affinity Matrix $W$:"></a>Affinity Matrix $W$:</h3><p>$$w_{ij}=\exp\left(\frac{x_i^Tx_j}{\sigma\cdot||x_i||_2\cdot||x_j||_2}\right)$$</p>
+<p>where $\sigma$ is temperature hyper-parameter.</p>
+<h3 id="Transition-Probability-Matrix-T-归一化的-W"><a href="#Transition-Probability-Matrix-T-归一化的-W" class="headerlink" title="Transition Probability Matrix $T$ (归一化的 $W$):"></a>Transition Probability Matrix $T$ (归一化的 $W$):</h3><p>$$T=softmax(W)$$</p>
+<h3 id="Spectral-Feature-Transformation-1"><a href="#Spectral-Feature-Transformation-1" class="headerlink" title="Spectral Feature Transformation"></a>Spectral Feature Transformation</h3><p>$$X’=TX$$</p>
+<hr>
+<p><strong>Note</strong>:</p>
+<ol>
+<li><p>To fully liberate the power of spectral clustering, it is necessary to satisfy the assumption that the input data obey the underlying cluster structure, i.e., <strong>there must be sufficient images for each identity in the training batch</strong>.</p>
+</li>
+<li><p>The proposed spectral feature transformation is just applied in the training process and would be discarded during inference.</p>
+</li>
+</ol>
+<hr>
+<p>核心代码:</p>
+<div align="center">
+    <img src="/2019/12/11/SpectralFeatureTransformationForPersonRe-ID/Code.png">
+</div>
+
+<h2 id="Local-Blurring-Re-ranking"><a href="#Local-Blurring-Re-ranking" class="headerlink" title="Local Blurring Re-ranking"></a>Local Blurring Re-ranking</h2><ol>
+<li><p>Given a probe image, images in the gallery are ranked according to the cosine similarity with it.</p>
+</li>
+<li><p>We collect features of top-n entries and perform spectral feature transformation on them.</p>
+</li>
+<li><p>The top-n rank list is recomputed based on the similarity derived from transformed features.</p>
+</li>
+</ol>
+<p>The extension is based on the assumption that there underlies a cluster structure in the neighborhood of the probe images. This is exactly the case when the feature extractor has been properly trained on the training data. As expressed in the mathematical formulation of spectral feature transformation, <strong>the embedding of each data point will be blurred by the others according to the similarities between them</strong>. Each data point will be moved towards the high-density area (i.e. cluster center) which has more short paths to it. This process is equivalent to conduct a clustering operation on local neighbors of the probe image. Therefore, it can make the cluster structure more compact and relieve the ambiguous issue in retrieval.</p>
+<p>Compared with k-reciprocal re-ranking which is operated on the whole test set, the proposed re-ranking is much more efficient.</p>
+]]></content>
+      <categories>
+        <category>Paper Notes</category>
+        <category>Person Re-ID</category>
+      </categories>
+      <tags>
+        <tag>person re-id</tag>
+        <tag>supervised</tag>
+        <tag>ICCV2019</tag>
+        <tag>graph</tag>
+        <tag>spectral feature</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决无法打开 TeX Live 的问题</title>
+    <url>/2021/05/21/TexLive/</url>
+    <content><![CDATA[<h1 id="解决无法打开-TeX-Live-的问题"><a href="#解决无法打开-TeX-Live-的问题" class="headerlink" title="解决无法打开 TeX Live 的问题"></a>解决无法打开 TeX Live 的问题</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>成功安装 TeX Live 后，仅在首次使用时可以正确打开 TeX Live，之后想再次启动程序无反应，或有命令行窗口闪现后秒退，重启电脑不解决问题。</p>
+<h2 id="暂时的解决方案"><a href="#暂时的解决方案" class="headerlink" title="暂时的解决方案"></a>暂时的解决方案</h2><a id="more"></a>
+
+<ol>
+<li><p>首先找到 TeX Live 的安装位置，我是默认安装位置，在 C:\texlive\2020\bin\win32 路径下。</p>
+</li>
+<li><p>找到 tlaunch.exe 程序，可以将其固定到开始屏幕，方便以后使用。</p>
+</li>
+<li><p>双击打开该程序，菜单栏选择 Tools，选择 Re-initialize TeX Live，点确认、确认。</p>
+</li>
+<li><p>最后点击第一个图标 LaTeX Editor 就可以愉快的使用 TeX Live 了。</p>
+</li>
+</ol>
+<p>之后想使用 TeX Live 时，我们只用在开始屏幕中打开 tlaunch，执行 3、4 步即可。</p>
+]]></content>
+      <categories>
+        <category>Technology</category>
+      </categories>
+      <tags>
+        <tag>LaTeX</tag>
+        <tag>TeX Live</tag>
       </tags>
   </entry>
   <entry>
