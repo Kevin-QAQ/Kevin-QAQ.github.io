@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-11-10 12:59:32" itemprop="dateModified" datetime="2023-11-10T12:59:32+08:00">2023-11-10</time>
+                <time title="Modified: 2023-11-10 13:59:57" itemprop="dateModified" datetime="2023-11-10T13:59:57+08:00">2023-11-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,7 +241,7 @@
 
 <h1 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h1><p>以下内容参考自<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496">廖雪峰官方网站的Git教程</a></p>
 <p>Windows 上，从<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">Git官网</a>下载 Git 并安装。</p>
-<p>安装完成后，还需要最后一步设置，在 Git Bash 命令行输入你 GitHub 的用户名和邮箱。</p>
+<p>安装完成后，还需要最后一步设置，在 Git Bash 命令行输入：</p>
 <pre><code>$ git config --global user.name &quot;Your Name&quot;
 $ git config --global user.email &quot;email@example.com&quot;
 </code></pre>
@@ -290,10 +290,13 @@ $ git config --global user.email &quot;email@example.com&quot;
 <p>验证生成的消息包含您的用户名，则连接成功了。</p>
 <pre><code>&gt; Hi USERNAME! You&#39;ve successfully authenticated, but GitHub does not provide shell access.
 </code></pre>
-<h2 id="在-GitHub-创建私有博客仓库"><a href="#在-GitHub-创建私有博客仓库" class="headerlink" title="在 GitHub 创建私有博客仓库"></a>在 GitHub 创建私有博客仓库</h2><p>在 GitHub 新建一个私有仓库，例如 hexo，将该仓库 git clone 克隆到本地。</p>
+<h2 id="Git-常用命令"><a href="#Git-常用命令" class="headerlink" title="Git 常用命令"></a>Git 常用命令</h2><pre><code>$ git add -A
+$ git commit -m &quot;git tracks changes&quot;
+$ git push origin master
+</code></pre>
 <h1 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h1><p>在<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">Node.js官网</a>下载并安装。默认设置即可，无需勾选 “自动安装必要工具”。</p>
 <p>检查 “C:\Program Files\nodejs\” 是否已添加到 Windows 环境变量的系统变量中。</p>
-<h1 id="安装全局-Hexo"><a href="#安装全局-Hexo" class="headerlink" title="安装全局 Hexo"></a>安装全局 Hexo</h1><p>打开<a href="##-%E5%9C%A8-GitHub-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E5%8D%9A%E5%AE%A2%E4%BB%93%E5%BA%93">在-GitHub-创建私有博客仓库</a>创建的 hexo 文件夹，在空白处右键选择Git Bash Here，依次输入以下指令安装 hexo 和 hexo 服务器模块（<code>-g</code>表示全局安装）：</p>
+<h1 id="安装全局-Hexo"><a href="#安装全局-Hexo" class="headerlink" title="安装全局 Hexo"></a>安装全局 Hexo</h1><p>在 GitHub 新建一个私有仓库，例如 hexo，将该仓库 git clone 克隆到本地。打开本地 hexo 文件夹，在空白处右键选择Git Bash Here，依次输入以下指令安装 hexo 和 hexo 服务器模块（<code>-g</code>表示全局安装）：</p>
 <pre><code>$ npm install -g hexo-cli
 $ npm install hexo-server --save
 </code></pre>
@@ -309,7 +312,7 @@ $ npm install hexo-server --save
 $ hexo s
 </code></pre>
 <p>成功后会有提示，进入 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a> 即可看到刚刚生成的网页。按 Ctrl + C 停止运行。</p>
-<h2 id="将-hexo-部署到-GitHub"><a href="#将-hexo-部署到-GitHub" class="headerlink" title="将 hexo 部署到 GitHub"></a>将 hexo 部署到 GitHub</h2><h3 id="在-GitHub-创建仓库"><a href="#在-GitHub-创建仓库" class="headerlink" title="在 GitHub 创建仓库"></a>在 GitHub 创建仓库</h3><p>在 GitHub 新建一个仓库，Repository name（仓库名）必须是“你的 GitHub 用户名.github.io”，Description（描述）和 Initialize this repository with: add a README file（初始化仓库时添加一个说明文件）均为可选项。</p>
+<h2 id="将-hexo-部署到-GitHub"><a href="#将-hexo-部署到-GitHub" class="headerlink" title="将 hexo 部署到 GitHub"></a>将 hexo 部署到 GitHub</h2><h3 id="在-GitHub-创建仓库"><a href="#在-GitHub-创建仓库" class="headerlink" title="在 GitHub 创建仓库"></a>在 GitHub 创建仓库</h3><p>在 GitHub 新建一个公共仓库，Repository name（仓库名）必须是“你的 GitHub 用户名.github.io”，Description（描述）和 Initialize this repository with: add a README file（初始化仓库时添加一个说明文件）均为可选项。</p>
 <h3 id="修改-hexo-配置文件"><a href="#修改-hexo-配置文件" class="headerlink" title="修改 hexo 配置文件"></a>修改 hexo 配置文件</h3><p>在 blog 文件夹下找到 _config.yml 文件，这是你的 hexo 博客的配置文件，用 sublime 或 VSCode 或 记事本打开，找到下面两处设置的位置，将其按如下的内容修改，username 换成你的 GitHub 用户名。</p>
 <pre><code># Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -325,22 +328,20 @@ url: https://username.github.io/
 </code></pre>
 <h3 id="安装-Git-部署命令工具"><a href="#安装-Git-部署命令工具" class="headerlink" title="安装 Git 部署命令工具"></a>安装 Git 部署命令工具</h3><pre><code>npm install hexo-deployer-git --save
 </code></pre>
-<p>然后执行下面三行命令后，在 username.github.io 访问你的博客</p>
+<p>然后执行下面三行命令后，就可以在 username.github.io 访问你的博客啦！</p>
 <pre><code>$ hexo clean
 $ hexo g
 $ hexo d
 </code></pre>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><pre><code>$ hexo new &quot;pagename&quot; 
+<h2 id="Hexo-常用命令"><a href="#Hexo-常用命令" class="headerlink" title="Hexo 常用命令"></a>Hexo 常用命令</h2><pre><code>$ hexo new &quot;pagename&quot; 
 $ hexo new page &quot;pagename&quot;
 $ hexo clean
 $ hexo g
 $ hexo d
 $ hexo s
-$ git add -A
-$ git commit -m &quot;git tracks changes&quot;
-$ git push origin master
 </code></pre>
-<p>hexo new “pagename”	表示在 source&#x2F;_post&#x2F; 下新建页面，hexo d	表示 push 到服务器。</p>
+<p>其中，hexo new “pagename”	表示在 source&#x2F;_post&#x2F; 下新建页面，hexo d	表示 push 到服务器。</p>
+<h2 id="Hexo-个性化"><a href="#Hexo-个性化" class="headerlink" title="Hexo 个性化"></a>Hexo 个性化</h2><p>用 sublime 或 VSCode 或 记事本打开 blog 文件夹你的博客的配置文件 _config.yml，可以设置博客标题、作者姓名、语言等等</p>
 <h1 id="安装-NexT"><a href="#安装-NexT" class="headerlink" title="安装 NexT"></a>安装 NexT</h1><p>注意：<a target="_blank" rel="noopener" href="http://theme-next.iissnan.com/getting-started.html">NexT原官网</a>对应的<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next">Next原仓库</a>已不再维护，社区维护版本是<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">Next社区维护版本</a></p>
 <p>克隆<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">Next社区维护版本</a>到blog目录下的 themes&#x2F;next</p>
 <pre><code>$ git clone https://github.com/theme-next/hexo-theme-next themes/next
@@ -348,8 +349,8 @@ $ git push origin master
 <p>在 <strong>Hexo 根配置文件</strong> 中设置主题：hexo&#x2F;blog&#x2F;_config.yml</p>
 <pre><code>theme: next
 </code></pre>
-<p>可在 next 文件夹下的 _config.yml 中设置 home 和 archives 路径，以及主题（我用的是 Gemini）。</p>
-<h1 id="个性化"><a href="#个性化" class="headerlink" title="个性化"></a>个性化</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>[1] <a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496">廖雪峰官方网站的Git教程</a></p>
+<h2 id="Next-个性化"><a href="#Next-个性化" class="headerlink" title="Next 个性化"></a>Next 个性化</h2><p>在 next 文件夹下的 _config.yml 中设置 home 和 archives 路径，以及主题（本博客使用的是 Gemini 主题）。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>[1] <a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496">廖雪峰官方网站的Git教程</a></p>
 <p>[2] <a target="_blank" rel="noopener" href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh">使用SSH连接到GitHub</a></p>
 <p>[3] <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo官网</a></p>
 <p>[4] <a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">Next社区维护版本</a></p>
@@ -1381,6 +1382,26 @@ $ git push origin master
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Kevin-QAQ" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Kevin-QAQ" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/kevinweixie@outlook.com" title="E-Mail → kevinweixie@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/3278338563" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;3278338563" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/3978904" title="bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;3978904" rel="noopener" target="_blank"><i class="fa-brands fa-bilibili fa-fw"></i>bilibili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/KevinQAQ/" title="豆瓣 → https:&#x2F;&#x2F;www.douban.com&#x2F;people&#x2F;KevinQAQ&#x2F;" rel="noopener" target="_blank"><i class="iconfont icon-doubanwang fa-fw"></i>豆瓣</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://blog.csdn.net/sinat_39617781" title="CSDN → https:&#x2F;&#x2F;blog.csdn.net&#x2F;sinat_39617781" rel="noopener" target="_blank"><i class="iconfont icon-csdn fa-fw"></i>CSDN</a>
+      </span>
+  </div>
 
 
 
