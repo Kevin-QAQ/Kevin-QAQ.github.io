@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kevin-qaq.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification全文链接：http:&#x2F;&#x2F;openaccess.thecvf.com&#x2F;content_ICCV_2019&#x2F;html&#x2F;Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Beyond Human Parts -- Dual Part-Aligned Representations">
+<meta property="og:url" content="https://kevin-qaq.github.io/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/index.html">
+<meta property="og:site_name" content="Wei Xie&#39;s Blog">
+<meta property="og:description" content="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification全文链接：http:&#x2F;&#x2F;openaccess.thecvf.com&#x2F;content_ICCV_2019&#x2F;html&#x2F;Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/Fig2.png">
+<meta property="article:published_time" content="2019-12-11T14:13:17.000Z">
+<meta property="article:modified_time" content="2023-11-08T13:33:08.776Z">
+<meta property="article:author" content="Wei Xie">
+<meta property="article:tag" content="person re-id">
+<meta property="article:tag" content="supervised">
+<meta property="article:tag" content="ICCV2019">
+<meta property="article:tag" content="attention">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kevin-qaq.github.io/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/Fig2.png">
+
+<link rel="canonical" href="https://kevin-qaq.github.io/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Beyond Human Parts -- Dual Part-Aligned Representations | Wei Xie's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Wei Xie's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kevin-qaq.github.io/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wei Xie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wei Xie's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Beyond Human Parts -- Dual Part-Aligned Representations
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-11 22:13:17" itemprop="dateCreated datePublished" datetime="2019-12-11T22:13:17+08:00">2019-12-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-08 21:33:08" itemprop="dateModified" datetime="2023-11-08T21:33:08+08:00">2023-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper-Notes/" itemprop="url" rel="index"><span itemprop="name">Paper Notes</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper-Notes/Person-Re-ID/" itemprop="url" rel="index"><span itemprop="name">Person Re-ID</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification"><a href="#Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification" class="headerlink" title="Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification"></a>Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification</h1><p>全文链接：<br><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_ICCV_2019/html/Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html">http://openaccess.thecvf.com/content_ICCV_2019&#x2F;html&#x2F;Guo_Beyond_Human_Parts_Dual_Part-Aligned_Representations_for_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<p>The source code is <a target="_blank" rel="noopener" href="https://github.com/ggjy/P2Net.pytorch">here</a>.</p>
+<h2 id="Challenges-Misalignment-Problem"><a href="#Challenges-Misalignment-Problem" class="headerlink" title="Challenges - Misalignment Problem"></a>Challenges - Misalignment Problem</h2><p>The significant visual appearance changes caused by:</p>
+<ol>
+<li><p>human pose variation</p>
+</li>
+<li><p>lighting conditions</p>
+</li>
+<li><p>part occlusions</p>
+</li>
+<li><p>background cluttering</p>
+</li>
+<li><p>distinct camera viewpoints ……</p>
+</li>
+</ol>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><ol>
+<li><p>Hand-crafted partitioning</p>
+<p> relies on manually designed splits of the input image or the feature maps into grid cells or horizontal stripes, based on the assumption that the human parts are well-aligned in the RGB color space</p>
+</li>
+<li><p>The attention mechanism</p>
+<p> tries to learn an attention map over the last output feature map and constructs the aligned part features accordingly</p>
+</li>
+<li><p>Predicting a set of predefined attributes as useful features to guide the matching process.</p>
+</li>
+<li><p>Injecting human pose estimation or human parsing results to extract the human part aligned features based on the predicted human key points or semantic human part regions, while the success of such approaches heavily counts on the accuracy of human parsing models or pose estimators.</p>
+</li>
+</ol>
+<h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>Most of the previous studies mainly focus on learning more accurate human part representations, while neglecting the influence of <strong>potentially useful contextual cues</strong> that could be addressed as <strong>“non-human” parts</strong>.</p>
+<p>Beyond these predefined part categories, there still exist many objects or parts which could be critical for person re-identification, but tend to be recognized as background by the pre-trained human parsing models.</p>
+<span id="more"></span>
+
+<h2 id="Dual-Part-Aligned-Representation"><a href="#Dual-Part-Aligned-Representation" class="headerlink" title="Dual Part-Aligned Representation"></a>Dual Part-Aligned Representation</h2><div align=center>
+    <img src="BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/Fig2.png"/>
+</div>
+
+<h3 id="Accurate-Human-Parts"><a href="#Accurate-Human-Parts" class="headerlink" title="Accurate Human Parts:"></a>Accurate Human Parts:</h3><ul>
+<li>Human parsing model CE2P [1] extracts the human part masks and computes the human part-aligned representations for the features from the low-levels to high-levels.</li>
+</ul>
+<p>the predicted label map: $L$ (rescaled to be of the same size as the feature map $X$ ($x_i$ is the representation of pixel $i$, essentially the $i_{th}$ row of $X$, $i&#x3D;1,2,…,N$))</p>
+<p>$l_i$ represents the human part category of pixel $i$ of $L$, which is of $K$ different values including $K-1$ human part categories and one background category.</p>
+<p>$K$ confidence maps: $P_1, P_2, …, P_K$, where each confidence map $P_K$ is associated with a human part category (or the background category), $p_{ki}$ is the $i_{th}$ pixel of $P_k$.</p>
+<ul>
+<li>the representation of the $k_{th}$ human part (分量形式)：</li>
+</ul>
+<p>$$h_k&#x3D;g(\sum_{i&#x3D;1}^Np_{ki}x_i)$$</p>
+<ul>
+<li>矩阵形式:</li>
+</ul>
+<p>$$h_k^{C\times 1}&#x3D;g(M^{C\times 1}P_k^{1\times N}\odot X^{C\times N}Y^{N\times 1})$$</p>
+<p>$M^{C\times 1}$: 所有元素全为 1 的向量，表示将 $P_k^{1\times N}$ 广播到 $C\times N$</p>
+<p>$Y^{N\times 1}$: 所有元素全为 1 的向量，表示按行求和 (对每一行求和)</p>
+<ul>
+<li>the human part-aligned feature map $X^{Human}$ (same size as $X$):</li>
+</ul>
+<p>$$X^{Human}&#x3D;\sum_{k&#x3D;1}^Kh_k^{C\times 1}P_k^{1\times N}$$</p>
+<h3 id="Coarse-Non-human-Parts"><a href="#Coarse-Non-human-Parts" class="headerlink" title="Coarse Non-human Parts:"></a>Coarse Non-human Parts:</h3><p>The latent part branch learns to predict $N$ coarse confidence maps $Q_1, Q_2, …, Q_N$ for all<br>$N$ pixels, $q_{ij}$ is the $j_{th}$ pixel of $Q_i$:</p>
+<p>$$q_{ij}&#x3D;\frac{1}{Z_i}\exp(\theta(x_j)^T\phi(x_i))$$</p>
+<p>where</p>
+<p>$$Z_i&#x3D;\sum_{j&#x3D;1}^N\exp(\theta(x_j)^T\phi(x_i))$$</p>
+<ul>
+<li>the latent part-aligned feature map $X^{Latent}$:</li>
+</ul>
+<p>$$x_i^{Latent}&#x3D;\sum_{j&#x3D;1}{N}q_{ij}\psi(x_j)$$</p>
+<ol>
+<li><p>The self-attention mechanism [2, 3] learns to group all the pixels belonging to the same latent part together. We also extract the latent non-human part information on the feature maps from the low-levels to the high-levels.</p>
+</li>
+<li><p>Self-attention can learn to group the similar pixels together without extra supervision (also shown useful in segmentation).</p>
+</li>
+<li><p>The performance gains from the latent part branch, which is in fact the mixture of the coarse human and non-human part information, is mainly attributed to capturing non-human parts.</p>
+</li>
+<li><p>Although the latent part masks are learned from scratch, DPB (latent) achieves comparable results with the human part branch in general, which carries more strong prior information of the human parts knowledge, showing the importance of the non-human part context.</p>
+</li>
+</ol>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li><p>Through combining the advantages of the complementary information from both parts, our approach learns to augment the representation of each pixel with the representation of the part (human parts or non-human parts) that it belongs to.</p>
+</li>
+<li><p>Human part branch and latent part branch are complementary to each other.</p>
+</li>
+<li><p>Human part masks can eliminate the influence of background regions, while the predicted latent part masks serves as reliable surrogate for the non-human part.</p>
+</li>
+<li><p>The human part branch adopts off-the-shelf human parsing model to inject structural prior information by capturing the predefined semantic human parts for a person, while the latent part branch adopts a self-attention mechanism to help capture the detailed part categories beyond the injected prior information.</p>
+</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] Ting Liu, Tao Ruan, Zilong Huang, Yunchao Wei, Shikui Wei, Yao Zhao, and Thomas Huang. Devil in the details: Towards accurate single and multiple human parsing. arXiv:1809.05996, 2018. [<a target="_blank" rel="noopener" href="https://www.aaai.org/ojs/index.php/AAAI/article/view/4409">link</a>]</p>
+<p>[2] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. In NIPS, 2017. [<a target="_blank" rel="noopener" href="http://papers.nips.cc/paper/7181-attention-is-all-you-need">link</a>]</p>
+<p>[3] Xiaolong Wang, Ross Girshick, Abhinav Gupta, and Kaiming He. Non-local neural networks. In CVPR, 2018. [<a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wang_Non-Local_Neural_Networks_CVPR_2018_paper.html">link</a>]</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/person-re-id/" rel="tag"># person re-id</a>
+              <a href="/tags/supervised/" rel="tag"># supervised</a>
+              <a href="/tags/ICCV2019/" rel="tag"># ICCV2019</a>
+              <a href="/tags/attention/" rel="tag"># attention</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/" rel="prev" title="Self-Similarity Grouping - A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-ID">
+      <i class="fa fa-chevron-left"></i> Self-Similarity Grouping - A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-ID
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/11/UnsupervisedGraphAssociationForPersonRe-ID/" rel="next" title="Unsupervised Graph Association For Person Re-ID">
+      Unsupervised Graph Association For Person Re-ID <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Beyond-Human-Parts-Dual-Part-Aligned-Representations-for-Person-Re-Identification"><span class="nav-number">1.</span> <span class="nav-text">Beyond Human Parts: Dual Part-Aligned Representations for Person Re-Identification</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Challenges-Misalignment-Problem"><span class="nav-number">1.1.</span> <span class="nav-text">Challenges - Misalignment Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Related-Work"><span class="nav-number">1.2.</span> <span class="nav-text">Related Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-number">1.3.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dual-Part-Aligned-Representation"><span class="nav-number">1.4.</span> <span class="nav-text">Dual Part-Aligned Representation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Accurate-Human-Parts"><span class="nav-number">1.4.1.</span> <span class="nav-text">Accurate Human Parts:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Coarse-Non-human-Parts"><span class="nav-number">1.4.2.</span> <span class="nav-text">Coarse Non-human Parts:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">1.5.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">1.6.</span> <span class="nav-text">References</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wei Xie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wei Xie</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

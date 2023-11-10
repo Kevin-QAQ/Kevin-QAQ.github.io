@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kevin-qaq.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="全文链接：http:&#x2F;&#x2F;openaccess.thecvf.com&#x2F;content_ICCV_2019&#x2F;html&#x2F;Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html The source code is here.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Self-Similarity Grouping - A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-ID">
+<meta property="og:url" content="https://kevin-qaq.github.io/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/index.html">
+<meta property="og:site_name" content="Wei Xie&#39;s Blog">
+<meta property="og:description" content="全文链接：http:&#x2F;&#x2F;openaccess.thecvf.com&#x2F;content_ICCV_2019&#x2F;html&#x2F;Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html The source code is here.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Self-similarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig2.png">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Self-similarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig3.png">
+<meta property="article:published_time" content="2019-12-11T14:12:45.000Z">
+<meta property="article:modified_time" content="2023-11-08T13:33:08.796Z">
+<meta property="article:author" content="Wei Xie">
+<meta property="article:tag" content="person re-id">
+<meta property="article:tag" content="ICCV2019">
+<meta property="article:tag" content="unsupervised">
+<meta property="article:tag" content="transfer learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kevin-qaq.github.io/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Self-similarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig2.png">
+
+<link rel="canonical" href="https://kevin-qaq.github.io/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Self-Similarity Grouping - A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-ID | Wei Xie's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Wei Xie's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kevin-qaq.github.io/2019/12/11/Self-SimilarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wei Xie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wei Xie's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Self-Similarity Grouping - A Simple Unsupervised Cross Domain Adaptation Approach for Person Re-ID
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-11 22:12:45" itemprop="dateCreated datePublished" datetime="2019-12-11T22:12:45+08:00">2019-12-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-08 21:33:08" itemprop="dateModified" datetime="2023-11-08T21:33:08+08:00">2023-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper-Notes/" itemprop="url" rel="index"><span itemprop="name">Paper Notes</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper-Notes/Person-Re-ID/" itemprop="url" rel="index"><span itemprop="name">Person Re-ID</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>全文链接：<br><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_ICCV_2019/html/Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html">http://openaccess.thecvf.com/content_ICCV_2019&#x2F;html&#x2F;Fu_Self-Similarity_Grouping_A_Simple_Unsupervised_Cross_Domain_Adaptation_Approach_for_ICCV_2019_paper.html</a></p>
+<p>The source code is <a target="_blank" rel="noopener" href="https://github.com/OasisYang/SSG">here</a>.</p>
+<h1 id="Challenges"><a href="#Challenges" class="headerlink" title="Challenges"></a>Challenges</h1><ol>
+<li><p>Deep re-ID models trained on the source domain may have a significant performance drop on the target domain due to <strong>the data-bias</strong> existing between source and target datasets.</p>
+<p> -&gt; unsupervised domain adaptation (UDA)</p>
+<p> -&gt; generative adversarial network (GAN)</p>
+</li>
+<li><p><strong>The disparities of cameras</strong> are another critical factor influencing re-ID performance.</p>
+<p> -&gt; Hetero-Homogeneous Learning (HHL [1])</p>
+</li>
+</ol>
+<p>However, the performances of these UDA approaches are still far behind their fully-supervised counterparts. The main reason is that <strong>most previous works focus on increasing the training samples or comparing the similarity or dissimilarity between the source dataset and the target dataset but ignoring the similar natural characteristics existing in the training samples from the target domain</strong>.</p>
+<span id="more"></span>
+
+<h1 id="Fully-Supervised-Pre-training"><a href="#Fully-Supervised-Pre-training" class="headerlink" title="Fully Supervised Pre-training"></a>Fully Supervised Pre-training</h1><p>$$L_{baseline}&#x3D;L_{softmax}+L_{triplet}$$</p>
+<h1 id="Self-Similarity-Grouping"><a href="#Self-Similarity-Grouping" class="headerlink" title="Self-Similarity Grouping"></a>Self-Similarity Grouping</h1><div align=center>
+    <img src="Self-similarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig2.png"/>
+</div>
+
+<p>We compare the similarities between two persons not only by <strong>global information obtaining from the whole body</strong> but also by more <strong>fine and local information getting from upper and lower parts of a person</strong>, i.e., <strong>proposed SSG mines the potential similarity existing in target dataset automatically by different appearance cues (from global to local) in an unsupervised manner</strong>.</p>
+<p>DBSCAN (Density Based Spatial Clustering of Applications with Noise)</p>
+<p>$$L_{ssg}&#x3D;L_{triple}(f_t, y_t)+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_t)$$</p>
+<h1 id="Clustering-guided-Semi-Supervised-Training"><a href="#Clustering-guided-Semi-Supervised-Training" class="headerlink" title="Clustering-guided Semi-Supervised Training"></a>Clustering-guided Semi-Supervised Training</h1><div align=center>
+    <img src="Self-similarityGroupingASimpleUnsupervisedCrossDomainAdaptationApproachForPersonRe-ID/Fig3.png" width="60%"/>
+</div>
+
+<ul>
+<li><p>We employ the k-reciprocal encoding [2], a variation of Jaccard distance between nearest neighbor sets, as the distance metric for similarity measurement.</p>
+</li>
+<li><p>We randomly sample a single image from each group to form a very small sub-dataset $X_g$ with $N_g$ images.</p>
+</li>
+<li><p>We label this small sub-dataset manually and perform labels assignment based on this annotation.</p>
+</li>
+<li><p>Since each image in $X_g$ is from different groups, it’s less possible that two different images share the same identity, which allows us to adopt the one shot learning approach [3] and further improve the performance. (<strong>multi gallery shot -&gt; one shot</strong>)</p>
+</li>
+</ul>
+<p>$$L_{semi}&#x3D;L_{triple}(f_t, y_{t_g})+L_{triple}(f_{t\_up}, y_{t\_up})+L_{triple}(f_{t\_low}, y_{t\_low})+L_{triple}(f_{t_e}, y_{t_g})$$</p>
+<h1 id="Joint-training-strategy"><a href="#Joint-training-strategy" class="headerlink" title="Joint training strategy"></a>Joint training strategy</h1><p>$$L_{jointly}&#x3D;L_{ssg}+L_{semi}$$</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] Zhun Zhong, Liang Zheng, Shaozi Li, and Yi Yang. Generalizing a person retrieval model hetero-and homogeneously. In ECCV, pages 172–188, 2018 [<a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_ECCV_2018/html/Zhun_Zhong_Generalizing_A_Person_ECCV_2018_paper.html">link</a>]</p>
+<p>[2] Zhun Zhong, Liang Zheng, Donglin Cao, and Shaozi Li. Reranking person re-identification with k-reciprocal encoding. In IEEE CVPR, pages 3652–3661, 2017. [<a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_cvpr_2017/html/Zhong_Re-Ranking_Person_Re-Identification_CVPR_2017_paper.html">link</a>]</p>
+<p>[3] Yu Wu, Yutian Lin, Xuanyi Dong, Yan Yan, Wanli Ouyang, and Yi Yang. Exploit the unknown gradually: One-shot video-based person re-identification by stepwise learning. In IEEE CVPR, 2018. [<a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_cvpr_2018/html/Wu_Exploit_the_Unknown_CVPR_2018_paper.html">link</a>]</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/person-re-id/" rel="tag"># person re-id</a>
+              <a href="/tags/ICCV2019/" rel="tag"># ICCV2019</a>
+              <a href="/tags/unsupervised/" rel="tag"># unsupervised</a>
+              <a href="/tags/transfer-learning/" rel="tag"># transfer learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/11/Omni-ScaleFeatureLearningForPersonRe-ID/" rel="prev" title="Omni-Scale Feature Learning for Person Re-ID">
+      <i class="fa fa-chevron-left"></i> Omni-Scale Feature Learning for Person Re-ID
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/11/BeyondHumanPartsDualPart-AlignedRepresentationsForPersonRe-ID/" rel="next" title="Beyond Human Parts -- Dual Part-Aligned Representations">
+      Beyond Human Parts -- Dual Part-Aligned Representations <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Challenges"><span class="nav-number">1.</span> <span class="nav-text">Challenges</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fully-Supervised-Pre-training"><span class="nav-number">2.</span> <span class="nav-text">Fully Supervised Pre-training</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Self-Similarity-Grouping"><span class="nav-number">3.</span> <span class="nav-text">Self-Similarity Grouping</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Clustering-guided-Semi-Supervised-Training"><span class="nav-number">4.</span> <span class="nav-text">Clustering-guided Semi-Supervised Training</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Joint-training-strategy"><span class="nav-number">5.</span> <span class="nav-text">Joint training strategy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wei Xie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wei Xie</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

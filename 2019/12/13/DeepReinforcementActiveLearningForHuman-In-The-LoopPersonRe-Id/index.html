@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kevin-qaq.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="全文链接：http:&#x2F;&#x2F;openaccess.thecvf.com&#x2F;content_ICCV_2019&#x2F;html&#x2F;Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html IntroductionMost existing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification">
+<meta property="og:url" content="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/index.html">
+<meta property="og:site_name" content="Wei Xie&#39;s Blog">
+<meta property="og:description" content="全文链接：http:&#x2F;&#x2F;openaccess.thecvf.com&#x2F;content_ICCV_2019&#x2F;html&#x2F;Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html IntroductionMost existing">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig1.png">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Alg1.png">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig2.png">
+<meta property="og:image" content="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig3.png">
+<meta property="article:published_time" content="2019-12-13T10:53:14.000Z">
+<meta property="article:modified_time" content="2023-11-08T13:33:08.778Z">
+<meta property="article:author" content="Wei Xie">
+<meta property="article:tag" content="graph">
+<meta property="article:tag" content="person re-id">
+<meta property="article:tag" content="supervised">
+<meta property="article:tag" content="ICCV2019">
+<meta property="article:tag" content="reinforcement learning">
+<meta property="article:tag" content="active learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig1.png">
+
+<link rel="canonical" href="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification | Wei Xie's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Wei Xie's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://kevin-qaq.github.io/2019/12/13/DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wei Xie">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Wei Xie's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Reinforcement Active Learning for Human-In-The-Loop Person Re-Identification
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-13 18:53:14" itemprop="dateCreated datePublished" datetime="2019-12-13T18:53:14+08:00">2019-12-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-11-08 21:33:08" itemprop="dateModified" datetime="2023-11-08T21:33:08+08:00">2023-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper-Notes/" itemprop="url" rel="index"><span itemprop="name">Paper Notes</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper-Notes/Person-Re-ID/" itemprop="url" rel="index"><span itemprop="name">Person Re-ID</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>全文链接：<br><a target="_blank" rel="noopener" href="http://openaccess.thecvf.com/content_ICCV_2019/html/Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html">http://openaccess.thecvf.com/content_ICCV_2019&#x2F;html&#x2F;Liu_Deep_Reinforcement_Active_Learning_for_Human-in-the-Loop_Person_Re-Identification_ICCV_2019_paper.html</a></p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>Most existing supervised person Re-ID approaches employ a train-once-and-deploy scheme, i.e., a large amount of pre-labelled data is put into training phrase all at once.</p>
+<p>However, in practice this assumption is not easy to adapt:</p>
+<ol>
+<li><p>Pairwise pedestrian data is prohibitive to be collected since it is unlikely that a large amount of pedestrian may reappear in other camera views.</p>
+</li>
+<li><p>The increasing number of camera views amplifies the difficulties in searching the same person among multiple camera views.</p>
+</li>
+</ol>
+<p>Solutions:</p>
+<ol>
+<li><p>Unsupervised learning algorithms</p>
+<p> Unsupervised learning based Re-ID models are inherently weaker compared to supervised learning based models, compromising Re-ID effectiveness in any practical deployment.</p>
+</li>
+<li><p>Semi-supervised learning scheme</p>
+<p> These models are still based on a strong assumption that parts of the identities (e.g. one third of the training set) are fully labelled for every camera view.</p>
+</li>
+</ol>
+<p>-&gt; Reinforcement Learning + Active Learning:</p>
+<p>human-in-the-loop (HITL) model learning process [1]</p>
+<p>A step-by-step sequential active learning process is adopted by exploring human selective annotations on a much smaller pool of samples for model learning.</p>
+<p>These cumulatively labelled data by human binary verification are used to update model training for improving Re-ID performance.</p>
+<p>Such an approach to model learning is naturally suited for reinforcement learning together with active learning, the focus of this work.</p>
+<div align=center>
+    <img src="DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig1.png" width="50%"/>
+</div>
+
+<span id="more"></span>
+
+<h1 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h1><div align=center>
+    <img src="DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Alg1.png" width="50%"/>
+</div>
+
+<h2 id="Base-CNN-Network"><a href="#Base-CNN-Network" class="headerlink" title="Base CNN Network"></a>Base CNN Network</h2><p>$$L_{total}&#x3D;L_{cross-entropy}+L_{triplet}$$</p>
+<h2 id="A-Deep-Reinforced-Active-Learner-An-Agent"><a href="#A-Deep-Reinforced-Active-Learner-An-Agent" class="headerlink" title="A Deep Reinforced Active Learner - An Agent"></a>A Deep Reinforced Active Learner - An Agent</h2><div align=center>
+    <img src="DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig2.png"/>
+</div>
+
+<p>As each query instance arrives, we perceive its $n_s$-nearest neighbors as the unlabelled gallery pool.</p>
+<h3 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h3><p>The action set defines to select an instance from the unlabelled gallery pool:</p>
+<p>$$\pi(A_t|S_t)$$</p>
+<p>Once $A_t&#x3D;g_k$ is performed, the agent is unable to choose it again in the subsequent steps.</p>
+<p>The termination criterion of this process depends on a pre-defined $K_{max}$ which restricts the maximal annotation amount for each query anchor.</p>
+<h3 id="State"><a href="#State" class="headerlink" title="State"></a>State</h3><div align=center>
+    <img src="DeepReinforcementActiveLearningForHuman-In-The-LoopPersonRe-Id/Fig3.png"/>
+</div>
+
+<p>At each discrete time step $t$, the environment provides an observation state $S_t$ which reveals the instances’ relationship, and receives a response from the agent by selecting an action $A_t$:</p>
+<ul>
+<li>Mahalanobis distance</li>
+</ul>
+<p>$$d(x, y)&#x3D;\mbox{Mahalanobis}(x, y)&#x3D;(x-y)^T\Sigma^{-1}(x-y)$$</p>
+<ul>
+<li>The k-reciprocal neighbors</li>
+</ul>
+<p>$$R(n_i, k)&#x3D;\lbrace n_j|(n_i\in N(n_j, k))\land(n_j\in N(n_i, k))\rbrace$$</p>
+<p>where $N(n_i, k)$ is the top k-nearest neighbors of $n_i$</p>
+<ul>
+<li>Sparse similarity graph</li>
+</ul>
+<p>The similarity value between every two samples $i,j(i\ne j)$</p>
+<p>$$<br>\mbox{Sim}(i, j)&#x3D;<br>\begin{cases}<br>1-\frac{d(i, j)}{\max_{i, j\in q, g}d(i, j)},\quad&amp;\mbox{if}\quad j\in R(i, k)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p>The similarity value of the node $n_i$ is remained, otherwise be assigned with zero.</p>
+<p>For a state $S_t$ at time $t$, the optimal action $A_t&#x3D;g_k$ is selected via the policy network, which indicates the $k$-th instance among the unlabelled gallery pool being annotated by human oracle, who replies with binary feedback true or false against the query:</p>
+<ol>
+<li>True Match:</li>
+</ol>
+<p>$$y_k^t&#x3D;1$$</p>
+<p>then,</p>
+<p>$$\mbox{Sim}(q, g_k)&#x3D;1$$</p>
+<p>$$\mbox{Sim}(q, g_i)&#x3D;\frac12[\mbox{Sim}(q, g_i)+\mbox{Sim}(g_k, g_i)]$$</p>
+<ol start="2">
+<li>False Match:</li>
+</ol>
+<p>$$y_k^t&#x3D;-1$$</p>
+<p>then,</p>
+<p>$$\mbox{Sim}(q, g_k)&#x3D;0$$</p>
+<p>$$<br>\mbox{Sim}(q, g_i)&#x3D;<br>\begin{cases}<br>\mbox{Sim}(q, g_i)-\mbox{Sim}(g_k, g_i),\quad&amp;\mbox{if}\quad\mbox{Sim}(q, g_i)\gt\mbox{Sim}(g_k, g_i)\\<br>0,&amp;\mbox{otherwise}<br>\end{cases}<br>$$</p>
+<p><strong>zoom in the distance among positives</strong> and <strong>push out the distance among negatives</strong>.</p>
+<p>The k-reciprocal operation will also be adopt afterwards, and a renewed state $S_{t+1}$ is then obtained.</p>
+<p>repeats until the maximum annotation amount $K_{max}$ for each query is exhausted</p>
+<h3 id="Reward"><a href="#Reward" class="headerlink" title="Reward"></a>Reward</h3><p>Loss for action $\pi$</p>
+<p>We use data uncertainty as the objective function of the reinforcement learning policy, i.e., Higher uncertainty indicates that the sample is harder to be distinguished</p>
+<p>$$R_t&#x3D;[m+y_k^t(\max_{x_i\in X_p^t}d(x_i, g_k)-\min_{x_j\in X_n^t}d(x_j, g_k))]_+$$</p>
+<p>All the future rewards $(R_{t+1}, R_{t+2}, \cdots)$:</p>
+<p>$$Q^*&#x3D;\max_{\pi}E[R_t+\gamma R_{t+1}+\gamma^2R_{t+2}+\cdots|\pi, S_t, A_t]$$</p>
+<h3 id="CNN-Network-Updating"><a href="#CNN-Network-Updating" class="headerlink" title="CNN Network Updating"></a>CNN Network Updating</h3><p>When plentiful enough pair-wise labelled data are obtained, the CNN parameters enable to be updated via triplet loss function, which in return generates a new initial state for incoming data. Through iteratively executing the sample selection and CNN network refreshing, the proposed algorithm could quickly escalate.</p>
+<p>This progress terminates when each image in the training data pool has been browsed once by our DRAL agent.</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><ul>
+<li><p>The key task for the model design becomes how to select more informative samples at a fixed annotation cost.</p>
+</li>
+<li><p>DRAL method releases the restriction of pre-labelling and keeps model upgrading with progressively collected data.</p>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] Hanxiao Wang, Shaogang Gong, Xiatian Zhu, and Tao Xiang. Human-in-the-loop person re-identification. In ECCV, 2016. [<a target="_blank" rel="noopener" href="https://link_springer.xilesou.top/chapter/10.1007/978-3-319-46493-0_25">link</a>]</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/graph/" rel="tag"># graph</a>
+              <a href="/tags/person-re-id/" rel="tag"># person re-id</a>
+              <a href="/tags/supervised/" rel="tag"># supervised</a>
+              <a href="/tags/ICCV2019/" rel="tag"># ICCV2019</a>
+              <a href="/tags/reinforcement-learning/" rel="tag"># reinforcement learning</a>
+              <a href="/tags/active-learning/" rel="tag"># active learning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/11/AMaximum-ValuePerfectMatchingforMiningHardSamplesWithApplicationToPersonRe-ID/" rel="prev" title="MVP Matching - A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-ID">
+      <i class="fa fa-chevron-left"></i> MVP Matching - A Maximum-value Perfect Matching for Mining Hard Samples, with Application to Person Re-ID
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/20/Self-CriticalAttentionLearningForPersonRe-ID/" rel="next" title="Self-Critical Attention Learning For Person Re-ID">
+      Self-Critical Attention Learning For Person Re-ID <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Methodology"><span class="nav-number">2.</span> <span class="nav-text">Methodology</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Base-CNN-Network"><span class="nav-number">2.1.</span> <span class="nav-text">Base CNN Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Deep-Reinforced-Active-Learner-An-Agent"><span class="nav-number">2.2.</span> <span class="nav-text">A Deep Reinforced Active Learner - An Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Action"><span class="nav-number">2.2.1.</span> <span class="nav-text">Action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#State"><span class="nav-number">2.2.2.</span> <span class="nav-text">State</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reward"><span class="nav-number">2.2.3.</span> <span class="nav-text">Reward</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN-Network-Updating"><span class="nav-number">2.2.4.</span> <span class="nav-text">CNN Network Updating</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">3.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wei Xie</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wei Xie</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
