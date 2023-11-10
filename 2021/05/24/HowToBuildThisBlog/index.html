@@ -28,7 +28,7 @@
 <meta property="og:description" content="安装 Git以下内容参考自廖雪峰官方网站的Git教程 Windows 上，从Git官网下载 Git 并安装。 安装完成后，还需要最后一步设置，在 Git Bash 命令行输入你 GitHub 的用户名和邮箱。 $ git config --global user.name &quot;Your Name&quot; $ git config --global user.email &quot;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-24T10:42:23.000Z">
-<meta property="article:modified_time" content="2023-11-09T15:08:35.859Z">
+<meta property="article:modified_time" content="2023-11-10T04:59:32.388Z">
 <meta property="article:author" content="Wei Xie">
 <meta property="article:tag" content="blog">
 <meta property="article:tag" content="hexo">
@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-11-09 23:08:35" itemprop="dateModified" datetime="2023-11-09T23:08:35+08:00">2023-11-09</time>
+                <time title="Modified: 2023-11-10 12:59:32" itemprop="dateModified" datetime="2023-11-10T12:59:32+08:00">2023-11-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -316,6 +316,27 @@ $ npm install hexo-server --save
 $ hexo s
 </code></pre>
 <p>成功后会有提示，进入 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a> 即可看到刚刚生成的网页。按 Ctrl + C 停止运行。</p>
+<h2 id="将-hexo-部署到-GitHub"><a href="#将-hexo-部署到-GitHub" class="headerlink" title="将 hexo 部署到 GitHub"></a>将 hexo 部署到 GitHub</h2><h3 id="在-GitHub-创建仓库"><a href="#在-GitHub-创建仓库" class="headerlink" title="在 GitHub 创建仓库"></a>在 GitHub 创建仓库</h3><p>在 GitHub 新建一个仓库，Repository name（仓库名）必须是“你的 GitHub 用户名.github.io”，Description（描述）和 Initialize this repository with: add a README file（初始化仓库时添加一个说明文件）均为可选项。</p>
+<h3 id="修改-hexo-配置文件"><a href="#修改-hexo-配置文件" class="headerlink" title="修改 hexo 配置文件"></a>修改 hexo 配置文件</h3><p>在 blog 文件夹下找到 _config.yml 文件，这是你的 hexo 博客的配置文件，用 sublime 或 VSCode 或 记事本打开，找到下面两处设置的位置，将其按如下的内容修改，username 换成你的 GitHub 用户名。</p>
+<pre><code># Deployment
+## Docs: https://hexo.io/docs/one-command-deployment
+deploy:
+type: git
+repo: https://github.com/username/username.github.io.git
+branch: master
+</code></pre>
+<p>另一处，</p>
+<pre><code># URL
+## Set your site url here. For example, if you use GitHub Page, set url as &#39;https://username.github.io/project&#39;
+url: https://username.github.io/
+</code></pre>
+<h3 id="安装-Git-部署命令工具"><a href="#安装-Git-部署命令工具" class="headerlink" title="安装 Git 部署命令工具"></a>安装 Git 部署命令工具</h3><pre><code>npm install hexo-deployer-git --save
+</code></pre>
+<p>然后执行下面三行命令后，在 username.github.io 访问你的博客</p>
+<pre><code>$ hexo clean
+$ hexo g
+$ hexo d
+</code></pre>
 <h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><pre><code>$ hexo new &quot;pagename&quot; 
 $ hexo new page &quot;pagename&quot;
 $ hexo clean
@@ -327,7 +348,6 @@ $ git commit -m &quot;git tracks changes&quot;
 $ git push origin master
 </code></pre>
 <p>hexo new “pagename”	表示在 source&#x2F;_post&#x2F; 下新建页面，hexo d	表示 push 到服务器。</p>
-<h1 id="GitHub-创建仓库"><a href="#GitHub-创建仓库" class="headerlink" title="GitHub 创建仓库"></a>GitHub 创建仓库</h1><p>在 GitHub 新建一个仓库，Repository name（仓库名）必须是“你的 GitHub 用户名.github.io”，Description（描述）和 Initialize this repository with: add a README file（初始化仓库时添加一个说明文件）均为可选项。</p>
 <h1 id="安装-NexT"><a href="#安装-NexT" class="headerlink" title="安装 NexT"></a>安装 NexT</h1><p>注意：<a target="_blank" rel="noopener" href="http://theme-next.iissnan.com/getting-started.html">NexT原官网</a>对应的<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next">Next原仓库</a>已不再维护，社区维护版本是<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">Next社区维护版本</a></p>
 <p>克隆<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">Next社区维护版本</a>到blog目录下的 themes&#x2F;next</p>
 <pre><code>$ git clone https://github.com/theme-next/hexo-theme-next themes/next
@@ -336,7 +356,7 @@ $ git push origin master
 <pre><code>theme: next
 </code></pre>
 <p>可在 next 文件夹下的 _config.yml 中设置 home 和 archives 路径，以及主题（我用的是 Gemini）。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>[1] <a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496">廖雪峰官方网站的Git教程</a></p>
+<h1 id="个性化"><a href="#个性化" class="headerlink" title="个性化"></a>个性化</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>[1] <a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/896043488029600/896067074338496">廖雪峰官方网站的Git教程</a></p>
 <p>[2] <a target="_blank" rel="noopener" href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh">使用SSH连接到GitHub</a></p>
 <p>[3] <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo官网</a></p>
 <p>[4] <a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">Next社区维护版本</a></p>
@@ -422,7 +442,7 @@ $ git push origin master
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Git"><span class="nav-number">1.</span> <span class="nav-text">安装 Git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-SSH-%E8%BF%9E%E6%8E%A5%E5%88%B0-GitHub"><span class="nav-number">2.</span> <span class="nav-text">使用 SSH 连接到 GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E7%8E%B0%E6%9C%89-SSH-%E5%AF%86%E9%92%A5"><span class="nav-number">2.1.</span> <span class="nav-text">检查现有 SSH 密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%96%B0-SSH-%E5%AF%86%E9%92%A5"><span class="nav-number">2.2.</span> <span class="nav-text">生成新 SSH 密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86-SSH-%E5%AF%86%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-ssh-agent"><span class="nav-number">2.3.</span> <span class="nav-text">将 SSH 密钥添加到 ssh-agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E5%90%AF%E5%8A%A8-ssh-agent"><span class="nav-number">2.3.1.</span> <span class="nav-text">手动启动 ssh-agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%97%A0%E6%8F%90%E5%8D%87%E6%9D%83%E9%99%90%E7%9A%84%E7%BB%88%E7%AB%AF%E7%AA%97%E5%8F%A3%E4%B8%AD%EF%BC%8C%E5%B0%86-SSH-%E7%A7%81%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-ssh-agent"><span class="nav-number">2.3.2.</span> <span class="nav-text">在无提升权限的终端窗口中，将 SSH 私钥添加到 ssh-agent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E-SSH-%E5%AF%86%E9%92%A5%E5%88%B0-GitHub-%E8%B4%A6%E6%88%B7"><span class="nav-number">2.4.</span> <span class="nav-text">新增 SSH 密钥到 GitHub 账户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-SSH-%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.5.</span> <span class="nav-text">测试 SSH 连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-GitHub-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E5%8D%9A%E5%AE%A2%E4%BB%93%E5%BA%93"><span class="nav-number">2.6.</span> <span class="nav-text">在 GitHub 创建私有博客仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Node-js"><span class="nav-number">3.</span> <span class="nav-text">安装 Node.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%85%A8%E5%B1%80-Hexo"><span class="nav-number">4.</span> <span class="nav-text">安装全局 Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">4.1.</span> <span class="nav-text">常用命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GitHub-%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-number">5.</span> <span class="nav-text">GitHub 创建仓库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-NexT"><span class="nav-number">6.</span> <span class="nav-text">安装 NexT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Git"><span class="nav-number">1.</span> <span class="nav-text">安装 Git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-SSH-%E8%BF%9E%E6%8E%A5%E5%88%B0-GitHub"><span class="nav-number">2.</span> <span class="nav-text">使用 SSH 连接到 GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E7%8E%B0%E6%9C%89-SSH-%E5%AF%86%E9%92%A5"><span class="nav-number">2.1.</span> <span class="nav-text">检查现有 SSH 密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%96%B0-SSH-%E5%AF%86%E9%92%A5"><span class="nav-number">2.2.</span> <span class="nav-text">生成新 SSH 密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86-SSH-%E5%AF%86%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-ssh-agent"><span class="nav-number">2.3.</span> <span class="nav-text">将 SSH 密钥添加到 ssh-agent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E5%90%AF%E5%8A%A8-ssh-agent"><span class="nav-number">2.3.1.</span> <span class="nav-text">手动启动 ssh-agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%97%A0%E6%8F%90%E5%8D%87%E6%9D%83%E9%99%90%E7%9A%84%E7%BB%88%E7%AB%AF%E7%AA%97%E5%8F%A3%E4%B8%AD%EF%BC%8C%E5%B0%86-SSH-%E7%A7%81%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-ssh-agent"><span class="nav-number">2.3.2.</span> <span class="nav-text">在无提升权限的终端窗口中，将 SSH 私钥添加到 ssh-agent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E-SSH-%E5%AF%86%E9%92%A5%E5%88%B0-GitHub-%E8%B4%A6%E6%88%B7"><span class="nav-number">2.4.</span> <span class="nav-text">新增 SSH 密钥到 GitHub 账户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-SSH-%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.5.</span> <span class="nav-text">测试 SSH 连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-GitHub-%E5%88%9B%E5%BB%BA%E7%A7%81%E6%9C%89%E5%8D%9A%E5%AE%A2%E4%BB%93%E5%BA%93"><span class="nav-number">2.6.</span> <span class="nav-text">在 GitHub 创建私有博客仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Node-js"><span class="nav-number">3.</span> <span class="nav-text">安装 Node.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%85%A8%E5%B1%80-Hexo"><span class="nav-number">4.</span> <span class="nav-text">安装全局 Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86-hexo-%E9%83%A8%E7%BD%B2%E5%88%B0-GitHub"><span class="nav-number">4.1.</span> <span class="nav-text">将 hexo 部署到 GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-GitHub-%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-number">4.1.1.</span> <span class="nav-text">在 GitHub 创建仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-hexo-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">4.1.2.</span> <span class="nav-text">修改 hexo 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Git-%E9%83%A8%E7%BD%B2%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7"><span class="nav-number">4.1.3.</span> <span class="nav-text">安装 Git 部署命令工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">4.2.</span> <span class="nav-text">常用命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-NexT"><span class="nav-number">5.</span> <span class="nav-text">安装 NexT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">个性化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
